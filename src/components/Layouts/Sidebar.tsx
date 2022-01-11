@@ -19,7 +19,7 @@ const Sidebar = () => {
         <hr className="sidebar-divider my-0" />
 
         <li className="nav-item active">
-          <a className="nav-link" href="index.html">
+          <a className="nav-link" href="/Dashboard">
             <i className="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span>
           </a>
@@ -47,28 +47,28 @@ const Sidebar = () => {
           >
             <div className="bg-white py-2 collapse-inner rounded">
               <h6 className="collapse-header">Custom</h6>
-              <a className="collapse-item" href="buttons.html">
+              <a className="collapse-item" href="/Student">
                 Student
               </a>
-              <a className="collapse-item" href="cards.html">
+              <a className="collapse-item" href="/Stu_add">
                 New Admission 
               </a>
-              <a className="collapse-item" href="cards.html">
+              <a className="collapse-item" href="/Student">
                 Promotion
               </a>
-              <a className="collapse-item" href="cards.html">
+              <a className="collapse-item" href="/Student">
                 Year of Fee
               </a>
-              <a className="collapse-item" href="cards.html">
+              <a className="collapse-item" href="/Student">
                 Fee Master
               </a>
-              <a className="collapse-item" href="cards.html">
+              <a className="collapse-item" href="/Student">
                 Discount Fee Type Master
               </a>
-              <a className="collapse-item" href="cards.html">
+              <a className="collapse-item" href="/Student">
                 Year
               </a>
-              <a className="collapse-item" href="cards.html">
+              <a className="collapse-item" href="/Student">
                Grade&section
               </a>
             </div>
