@@ -44,7 +44,7 @@ const Feesdetails = () => {
         </div>
       </div>
 
-      <div className="col-lg-6">
+      <div className="col-lg-5">
         <div className="card shadow mb-4">
           <div className="card-header py-3">
             <h4 className="m-0 font-weight-bold text-danger text-center">

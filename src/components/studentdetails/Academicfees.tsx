@@ -2,7 +2,7 @@ import React from 'react'
 
 const Academicfees = () =>{
     return(
-        <div className="col-lg-12">
+        <div className="col-lg-11">
         <div className="card shadow mb-5">
           <div className="card-header py-3">
             <h4 className="m-0 font-weight-bold text-danger text-center">

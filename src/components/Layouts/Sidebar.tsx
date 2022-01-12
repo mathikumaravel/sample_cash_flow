@@ -11,7 +11,7 @@ const Sidebar = () => {
           className="sidebar-brand d-flex align-items-center justify-content-center"
           href="index.html"
         >
-          <div className="sidebar-brand-icon rotate-n-15">
+          <div className="sidebar-brand-icon">
             <i className="fas fa-rupee-sign"></i>
           </div>
           <div className="sidebar-brand-text mx-3">CASHFLOW</div>
@@ -53,13 +53,13 @@ const Sidebar = () => {
               <a className="collapse-item" href="/Stu_add">
                 New Admission 
               </a>
-              <a className="collapse-item" href="/Student">
+              <a className="collapse-item" href="/Stupro">
                 Promotion
               </a>
-              <a className="collapse-item" href="/Student">
+              <a className="collapse-item" href="/Stu_fees">
                 Year of Fee
               </a>
-              <a className="collapse-item" href="/Student">
+              <a className="collapse-item" href="/Fee_master">
                 Fee Master
               </a>
               <a className="collapse-item" href="/Student">
