@@ -1,13 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
-import Student from './components/studentdetails/Student'
+import Config from './config/Config';
 
 ReactDOM.render(
   <React.StrictMode>
-    <Student/>
+    <Config/>
   </React.StrictMode>,
   document.getElementById('root')
 );
