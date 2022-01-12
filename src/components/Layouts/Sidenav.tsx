@@ -13,6 +13,8 @@ function Sidenav(){
 
             <div id="content">
                 <Navbar></Navbar>
+                <div className="container-fluid">
+                    </div>
                 </div>
                 </div>
                 </div>
