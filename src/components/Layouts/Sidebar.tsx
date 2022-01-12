@@ -62,13 +62,13 @@ const Sidebar = () => {
               <a className="collapse-item" href="/Fee_master">
                 Fee Master
               </a>
-              <a className="collapse-item" href="/Student">
+              <a className="collapse-item" href="/Discounttype">
                 Discount Fee Type Master
               </a>
-              <a className="collapse-item" href="/Student">
+              <a className="collapse-item" href="/Academicyear">
                 Year
               </a>
-              <a className="collapse-item" href="/Student">
+              <a className="collapse-item" href="/Grade_section">
                Grade&section
               </a>
             </div>

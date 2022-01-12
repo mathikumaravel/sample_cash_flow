@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import Sidebar from "../Layouts/Sidebar";
 import Navbar from "../Layouts/Navbar";
 import Listofpayment from "./Listofpayment";
+import { Alert, Button } from "react-bootstrap";
 
 const Studentpay = () => {
+  const [show, setShow] = useState(false);
+
   return (
     <div>
       <div id="page-top">
@@ -13,6 +16,100 @@ const Studentpay = () => {
             <div id="content">
               <Navbar></Navbar>
               <div className="container-fluid">
+                <div  className="col-xl-12">
+                <Alert show={show} variant="danger">
+                  <Alert.Heading><h5  style={{ textAlign: "center" }}>Refund</h5>
+        </Alert.Heading>
+                  <form>
+                    <div className="modal-body">
+                      <table width="100%">
+                        <thead>
+                          <th>Fee Type Name</th>
+                          <th>Actual fees</th>
+                          <th>Paid</th>
+                          <th style={{ textAlign: "center" }}>
+                            Date<span className="text-danger"> * </span>
+                          </th>
+                          <th style={{ textAlign: "center" }}>
+                            Amount<span className="text-danger"> * </span>
+                          </th>
+                          <th style={{ textAlign: "center" }}>
+                            Mode of Payment
+                            <span className="text-danger"> * </span>
+                          </th>
+                          <th style={{ textAlign: "center" }}>Comments</th>
+                        </thead>
+
+                        <tbody>
+                          <tr>
+                            <td>
+                             <label style={{ position: "relative", top: "10px" }}>Admission fees</label>
+                            </td>
+       
+                            <td>
+                              {" "}
+                              <label style={{ position: "relative", top: "10px" }}>200000</label>
+                            </td>
+                            <td>
+                              {" "}
+                              <label style={{ position: "relative", top: "10px"}}>5000</label>
+                            </td>
+
+                            <td>
+                              {" "}
+                              <input style={{ position: "relative", top: "10px",width:"90%" }}
+                                type="date"
+                                className="form-control refund_date"
+                              
+                              />
+                            </td>
+                            <td>
+                              <input
+                                type="text"
+                                style={{ position: "relative", top: "10px",width:"90%" }}
+                                className="form-control input-sm txtrefundamt nk"
+                                placeholder="Enter Amount"
+                              />
+                            </td>
+                            <td>
+                              <select style={{ position: "relative", top:"10px",width:"90%" }}
+                                className="form-control"
+                                id="mode_of_refund"
+                              >
+                                <option value="Select">--Select--</option>
+                                <option>Cash</option>
+                                <option>Card</option>
+                                <option>Direct Acc.</option>
+                                <option>Emp. Account</option>
+                                <option>Discountinue</option>
+                              </select>
+                            </td>
+                            <td> 
+                              <input style={{ position: "relative", top: "10px",width:"90%" }}
+                                type="text"
+                                
+                                className="form-control input-sm txtcomments"
+                                placeholder="Enter Comments"
+                              />
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div className="modal-footer">
+                      <Button
+                        onClick={() => setShow(false)}
+                        className="btn btn-secondary"
+                      >
+                      Close
+                      </Button>
+                      <button type="submit" className="btn btn-primary">
+                        Save changes
+                      </button>
+                    </div>
+                  </form>
+                </Alert>
+                </div>
                 <div>
                   <div className="row">
                     <div
@@ -69,14 +166,14 @@ const Studentpay = () => {
                                   <th> </th>
                                   <td width="1%"></td>
                                   <td>
-                                    <button
-                                      type="button"
-                                      className="btn btn-primary refbtn "
-                                      data-toggle="modal"
-                                      data-target="#exampleModal"
-                                    >
-                                      Refund
-                                    </button>
+                                    {!show && (
+                                      <Button
+                                        className="btn btn-primary refbtn"
+                                        onClick={() => setShow(true)}
+                                      >
+                                        Refund
+                                      </Button>
+                                    )}
                                   </td>
                                   <td></td>
                                 </tr>
@@ -255,9 +352,8 @@ const Studentpay = () => {
                         </form>
                       </div>
                     </div>
-                </div>
-                 <Listofpayment></Listofpayment>
-                  
+                  </div>
+                  <Listofpayment></Listofpayment>
                 </div>
               </div>
             </div>

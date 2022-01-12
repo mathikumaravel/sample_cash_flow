@@ -7,7 +7,7 @@ const Feesdetails = () => {
       <div className="col-lg-6">
         <div className="card shadow mb-4">
           <div className="card-header py-3">
-            <h4 className="m-0 font-weight-bold text-danger text-center">
+            <h4 className="m-0 text-danger text-center">
             <a><i className="fas fa-wallet"></i> Payment</a> <a className="btn btn-success btn-sm float-right" href="/Stu_pay">Pay or View All</a>
             </h4>
            
@@ -47,7 +47,7 @@ const Feesdetails = () => {
       <div className="col-lg-5">
         <div className="card shadow mb-4">
           <div className="card-header py-3">
-            <h4 className="m-0 font-weight-bold text-danger text-center">
+            <h4 className="m-0  text-danger text-center">
               <i className="fas fa-money-bill-wave-alt"></i> Year of Balance
             </h4>
           </div>

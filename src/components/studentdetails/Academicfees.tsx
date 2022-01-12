@@ -5,7 +5,7 @@ const Academicfees = () =>{
         <div className="col-lg-11">
         <div className="card shadow mb-5">
           <div className="card-header py-3">
-            <h4 className="m-0 font-weight-bold text-danger text-center">
+            <h4 className="m-0 text-danger text-center">
             <i className="fa fa-address-card"></i>{' '}Student Academic Fees
             </h4>
           </div>

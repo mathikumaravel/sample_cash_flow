@@ -68,7 +68,7 @@ const Listofpayment = ()=>{
             <div className="col-md-12" style={{"padding":"20px"}}>
        <div className="card shadow">  
           <div className="card-header text-center">
-            <h6 className="m-0 font-weight-bold text-danger">List of Payment</h6>
+            <h6 className="m-0 text-danger">List of Payment</h6>
           </div>
           <div className="row" style={{"padding":"10px"}}>
       <div className="col-md-5">
