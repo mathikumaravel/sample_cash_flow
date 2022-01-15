@@ -65,13 +65,13 @@ const Listofpayment = ()=>{
     
     return(
         <div>
-            <div className="col-md-12" style={{"padding":"20px"}}>
+            <div className="col-lg-12" style={{ position: "relative", top: "40px" }}>
        <div className="card shadow">  
           <div className="card-header text-center">
             <h6 className="m-0 text-danger">List of Payment</h6>
           </div>
           <div className="row" style={{"padding":"10px"}}>
-      <div className="col-md-5">
+      <div className="col-md-6">
         <table> 
           <tr>
             <th>Student Name</th>
@@ -90,7 +90,7 @@ const Listofpayment = ()=>{
           </tr>
         </table>
       </div>
-      <div className="col-md-5"  >
+      <div className="col-md-6"  >
         <table>
           <tr>
             <th>Class & Section</th>

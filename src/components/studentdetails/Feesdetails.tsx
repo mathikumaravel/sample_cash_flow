@@ -1,4 +1,5 @@
 import react from "react";
+import { Link } from "react-router-dom";
 
 const Feesdetails = () => {
     return (
@@ -11,9 +12,9 @@ const Feesdetails = () => {
                                 <a>
                                     <i className="far fa-clone"></i> Payment
                                 </a>{" "}
-                                <a className="btn btn-success btn-sm float-right" href="/Stu_pay">
+                                <Link to="/Stu_pay"> <a className="btn btn-success btn-sm float-right">
                                     Pay or View All
-                                </a>
+                                </a></Link>
                             </h4>
                         </div>
                         <div className="card-body">

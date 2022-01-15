@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Sidebar = () => {
   return (
@@ -47,30 +48,30 @@ const Sidebar = () => {
           >
             <div className="bg-white py-2 collapse-inner rounded">
               <h6 className="collapse-header">Custom</h6>
-              <a className="collapse-item" href="/Student">
+           <Link to="/Student"><a className="collapse-item">
                 Student
-              </a>
-              <a className="collapse-item" href="/Stu_add">
+              </a></Link>   
+              <Link to="/Stu_add"> <a className="collapse-item">
                 New Admission 
-              </a>
-              <a className="collapse-item" href="/Stupro">
+              </a></Link>
+              <Link to="/Stupro"><a className="collapse-item">
                 Promotion
-              </a>
-              <a className="collapse-item" href="/Stu_fees">
+              </a></Link>
+              <Link to="/Stu_fees"> <a className="collapse-item">
                 Year of Fee
-              </a>
-              <a className="collapse-item" href="/Fee_master">
+              </a></Link>
+              <Link to="/Fee_master"><a className="collapse-item">
                 Fee Master
-              </a>
-              <a className="collapse-item" href="/Discounttype">
+              </a></Link>
+              <Link to="/Discounttype">  <a className="collapse-item">
                 Discount Fee Type Master
-              </a>
-              <a className="collapse-item" href="/Academicyear">
+              </a></Link>
+              <Link to="/Academicyear"><a className="collapse-item">
                 Year
-              </a>
-              <a className="collapse-item" href="/Grade_section">
+              </a></Link>
+              <Link to="/Grade_section">  <a className="collapse-item">
                Grade&section
-              </a>
+              </a></Link>
             </div>
           </div>
         </li>
