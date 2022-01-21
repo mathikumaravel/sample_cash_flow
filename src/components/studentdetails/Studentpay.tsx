@@ -69,30 +69,31 @@ const Studentpay = () => {
                             </tbody>
                           </table>
                         </div>
-                        <div className="col-md-6" style={{ padding: "20px;" }}>
+                        <div className="col-md-6" style={{ padding: "30px;" }}>
                           <table>
                             <tbody>
                               <tr>
-                                <th>Total</th>
+                                <th >Total</th>
                                 <td width="1%">:</td>
-                                <td id="sum">0.00</td>
+                                <td >0.00</td>
                               </tr>
                               <tr>
                                 <th> </th>
-                                <td width="1%"></td>
-                                <td>
+                                
+                                <td style={{width:"10%"}}>
                                   {!RefundTableStatus ? (
-                                    <Button
+                                    <Button 
                                       onClick={() => setRefundTableStatus(true)}
                                       className="btn btn-primary refbtn"
                                     >
                                       Refund
                                     </Button>
                                   ) : (
-                                    <Button
+                                    <Button 
                                       className="btn btn-secondary"
                                       onClick={() =>
                                         setRefundTableStatus(false)
+                                        
                                       }
                                     >
                                       Close
@@ -133,9 +134,10 @@ const Studentpay = () => {
                                     <span className="text-danger"> * </span>
                                   </th>
                                   <th>Comments</th>
-                                  <th>
+                                  <th style={{width:"10%"}}>
                                     {!RefundTableStatus ? (
                                       <Button
+                                    
                                         type="submit"
                                         className="btn btn-success btn float-right"
                                         onClick={()=>setRefundTableStatus(false)}
@@ -144,6 +146,7 @@ const Studentpay = () => {
                                       </Button>
                                     ) : (
                                       <Button
+                                      
                                         type="submit"
                                         className="btn btn-primary btn float-right"
                                         onClick={() =>

@@ -2,9 +2,12 @@ import React,{useState} from "react";
 import Navbar from "../Layouts/Navbar";
 import Sidebar from "../Layouts/Sidebar";
 import "../../App.css";
-import { Form, Button  } from "react-bootstrap";
+import { Form, Button,InputGroup } from "react-bootstrap";
+import Feedback from 'react-bootstrap/Feedback';
 
 const Studentadd = () => {
+   const [validated, setValidated] = useState(false);
+
     const [admissionNo, setAdmissionno] = useState<any>('');
     const [studentName,setStudentname] = useState<any>('');
     const [fromGrade,setFromgrade] = useState<any>('');
@@ -21,14 +24,25 @@ const Studentadd = () => {
     const [address,setAddress] = useState<any>('');
     const [phoneNo,setPhoneno] = useState<any>('');
 
+    const handleSubmit = (e:any) => {
+      const form = e.currentTarget;
+      if (form.checkValidity() === false) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      setValidated(true);
+      const register = {AdmissionNo:admissionNo,StudentName:studentName,FromGrade:fromGrade,DateofBirth:dateofBirth,Gender:gender,Email:email
+        ,AcademicYear:academicYear,ToGrade:toGrade,AdmissionDate:admissionDate,ToSection:toSection,PreviousSchoolInfo:previousSchoolInfo,
+        FatherName:fatherName,FatherOccupation:fatherOccupation,Address:address,PhoneNo:phoneNo}
     
-const Register = ()=>{
-    const register = {AdmissionNo:admissionNo,StudentName:studentName,FromGrade:fromGrade,DateofBirth:dateofBirth,Gender:gender,Email:email
-    ,AcademicYear:academicYear,ToGrade:toGrade,AdmissionDate:admissionDate,ToSection:toSection,PreviousSchoolInfo:previousSchoolInfo,
-    FatherName:fatherName,FatherOccupation:fatherOccupation,Address:address,PhoneNo:phoneNo}
+        console.log(register)
+    };
+  
 
-    console.log(register)
-}
+    
+// const Register = ()=>{
+    
+// }
    
 
 
@@ -51,77 +65,92 @@ const Register = ()=>{
                     </h4>
                   </div>
 
-                  <Form>
+                  <Form noValidate validated={validated} onSubmit={handleSubmit}>
                     <div className="row">
                       <div className="col-md-6">
                         <div className="card-body">
                           <Form.Group
-                            className="form-group row"
-                            controlId="formBasicEmail"
+                            className="form-group row" controlId="validationCustom01"
+                            
                           >
                             <Form.Label className="col-md-5 col-form-label text-md-right">
                               Admission No
                               <span className="text-danger"> * </span>
                             </Form.Label>
                             <div className="col-md-6">
-                              <Form.Control
-                                type="email"
+                            <InputGroup hasValidation>
+                              <Form.Control 
+                              required
+                                type="text"
                                 placeholder="Admission No"
                                 onChange={(e) => setAdmissionno(e.target.value)}
-                              />
+                                 />
+                                 <Form.Control.Feedback type="invalid">Please Enter Admission No</Form.Control.Feedback>
+                            </InputGroup>
                             </div>
+                            
                           </Form.Group>
 
                           <Form.Group
                             className="form-group row"
-                            controlId="formBasicEmail"
+                            controlId="validationCustom01"
                           >
                             <Form.Label className="col-md-5 col-form-label text-md-right">
                               Student Name
                               <span className="text-danger"> * </span>
                             </Form.Label>
                             <div className="col-md-6">
+                            <InputGroup hasValidation>
                               <Form.Control
-                                type="email"
+                                required
+                                type="name"
                                 placeholder="Student Name"
                                 onChange={(e) => setStudentname(e.target.value)}
                               />
+                              <Form.Control.Feedback type="invalid">Please Enter Student Name</Form.Control.Feedback>
+                              </InputGroup>
                             </div>
                           </Form.Group>
 
                           <Form.Group
                             className="form-group row"
-                            controlId="formBasicEmail"
+                            controlId="validationgrade"
                           >
-                            <Form.Label className="col-md-5 col-form-label text-md-right">
+                            <Form.Label className="col-md-5 col-form-label text-md-right"> 
                               From Grade<span className="text-danger"> </span>
                             </Form.Label>
                             <div className="col-md-6">
-                              <Form.Select onChange={(e) => setFromgrade(e.target.value)}>
-                                <option>--Select Grade--</option>
+                            <InputGroup hasValidation>
+                              <Form.Select onChange={(e) => setFromgrade(e.target.value)} required>
+                                <option selected disabled value="">--Select Grade--</option>
                                 <option>I</option>
                                 <option>II</option>
                                 <option>III</option>
                               </Form.Select>
+                              <Form.Control.Feedback type="invalid">Please Enter Grede</Form.Control.Feedback>
+                              </InputGroup>
                             </div>
                           </Form.Group>
 
                           <Form.Group
                             className="form-group row"
-                            controlId="formBasicEmail"
+                            controlId="validationDate"
                           >
                             <Form.Label className="col-md-5 col-form-label text-md-right">
                               DOB
                               <span className="text-danger"> * </span>
                             </Form.Label>
                             <div className="col-md-6">
-                              <Form.Control type="date" onChange={(e) => setDateofbirth(e.target.value)} />
+                            <InputGroup hasValidation>
+                              <Form.Control type="date" onChange={(e) => setDateofbirth(e.target.value)} required/>
+                              <Form.Control.Feedback type="invalid">Please Enter DateofBirth</Form.Control.Feedback>
+                              </InputGroup>
                             </div>
                           </Form.Group>
 
                           <Form.Group
                             className="form-group row"
-                            controlId="formBasicEmail"
+                            
                           >
                             <Form.Label className="col-md-5 col-form-label text-md-right">
                               Gender
@@ -131,6 +160,7 @@ const Register = ()=>{
                             <div key={`inline-radio`}  className="mb-3">
                                   <Form.Check
                                     inline
+                                    required
                                     label="Male"
                                     name="group1"
                                     value="Male"
@@ -160,7 +190,10 @@ const Register = ()=>{
                               <span className="text-danger"> * </span>
                             </Form.Label>
                             <div className="col-md-6">
-                              <Form.Control type="text" onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
+                            <InputGroup hasValidation>
+                              <Form.Control type="email" onChange={(e) => setEmail(e.target.value)} placeholder="Email" required />
+                              <Form.Control.Feedback type="invalid">Please Enter Email</Form.Control.Feedback>
+                              </InputGroup>
                             </div>
                           </Form.Group>
 
@@ -173,7 +206,10 @@ const Register = ()=>{
                               <span className="text-danger"> * </span>
                             </Form.Label>
                             <div className="col-md-6">
-                              <Form.Control type="date" onChange={(e) => setAdmissiondate(e.target.value)} />
+                            <InputGroup hasValidation>
+                              <Form.Control type="date" onChange={(e) => setAdmissiondate(e.target.value)} required/>
+                              <Form.Control.Feedback type="invalid">Please Enter Admission Date</Form.Control.Feedback>
+                              </InputGroup>
                             </div>
                           </Form.Group>
 
@@ -186,13 +222,16 @@ const Register = ()=>{
                               <span className="text-danger"> * </span>
                             </Form.Label>
                             <div className="col-md-6">
-                              <Form.Select onChange={(e) => setAcademicyear(e.target.value)}>
-                                <option>--Select Year--</option>
+                            <InputGroup hasValidation>
+                              <Form.Select onChange={(e) => setAcademicyear(e.target.value)} required>
+                                <option selected disabled value="">--Select Year--</option>
                                 <option>2021-2022</option>
                                 <option>2023-2024</option>
                                 <option>2025-2026</option>
                                 <option>2027-2028</option>
                               </Form.Select>
+                              <Form.Control.Feedback type="invalid">Please Enter Academic Year</Form.Control.Feedback>
+                              </InputGroup>
                             </div>
                           </Form.Group>
                         </div>
@@ -208,11 +247,14 @@ const Register = ()=>{
                               <span className="text-danger"> * </span>
                             </Form.Label>
                             <div className="col-md-6">
-                              <Form.Select onChange={(e) => setToGrade(e.target.value)}>
-                                <option>--Select Year--</option>
+                            <InputGroup hasValidation>
+                              <Form.Select onChange={(e) => setToGrade(e.target.value)} required>
+                                <option selected disabled value="">--Select Year--</option>
                                 <option>I</option>
                                 <option>II</option>
                               </Form.Select>
+                              <Form.Control.Feedback type="invalid">Please Enter Grade</Form.Control.Feedback>
+                              </InputGroup>
                             </div>
                           </Form.Group>
 
@@ -225,11 +267,14 @@ const Register = ()=>{
                               <span className="text-danger"> * </span>
                             </Form.Label>
                             <div className="col-md-6">
-                              <Form.Select onChange={(e) => setToSection(e.target.value)}>
-                                <option>--Select Year--</option>
+                            <InputGroup hasValidation>
+                              <Form.Select onChange={(e) => setToSection(e.target.value)} required>
+                                <option selected disabled value="">--Select Year--</option>
                                 <option>A</option>
                                 <option>B</option>
                               </Form.Select>
+                              <Form.Control.Feedback type="invalid">Please Enter Section</Form.Control.Feedback>
+                              </InputGroup>
                             </div>
                           </Form.Group>
 
@@ -242,7 +287,10 @@ const Register = ()=>{
                               <span className="text-danger"> * </span>
                             </Form.Label>
                             <div className="col-md-6">
-                              <Form.Control as="textarea" onChange={(e) => setPreviousSchoolInfo(e.target.value)} />
+                            <InputGroup hasValidation>
+                              <Form.Control as="textarea" onChange={(e) => setPreviousSchoolInfo(e.target.value)} required/>
+                              <Form.Control.Feedback type="invalid">Please Enter Previous School Info</Form.Control.Feedback>
+                              </InputGroup>
                             </div>
                           </Form.Group>
 
@@ -255,11 +303,15 @@ const Register = ()=>{
                               <span className="text-danger"> * </span>
                             </Form.Label>
                             <div className="col-md-6">
+                            <InputGroup hasValidation>
                               <Form.Control
                                 type="text"
                                 placeholder="Father Name"
                                 onChange={(e) => setFatherName(e.target.value)}
+                                required
                               />
+                              <Form.Control.Feedback type="invalid">Please Enter Fathername</Form.Control.Feedback>
+                              </InputGroup>
                             </div>
                           </Form.Group>
 
@@ -272,11 +324,15 @@ const Register = ()=>{
                               <span className="text-danger"> * </span>
                             </Form.Label>
                             <div className="col-md-6">
+                            <InputGroup hasValidation>
                               <Form.Control
                                 type="text"
                                 placeholder="Father Occupation"
                                 onChange={(e) => setFatherOccupation(e.target.value)}
+                                required
                               />
+                              <Form.Control.Feedback type="invalid">Please Enter FatherOccupation</Form.Control.Feedback>
+                              </InputGroup>
                             </div>
                           </Form.Group>
 
@@ -289,7 +345,10 @@ const Register = ()=>{
                               <span className="text-danger"> * </span>
                             </Form.Label>
                             <div className="col-md-6">
-                              <Form.Control as="textarea"  onChange={(e) => setAddress(e.target.value)} />
+                            <InputGroup hasValidation>
+                              <Form.Control as="textarea"  onChange={(e) => setAddress(e.target.value)} required/>
+                              <Form.Control.Feedback type="invalid">Please Enter Address</Form.Control.Feedback>
+                              </InputGroup>
                             </div>
                           </Form.Group>
 
@@ -303,6 +362,7 @@ const Register = ()=>{
                             </Form.Label>
                             <div className="col-md-6">
                               <Form.Control
+                              required
                                 type="text"
                                 placeholder="Phone No"
                                 onChange={(e) => setPhoneno(e.target.value)}
@@ -317,9 +377,7 @@ const Register = ()=>{
                       <div className="card-footerss">
                         <Button
                           className="btn btn-danger float-right"
-                          type="submit"
-                          onClick={Register}
-                        >
+                          type="submit">
                           Submit
                         </Button>
                       </div>

@@ -3,11 +3,12 @@ import Sidebar from "../Layouts/Sidebar";
 import Navbar from "../Layouts/Navbar";
 import Feesdetails from "./Feesdetails";
 import Academicfees from "./Academicfees";
-import { Row, Col, Form } from "react-bootstrap";
+import { Row, Col, Form,Button } from "react-bootstrap";
 
 const Student = () => {
   //To Make Edit
   const [statusStudentEdit, setStatusStudentEdit] = useState(false);
+  const [statusStudentSearch, setStatusStudentSearch] = useState({});
 
   return (
     <div id="page-top">
@@ -22,18 +23,19 @@ const Student = () => {
                   <div className="col-xl-12 col-md-2 mb-5 text-center">
                     <form className="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-10 my-md-0 mw-100">
                       <div className="input-group">
-                        <input
-                          type="text"
+                        <Form.Control
+                          type="search"
                           className="form-control bg-light border-0 small"
                           placeholder="Search for..."
                           aria-label="Search"
                           aria-describedby="basic-addon2"
                           style={{ width: "480px" }}
+                          
                         />
                         <div className="input-group-append">
-                          <button className="btn btn-danger" type="button">
+                          <Button className="btn btn-danger" type="button">
                             <i className="fas fa-search fa-sm"></i>
-                          </button>
+                          </Button>
                         </div>
                       </div>
                     </form>
@@ -77,6 +79,7 @@ const Student = () => {
                                   }}
                                 >
                                   <i
+                        
                                     className="fa fa-times"
                                     aria-hidden="true"
                                     onClick={() => setStatusStudentEdit(false)}
@@ -280,7 +283,7 @@ const Student = () => {
                             </Col>
                           </Form.Group>
 
-                          <Form.Group as={Row}>
+                          <Form.Group as={Row} >
                             <Form.Label column sm="4">
                               <strong>Email</strong>
                             </Form.Label>
@@ -309,7 +312,7 @@ const Student = () => {
                               {!statusStudentEdit ? (
                                 <div
                                   className="col-md-12 text-black"
-                                  id="stud_name"
+                                  
                                 >
                                   Active
                                 </div>

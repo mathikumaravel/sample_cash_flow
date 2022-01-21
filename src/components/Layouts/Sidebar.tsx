@@ -8,10 +8,7 @@ const Sidebar = () => {
         className="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion"
         id="accordionSidebar"
       >
-        <a
-          className="sidebar-brand d-flex align-items-center justify-content-center"
-          href="index.html"
-        >
+        <a className="sidebar-brand d-flex align-items-center justify-content-center">
           <div className="sidebar-brand-icon">
             <i className="fas fa-rupee-sign"></i>
           </div>
@@ -26,8 +23,15 @@ const Sidebar = () => {
           </a>
         </li>
 
-        <hr className="sidebar-divider" />
-
+       <div>
+         {' '}
+       </div>
+          <li>
+            <div>
+              {' '}
+            </div>
+            
+            </li>
         <li className="nav-item">
           <a
             className="nav-link collapsed"
@@ -48,109 +52,82 @@ const Sidebar = () => {
           >
             <div className="bg-white py-2 collapse-inner rounded">
               <h6 className="collapse-header">Custom</h6>
-           <Link to="/Student"><a className="collapse-item">
+           <Link to="/Student" className="collapse-item">
                 Student
-              </a></Link>   
-              <Link to="/Stu_add"> <a className="collapse-item">
+              </Link>   
+              <Link to="/Stu_add" className="collapse-item">
                 New Admission 
-              </a></Link>
-              <Link to="/Stupro"><a className="collapse-item">
+              </Link>
+              <Link to="/Stupro" className="collapse-item">
                 Promotion
-              </a></Link>
-              <Link to="/Stu_fees"> <a className="collapse-item">
+              </Link>
+              <Link to="/Stu_fees" className="collapse-item"> 
                 Year of Fee
-              </a></Link>
-              <Link to="/Fee_master"><a className="collapse-item">
+              </Link>
+              <Link to="/Fee_master" className="collapse-item">
                 Fee Master
-              </a></Link>
-              <Link to="/Discounttype">  <a className="collapse-item">
+              </Link>
+              <Link to="/Discounttype" className="collapse-item"> 
                 Discount Fee Type Master
-              </a></Link>
-              <Link to="/Academicyear"><a className="collapse-item">
+              </Link>
+              <Link to="/Academicyear" className="collapse-item">
                 Year
-              </a></Link>
-              <Link to="/Grade_section">  <a className="collapse-item">
+              </Link>
+              <Link to="/Grade_section" className="collapse-item">  
                Grade&section
-              </a></Link>
+              </Link>
             </div>
           </div>
         </li>
-
         <li className="nav-item">
-          <a className="nav-link" href="charts.html">
-            <i className="fas fa-fw fa-chart-area"></i>
-            <span>Operations</span>
-          </a>
-        </li>
-
-        <li className="nav-item">
-          <a className="nav-link" href="charts.html">
-            <i className="fas fa-fw fa-chart-area"></i>
-            <span>Account Transfer</span>
-          </a>
-        </li>
-
-        <li className="nav-item">
-          <a className="nav-link" href="charts.html">
-            <i className="fas fa-fw fa-chart-area"></i>
-            <span>IIT Fees</span>
-          </a>
-        </li> 
-
-        
-        <li className="nav-item">
-          <a className="nav-link" href="tables.html">
-            <i className="fas fa-fw fa-table"></i>
-            <span>hostel Advances</span>
-          </a>
-        </li>
-
-        <hr className="sidebar-divider" />
-
-        {/* <div className="sidebar-heading">Addons</div> */}
-
-        {/* <li className="nav-item">
-          <a
-            className="nav-link collapsed"
+          <a  className="nav-link collapsed"
             href="#"
             data-toggle="collapse"
-            data-target="#collapsePages"
+            data-target="#collapseTwo"
             aria-expanded="true"
-            aria-controls="collapsePages"
-          >
-            <i className="fas fa-fw fa-folder"></i>
+            aria-controls="collapseTwo">
+              <i className="fas fa-chalkboard-teacher"></i>
+            <span>Setting</span>
+          </a>
+          </li>
+          <li className="nav-item">
+          <a  className="nav-link collapsed"
+            href="#"
+            data-toggle="collapse"
+            data-target="#collapseTwo"
+            aria-expanded="true"
+            aria-controls="collapseTwo">
+              <i className="fas fa-chalkboard-teacher"></i>
+            <span>Options</span>
+          </a>
+          </li>
+          
+
+          <li className="nav-item">
+          <a  className="nav-link collapsed"
+            href="#"
+            data-toggle="collapse"
+            data-target="#collapseTwo"
+            aria-expanded="true"
+            aria-controls="collapseTwo">
+              <i className="fas fa-chalkboard-teacher"></i>
             <span>Pages</span>
           </a>
-          <div
-            id="collapsePages"
-            className="collapse"
-            aria-labelledby="headingPages"
-            data-parent="#accordionSidebar"
-          >
-            <div className="bg-white py-2 collapse-inner rounded">
-              <h6 className="collapse-header">Login Screens:</h6>
-              <a className="collapse-item" href="login.html">
-                Login
-              </a>
-              <a className="collapse-item" href="register.html">
-                Register
-              </a>
-              <a className="collapse-item" href="forgot-password.html">
-                Forgot Password
-              </a>
-              <div className="collapse-divider"></div>
-              <h6 className="collapse-header">Other Pages:</h6>
-              <a className="collapse-item" href="404.html">
-                404 Page
-              </a>
-              <a className="collapse-item" href="blank.html">
-                Blank Page
-              </a>
-            </div>
-          </div>
-        </li> */}
-
+          </li>
+          <li className="nav-item">
+          <a  className="nav-link collapsed"
+            href="#"
+            data-toggle="collapse"
+            data-target="#collapseTwo"
+            aria-expanded="true"
+            aria-controls="collapseTwo">
+              <i className="fas fa-chalkboard-teacher"></i>
+            <span>Admission</span>
+          </a>
+          </li>
+       
         <hr className="sidebar-divider d-none d-md-block" />
+        <hr/>
 
         <div className="text-center d-none d-md-inline">
           <button
