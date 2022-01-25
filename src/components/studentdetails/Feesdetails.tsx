@@ -1,7 +1,9 @@
 import react from "react";
 import { Link } from "react-router-dom";
 
-const Feesdetails = () => {
+const Feesdetails = (props:any) => {
+    const status = props.status;
+
     return (
         <div>
             <div className="row">
@@ -12,9 +14,10 @@ const Feesdetails = () => {
                                 <a>
                                     <i className="far fa-clone"></i> Payment
                                 </a>{" "}
-                                <Link to="/Stu_pay"> <a className="btn btn-success btn-sm float-right">
+                            {status === 'active' ? 
+                               <Link to='/Stu_pay'> <a className="btn btn-success btn-sm float-right">
                                     Pay or View All
-                                </a></Link>
+                                </a></Link>:null}
                             </h4>
                         </div>
                         <div className="card-body">
