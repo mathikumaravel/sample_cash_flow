@@ -5,8 +5,10 @@ import Navbar from "../Layouts/Navbar";
 import Listofpayment from "./Listofpayment";
 import { Button, Row, Col } from "react-bootstrap";
 
+
 const Studentpay = () => {
   const [RefundTableStatus, setRefundTableStatus] = useState(false);
+  
 
   return (
     <div>
@@ -16,13 +18,14 @@ const Studentpay = () => {
           <div>
             <div id="content">
               <Navbar></Navbar>
-              <div className="container">
+               <div className="container">
                 <div className="row">
                   <div
                     className="col-lg-12"
                     style={{ position: "relative", top: "20px" }}
                   >
-                    <div className="card shadow  mb-3">
+                
+               <div className="card shadow  mb-3">
                       <div className="card-header bg-transparent border-1 text-center">
                         {!RefundTableStatus ? (
                           <a style={{ color: "rgb(230, 63, 63)" }}>
@@ -288,6 +291,7 @@ const Studentpay = () => {
                 </div>
                 <Listofpayment></Listofpayment>
               </div>
+            
             </div>
           </div>
         </div>
@@ -296,50 +300,3 @@ const Studentpay = () => {
   );
 };
 export default Studentpay;
-
-{
-  /* 
-<div className="row">    
-            <div className="col-lg-12">
-             <div className="card shadow mb-4">
-            <div className="card-header py-3">
-            <h4 className="m-0 font-weight-bold text-danger text-center">
-            <a><i className="far fa-clone pr-1"></i> Fees</a> <a className="btn btn-success btn-sm float-right" href="/Stu_pay">Back</a>
-            </h4>
-           
-          </div>
-          <div className="card-body">
-            <div className="row">
-              <div className="col-xl-4 col-md-3 mb-4">
-                <div>
-                  <h6>Date</h6>
-                </div>
-                <div>
-                  <label>2022-01-04</label>
-                </div>
-              </div>
-
-              <div className="col-xl-4 col-md-3 mb-4">
-                <div>
-                  <h6>Fee Type</h6>
-                </div>
-                <div>
-                  <label>Admission Fees</label>
-                </div>
-              </div>
-              <div className="col-xl-4 col-md-3 mb-4">
-                <div>
-                <h6>Amount</h6>
-                </div>
-                <div>
-                  <label>1.00</label>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-
-      </div> */
-}
