@@ -1,11 +1,55 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import Sidebar from "../Layouts/Sidebar";
 import Navbar from "../Layouts/Navbar";
 import { Button, Table, Pagination, Form, Col, Row } from "react-bootstrap";
+import axios, { AxiosResponse } from "axios";
+
 
 const Grade = () => {
   const [statusGradeEdit, setStatusGradeEdit] = useState(false);
   const [statusGradeAdd, setStatusGradeAdd] = useState(false);
+  const [statusList,setStatusList] = useState<any>([]);
+  const [statusGrade,setStatusgrade] =useState<any>([]);
+  const [statusSection,setStatussection] = useState<any>([]);
+
+
+
+  useEffect(() => {
+    axios
+    .get(`https://61ea85bfc9d96b0017700bb9.mockapi.io/grade`)
+    .then((response: AxiosResponse) => {
+        setStatusList(response.data);
+    });
+  }, []);
+
+  const editData = () => {
+    axios.put(`https://61ea85bfc9d96b0017700bb9.mockapi.io/grade`,{
+      
+    })
+
+  }
+ 
+  const postData = () => {
+    axios
+      .post(`https://61ea85bfc9d96b0017700bb9.mockapi.io/grade`, {
+        grade:statusGrade,
+        section:statusSection,
+      })
+      .then(() => {
+        alert("success");
+        window.location.reload();
+      }).catch(() => {
+      alert("This Faild");
+     
+  });
+  }
+
+  const onDelete = (grade_id:any,index:any) => {
+    axios.delete(`https://61ea85bfc9d96b0017700bb9.mockapi.io/grade/${grade_id}`)
+        .then(() => {
+          window.location.reload();
+        })
+}
 
   return (
     <div>
@@ -104,170 +148,96 @@ const Grade = () => {
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  <tr>
-                                    <td
-                                      style={{ width: "30%" }}
-                                      className="sorting_1"
-                                    >
-                                      1
-                                    </td>
-                                    <td>
-                                      {" "}
-                                      {!statusGradeEdit ? (
-                                        <div>I</div>
-                                      ) : (
-                                        <div>
-                                          <Form.Control
-                                            style={{ width: "80%" }}
-                                            type="text"
-                                            defaultValue="I"
-                                          />
-                                        </div>
-                                      )}
-                                    </td>
-                                    <td>
-                                      {" "}
-                                      {!statusGradeEdit ? (
-                                        <div>A</div>
-                                      ) : (
-                                        <div>
-                                          <Form.Control
-                                            style={{ width: "80%" }}
-                                            type="text"
-                                            defaultValue="A"
-                                          />
-                                        </div>
-                                      )}
-                                    </td>
-                                    <td>
-                                      {" "}
-                                      {!statusGradeEdit ? (
-                                        <div>
-                                          <i
-                                            style={{
-                                              marginLeft: "10px",
-                                              cursor: "pointer",
-                                            }}
-                                            onClick={() =>
-                                              setStatusGradeEdit(true)
-                                            }
-                                            className="fa fa-edit fa-1x text-success"
-                                          ></i>
-                                          <i
-                                            style={{
-                                              marginLeft: "10px",
-                                              cursor: "pointer",
-                                            }}
-                                            className="far fa-trash-alt text-danger"
-                                          ></i>
-                                        </div>
-                                      ) : (
-                                        <div>
-                                          <i
-                                            style={{
-                                              marginLeft: "5px",
-                                              cursor: "pointer",
-                                            }}
-                                            onClick={() =>
-                                              setStatusGradeEdit(false)
-                                            }
-                                            className="fa fa-times fa-1x text-danger"
-                                            aria-hidden="true"
-                                          ></i>
-                                          <i
-                                            style={{
-                                              marginLeft: "5px",
-                                              cursor: "pointer",
-                                            }}
-                                            onClick={() =>
-                                              setStatusGradeEdit(false)
-                                            }
-                                            className="fa fa-save btn text-danger"
-                                          ></i>
-                                        </div>
-                                      )}
-                                    </td>
-                                  </tr>
-
-                                  <tr className="even">
-                                    <td style={{ width: "30%" }}>2</td>
-                                    <td>
-                                      {" "}
-                                      {!statusGradeEdit ? (
-                                        <div>II</div>
-                                      ) : (
-                                        <div>
-                                          <Form.Control
-                                            style={{ width: "80%" }}
-                                            type="text"
-                                            defaultValue="II"
-                                          />
-                                        </div>
-                                      )}
-                                    </td>
-                                    <td>
-                                      {" "}
-                                      {!statusGradeEdit ? (
-                                        <div>B</div>
-                                      ) : (
-                                        <div>
-                                          <Form.Control
-                                            style={{ width: "80%" }}
-                                            type="text"
-                                            defaultValue="B"
-                                          />
-                                        </div>
-                                      )}
-                                    </td>
-                                    <td>
-                                      {" "}
-                                      {!statusGradeEdit ? (
-                                        <div>
-                                          <i
-                                            style={{
-                                              marginLeft: "10px",
-                                              cursor: "pointer",
-                                            }}
-                                            onClick={() =>
-                                              setStatusGradeEdit(true)
-                                            }
-                                            className="fa fa-edit fa-1x text-success"
-                                          ></i>
-                                          <i
-                                            style={{
-                                              marginLeft: "10px",
-                                              cursor: "pointer",
-                                            }}
-                                            className="far fa-trash-alt text-danger"
-                                          ></i>
-                                        </div>
-                                      ) : (
-                                        <div>
-                                          <i
-                                            style={{
-                                              marginLeft: "5px",
-                                              cursor: "pointer",
-                                            }}
-                                            onClick={() =>
-                                              setStatusGradeEdit(false)
-                                            }
-                                            className="fa fa-times fa-1x text-danger"
-                                            aria-hidden="true"
-                                          ></i>
-                                          <i
-                                            style={{
-                                              marginLeft: "5px",
-                                              cursor: "pointer",
-                                            }}
-                                            onClick={() =>
-                                              setStatusGradeEdit(false)
-                                            }
-                                            className="fa fa-save btn text-danger"
-                                          ></i>
-                                        </div>
-                                      )}
-                                    </td>
-                                  </tr>
+                                {statusList &&
+              statusList.length &&
+              statusList.map((data: any, index: any) => {
+                return (<tr>
+                  <td
+                    style={{ width: "30%" }}
+                    className="sorting_1"
+                    key={index}
+                  >
+                    {index+1}
+                  </td>
+                  <td>
+                    {" "}
+                    {!statusGradeEdit ? (
+                      <div>{data.grade}</div>
+                    ) : (
+                      <div>
+                        <Form.Control
+                          style={{ width: "80%" }}
+                          type="text"
+                          defaultValue={data.grade}
+                        />
+                      </div>
+                    )}
+                  </td>
+                  <td>
+                    {" "}
+                    {!statusGradeEdit ? (
+                      <div>{data.section}</div>
+                    ) : (
+                      <div>
+                        <Form.Control
+                          style={{ width: "80%" }}
+                          type="text"
+                          defaultValue={data.section}
+                        />
+                      </div>
+                    )}
+                  </td>
+                  <td>
+                    {" "}
+                    {!statusGradeEdit ? (
+                      <div>
+                        <i
+                          style={{
+                            marginLeft: "10px",
+                            cursor: "pointer",
+                          }}
+                          onClick={() =>
+                            setStatusGradeEdit(true)
+                          }
+                          className="fa fa-edit fa-1x text-success"
+                        ></i>
+                        <i
+                          style={{
+                            marginLeft: "10px",
+                            cursor: "pointer",
+                          }}
+                          onClick={() => onDelete(data.id,index)}
+                          className="far fa-trash-alt text-danger"
+                        ></i>
+                      </div>
+                    ) : (
+                      <div>
+                        <i
+                          style={{
+                            marginLeft: "5px",
+                            cursor: "pointer",
+                          }}
+                          onClick={() =>
+                            setStatusGradeEdit(false)
+                          }
+                          className="fa fa-times fa-1x text-danger"
+                          aria-hidden="true"
+                        ></i>
+                        <i
+                          style={{
+                            marginLeft: "5px",
+                            cursor: "pointer",
+                          }}
+                          onClick={() =>
+                            setStatusGradeEdit(false)
+                          }
+                          className="fa fa-save btn text-danger"
+                        ></i>
+                      </div>
+                                 )}
+                                        </td>
+                                    </tr>);
+                                })}  
                                 </tbody>
                               </Table>
                             </div>
@@ -294,6 +264,7 @@ const Grade = () => {
                         </div>
                       ) : (
                         <div>
+                          
                           <Row className="mb-4">
                             <Col sm="4" className="mb-4">
                               <Form.Label style={{ marginLeft: "40px" }}>
@@ -301,7 +272,7 @@ const Grade = () => {
                               </Form.Label>
                             </Col>
                             <Col sm="6">
-                              <Form.Control type="text" style={{width:"50%"}} />
+                              <Form.Control type="text" style={{width:"50%"}} onChange={(e) => setStatusgrade(e.target.value)} />
                             </Col>{" "}
                             <Col sm="4">
                               <Form.Label style={{ marginLeft: "40px" }}>
@@ -309,19 +280,21 @@ const Grade = () => {
                               </Form.Label>
                             </Col>
                             <Col sm="6">
-                              <Form.Control type="text" style={{width:"50%"}}/>
+                              <Form.Control type="text" style={{width:"50%"}} onChange={(e) => setStatussection(e.target.value)}/>
                             </Col>
                           </Row>
                           <div className="card-footer py3">
                             <Button
+                          
                               type="submit"
                               className="btn btn-danger btn-save"
-                              onClick={() => setStatusGradeEdit(false)}
+                              onClick={() => postData()}
                               style={{ marginLeft: "90%" }}
                             >
                               Save
                             </Button>
                           </div>
+                         
                         </div>
                       )}
                     </div>
@@ -336,3 +309,7 @@ const Grade = () => {
   );
 };
 export default Grade;
+function e(e: any, any: any) {
+  throw new Error("Function not implemented.");
+}
+

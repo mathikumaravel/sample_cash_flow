@@ -1,7 +1,12 @@
 import React from "react";
-
+import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
+    let history = useNavigate();
+    const callLogout= ()=>{
+        localStorage.clear();
+        history('/')
+    }
 
     return(
         <div>
@@ -31,7 +36,7 @@ const Navbar = () => {
                                     Activity Log
                                 </a>
                                 <div className="dropdown-divider"></div>
-                                <a className="dropdown-item" href="/">
+                                <a className="dropdown-item" onClick={()=>{callLogout()}}>
                                     <i className="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
                                 </a>

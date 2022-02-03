@@ -81,7 +81,6 @@ const Student = () => {
       )
       .then((response: AxiosResponse) => {
         setStatusStudentDetails(response.data);
-        setStatusStudentEdit(false);
       })
       .catch((error) => {
         alert(error);
@@ -180,7 +179,7 @@ const Student = () => {
                                     <Col md={5}>
                                       <i
                                         className="fa fa-save btn"
-                                        onClick={searchedit}
+                                        onClick={()=>searchedit()}
                                         style={{
                                           fontSize: "25px",
                                           color: "red",

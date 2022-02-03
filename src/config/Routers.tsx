@@ -1,4 +1,7 @@
 import React from 'react'
+import axios from 'axios'
+
+import "../config/Axiosconfiq"
 import {
     BrowserRouter as Router,
     Routes,
@@ -17,7 +20,14 @@ import Year from '../components/Year/Year';
 import Grade from '../components/Grade_section/Grade';
 
 
-function Config(){
+let token_get:any = localStorage.getItem('AccessToken') ? localStorage.getItem('AccessToken') : '';
+axios.defaults.headers.common['Authorization'] = token_get ;
+
+function Routers(){
+    if(localStorage.getItem('AccessToken')){
+        console.log(localStorage.getItem('AccessToken'));
+    }
+    
     return(
         <div>
 <Router>
@@ -41,4 +51,4 @@ function Config(){
     )
 
 }
-export default Config
+export default Routers

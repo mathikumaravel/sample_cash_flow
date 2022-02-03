@@ -2,11 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import Config from './config/Config';
+import Routers from './config/Routers';
+
+export const baseUrl= "http://3.13.152.87/api/v1/"
 
 ReactDOM.render(
   <React.StrictMode>
-    <Config/>
+    <Routers/>
   </React.StrictMode>,
   document.getElementById('root')
 );
