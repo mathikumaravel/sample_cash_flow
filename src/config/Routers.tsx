@@ -2,11 +2,7 @@ import React from 'react'
 import axios from 'axios'
 
 import "../config/Axiosconfiq"
-import {
-    BrowserRouter as Router,
-    Routes,
-    Route
-  } from 'react-router-dom';
+import {BrowserRouter,Route,Switch,useHistory } from 'react-router-dom'
 import Login from '../components/auth/Login';
 import Student from '../components/studentdetails/Student';
 import Dashboard from '../components/Dashboard/Dashboard';
@@ -23,31 +19,41 @@ import Grade from '../components/Grade_section/Grade';
 let token_get:any = localStorage.getItem('AccessToken') ? localStorage.getItem('AccessToken') : '';
 axios.defaults.headers.common['Authorization'] = token_get ;
 
-function Routers(){
+const PrivateRoute = (props:any) => {
+    let history = useHistory<any>();
+    const token= localStorage.getItem('AccessToken');
+    if(token){
+    return <Route exact={true} path={props.path} component={props.component} />
+    }else {
+        history.push('/')
+    return <Login {...props} />
+    }
+    }
+    
+    
+
+function Routers(props:any){
     if(localStorage.getItem('AccessToken')){
         console.log(localStorage.getItem('AccessToken'));
     }
     
     return(
-        <div>
-<Router>
-<Routes>
-    <Route  path='/' element={< Login />}></Route>
-    <Route path='/Dashboard' element={<Dashboard/>}></Route>
-    <Route  path='/Student' element={< Student />}></Route>
-    <Route path='/Stu_pay' element={<Studentpay/>}></Route>
-    <Route path='/Stu_add' element={<Studentadd/>}></Route>
-    <Route path='/Stupro' element={<Promotion/>}></Route>
-    <Route path='/Stu_fees' element={<Yearoffee/>}></Route>
-    <Route path='/Fee_master' element={<Feemaster/>}></Route>
-    <Route path='/Discounttype' element={<Discountfee/>}></Route>
-    <Route path='/Academicyear' element={<Year/>}></Route>
-    <Route path='/Grade_section' element={<Grade/>}></Route>
-</Routes>
-</Router>
-       {/* Cashflow Ui color #e84118          */}
-   
-    </div>
+       
+<BrowserRouter>
+<Switch>
+<Route exact={true} path="/" component={Login} />
+<PrivateRoute path='/Dashboard' component={Dashboard}/>
+<PrivateRoute  path='/Student' component={Student}/>
+<PrivateRoute path='/Stu_pay' component={Studentpay}/>
+<PrivateRoute path='/Stu_add' component={Studentadd}/>
+<PrivateRoute path='/Stupro' component={Promotion}/>
+<PrivateRoute path='/Stu_fees' component={Yearoffee}/>
+<PrivateRoute path='/Fee_master' component={Feemaster}/>
+<PrivateRoute path='/Discounttype' component={Discountfee}/>
+<PrivateRoute path='/Academicyear' component={Year}/>
+<PrivateRoute path='/Grade_section' component={Grade}/>
+</Switch>
+</BrowserRouter>
     )
 
 }

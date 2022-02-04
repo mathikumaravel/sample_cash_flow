@@ -1,7 +1,6 @@
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { baseUrl } from "../../index";
-import { useNavigate } from "react-router-dom";
 import Sidebar from "../Layouts/Sidebar";
 import Navbar from "../Layouts/Navbar";
 import { Button, Table, Pagination, Form } from "react-bootstrap";
