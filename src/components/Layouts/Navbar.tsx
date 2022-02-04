@@ -1,11 +1,11 @@
 import React from "react";
-import { useNavigate } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 const Navbar = () => {
-    let history = useNavigate();
+    let history = useHistory();
     const callLogout= ()=>{
         localStorage.clear();
-        history('/')
+        history.push('/')
     }
 
     return(
