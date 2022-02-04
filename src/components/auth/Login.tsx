@@ -2,10 +2,12 @@ import React from 'react'
 import axios from "axios";
 import { useState,useEffect } from "react";
 import { baseUrl } from '../../index';
-import { useNavigate } from 'react-router-dom';
+import { useHistory } from "react-router-dom";
 
-const Login = () =>{
-    let history = useNavigate();
+
+
+const Login = (props:any) =>{
+    let history = useHistory<any>();
 
   const [username, setUsername] = useState<any>('');
   const [password, setPassword] = useState<any>('');
@@ -26,7 +28,7 @@ const Login = () =>{
     const res:any = await axios.post(`${baseUrl}sessions/login`, { email:username,  password:password }).then((res:any) => {
         console.log(res);
         localStorage.setItem('AccessToken', res.data.auth_token);
-        history('/Student')
+        history.push('/Student')
     });
     } catch (err) {
     alert("Incorrect Username and Password");
