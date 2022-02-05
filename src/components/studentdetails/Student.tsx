@@ -164,7 +164,7 @@ const Student = () => {
                           <div className="card shadow mb-5">
                           <div className="card-header py-2">
                             <h4 className="m-0 text-danger">
-                                <a>Student Profile</a>
+                                <a>Profile</a>
                                
                                 {!statusStudentEdit ? (
                                   <i
@@ -174,7 +174,7 @@ const Student = () => {
                                       fontSize: "25px",
                                       color: "red",
                                       cursor: "pointer",
-                                      marginLeft: "50%" ,
+                                      marginLeft: "70%" ,
                                     }}
                                   ></i>
                                 ) : (
@@ -185,7 +185,7 @@ const Student = () => {
                                           fontSize: "25px",
                                           color: "red",
                                           cursor: "pointer",
-                                          marginLeft: "50%" ,
+                                          marginLeft: "70%" ,
                                         }}
                                       ></i>
                                    
