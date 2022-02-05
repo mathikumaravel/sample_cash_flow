@@ -59,7 +59,10 @@ const Discountfee = () => {
     const updateDiscountFeeTypeName = () => {
         delete editingDiscountFeeYear.id;
         getAccessToken();
-        axios
+        if(editingDiscountFeeYear.name == ''){
+            alert("Please Enter A Value");
+        }else{
+            axios
             .put(`${baseUrl}discount_type_masters/update`, { dis_feetype_id: editingDiscountFeeYear.dis_id, dis_feetype_name: editingDiscountFeeYear.name })
             .then((res: any) => {
                 console.log(res.data);
@@ -73,6 +76,8 @@ const Discountfee = () => {
                 setEditingDiscountFeeYear({});
                 setUpdateDiscountData("");
             });
+        }
+       
     };
 
     useEffect(() => {
@@ -109,17 +114,24 @@ const Discountfee = () => {
     const handleSubmit = async (e: any) => {
         setDuplication(true);
         e.preventDefault();
-        try {
-            getAccessToken();
-            const res: any = await axios.post(`${baseUrl}discount_type_masters/create`, { dis_feetype_name: discountFeeTypeName }).then((res: any) => {
-                console.log(res.data);
-                getgetDiscountFeeTypeName();
-                setStatusDiscountfeeAdd(false);
-                setDuplication(false);
-            });
-        } catch (err) {
+        if (discountFeeTypeName == "") {
+            alert("Please Enter A Value");
             setDuplication(false);
-            alert("try again");
+        } else {
+            try {
+                getAccessToken();
+                const res: any = await axios.post(`${baseUrl}discount_type_masters/create`, { dis_feetype_name: discountFeeTypeName }).then((res: any) => {
+                    console.log(res.data);
+                    getgetDiscountFeeTypeName();
+                    setStatusDiscountfeeAdd(false);
+                    setDuplication(false);
+                    setDiscountFeeTypeName("")
+                });
+            } catch (err) {
+                setDuplication(false);
+                setDiscountFeeTypeName("")
+                alert("try again");
+            }
         }
     };
 
