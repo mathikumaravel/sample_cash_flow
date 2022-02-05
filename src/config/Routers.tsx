@@ -15,10 +15,6 @@ import Discountfee from '../components/Discountfee/Discountfee';
 import Year from '../components/Year/Year';
 import Grade from '../components/Grade_section/Grade';
 
-
-let token_get:any = localStorage.getItem('AccessToken') ? localStorage.getItem('AccessToken') : '';
-axios.defaults.headers.common['Authorization'] = token_get ;
-
 const PrivateRoute = (props:any) => {
     let history = useHistory<any>();
     const token= localStorage.getItem('AccessToken');
