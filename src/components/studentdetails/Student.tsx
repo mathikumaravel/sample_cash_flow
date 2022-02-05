@@ -162,8 +162,10 @@ const Student = () => {
                       <div className="row">
                         <div className="col-lg-6">
                           <div className="card shadow mb-5">
-                            <div className="card-body bg-transparent">
-                              <div style={{ marginLeft: "80%" }}>
+                          <div className="card-header py-2">
+                            <h4 className="m-0 text-danger">
+                                <a>Student Profile</a>
+                               
                                 {!statusStudentEdit ? (
                                   <i
                                     className="fa fa-edit profile_btn-edit btn"
@@ -172,28 +174,21 @@ const Student = () => {
                                       fontSize: "25px",
                                       color: "red",
                                       cursor: "pointer",
+                                      marginLeft: "50%" ,
                                     }}
                                   ></i>
                                 ) : (
-                                  <Row>
-                                    <Col md={5}>
-                                      <i
-                                        className="fa fa-save btn"
+                                  <>
+                                      <i className="fa fa-save btn"
                                         onClick={()=>searchedit()}
                                         style={{
                                           fontSize: "25px",
                                           color: "red",
                                           cursor: "pointer",
+                                          marginLeft: "50%" ,
                                         }}
                                       ></i>
-                                    </Col>
-                                    <Col
-                                      md={5}
-                                      style={{
-                                        display: "flex",
-                                        alignItems: "center",
-                                      }}
-                                    >
+                                   
                                       <i
                                         className="fa fa-times"
                                         aria-hidden="true"
@@ -204,12 +199,18 @@ const Student = () => {
                                           fontSize: "25px",
                                           color: "red",
                                           cursor: "pointer",
+                                          
                                         }}
+                                  
                                       ></i>
-                                    </Col>
-                                  </Row>
+                                   </>
                                 )}
-                              </div>
+                              
+                              </h4>
+                           
+                        </div>
+                            <div className="card-body bg-transparent">
+                              
                               <Form.Group as={Row}>
                                 <Form.Label column sm="4">
                                   <strong>Student Name</strong>
@@ -299,7 +300,7 @@ const Student = () => {
                                       className="col-md-6 text-black"
                                       id="stud_name"
                                     >
-                                      {statusStudentDetails.student_id}
+                                     000123
                                     </div>
                                   ) : (
                                     <Form.Control
@@ -319,6 +320,9 @@ const Student = () => {
                         <div className="col-lg-5">
                           <div className="card shadow mb-5">
                             <div className="card-body bg-transparent">
+                            <Form.Group as={Row}>
+                                <Form.Label> </Form.Label>
+                              </Form.Group>
                               <Form.Group as={Row}>
                                 <Form.Label column sm="4">
                                   <strong>Father Name</strong>

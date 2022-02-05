@@ -129,7 +129,7 @@ const Studentpay = () => {
                                     <span className="text-danger"> * </span>
                                   </th>
                                   <th>
-                                    Amount
+                                    Amount ₹
                                     <span className="text-danger"> * </span>
                                   </th>
                                   <th>
@@ -226,10 +226,10 @@ const Studentpay = () => {
                                     {" "}
                                     <input
                                       type="date"
-                                      id="payment_date"
+                                      
                                       className="form-control payment_date"
                                       name="fee_name[0][payment_date]"
-                                      style={{ width: "86%" }}
+                                      style={{ width: "100%" }}
                                     />
                                   </td>
                                   <td>

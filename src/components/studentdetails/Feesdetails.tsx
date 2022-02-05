@@ -41,7 +41,7 @@ const Feesdetails = (props:any) => {
                                 </div>
                                 <div className="col-xl-4 col-md-3 mb-4">
                                     <div>
-                                        <h6>Amount</h6>
+                                        <h6>Amount ₹</h6>
                                     </div>
                                     <div>
                                         <label>1.00</label>
@@ -72,7 +72,7 @@ const Feesdetails = (props:any) => {
 
                                 <div className="col-xl-6 col-md-3 mb-4">
                                     <div>
-                                        <h6>Balance</h6>
+                                        <h6>Balance ₹</h6>
                                     </div>
                                     <div>
                                         <label>332</label>

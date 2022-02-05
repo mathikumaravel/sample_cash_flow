@@ -23,6 +23,7 @@ const Studentadd = () => {
     const [fatherOccupation,setFatherOccupation] = useState<any>('');
     const [address,setAddress] = useState<any>('');
     const [phoneNo,setPhoneno] = useState<any>('');
+    const [alterPhoneno,setAlterPhoneno] = useState<any>('');
 
     const handleSubmit = (e:any) => {
       const form = e.currentTarget;
@@ -37,8 +38,21 @@ const Studentadd = () => {
     
         console.log(register)
     };
-  
 
+
+    const handleChangeMobile = (e:any) => {
+      const re = /^[0-9\b]+$/; //rules
+      if (e.target.value === "" || re.test(e.target.value)) {
+        setPhoneno(e.target.value);
+      }
+    }
+  
+      const handleChangeMobileAlter = (e:any) => {
+        const re = /^[0-9\b]+$/; //rules
+        if (e.target.value === "" || re.test(e.target.value)) {
+          setAlterPhoneno(e.target.value);
+        }
+      }
     
 // const Register = ()=>{
     
@@ -234,10 +248,7 @@ const Studentadd = () => {
                               </InputGroup>
                             </div>
                           </Form.Group>
-                        </div>
-                      </div>
-                      <div className="col-md-6">
-                        <div className="card-body">
+
                           <Form.Group
                             className="form-group row"
                             controlId="formBasicEmail"
@@ -257,6 +268,11 @@ const Studentadd = () => {
                               </InputGroup>
                             </div>
                           </Form.Group>
+                        </div>
+                      </div>
+                      <div className="col-md-6">
+                        <div className="card-body">
+                          
 
                           <Form.Group
                             className="form-group row"
@@ -363,13 +379,29 @@ const Studentadd = () => {
                             <div className="col-md-6">
                               <Form.Control
                               required
-                                type="text"
+                              type="text"
+                               pattern="[0-9]*"
                                 placeholder="Phone No"
-                                onChange={(e) => setPhoneno(e.target.value)}
                               />
-                              <span style={{ color: "red" }}>
-                                Note:Phone No should be 10 digit.
-                              </span>
+                              
+                            </div>
+                          </Form.Group>
+                          <Form.Group
+                            className="form-group row"
+                            controlId="formBasicEmail"
+                          >
+                            <Form.Label className="col-md-5 col-form-label text-md-right">
+                             Alt. Phone No
+                              <span className="text-danger"> * </span>
+                            </Form.Label>
+                            <div className="col-md-6">
+                              <Form.Control
+                              required
+                                type="text"
+                                pattern="[0-9]*"
+                                placeholder="Alt. Phone No"  
+                              />
+                              
                             </div>
                           </Form.Group>
                         </div>
@@ -391,5 +423,6 @@ const Studentadd = () => {
       </div>
     </div>
   );
+
 };
 export default Studentadd;
