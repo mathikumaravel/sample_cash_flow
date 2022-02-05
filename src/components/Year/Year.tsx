@@ -42,7 +42,7 @@ const Year = () => {
     const getAllAcademicYear = () => {
         getAccessToken();
         axios
-            .get(`${baseUrl}academic_year`)
+            .get(`${baseUrl}academic_year/show`)
             .then((res: any) => {
                 console.log(res.data);
                 setAllAcademicYear(res.data);
@@ -61,7 +61,7 @@ const Year = () => {
         newArrVal.splice(index, 1);
         getAccessToken();
         axios
-            .delete(`${baseUrl}academic_year`, { data: { id: year } })
+            .delete(`${baseUrl}academic_year/delete?`, { data: { year_id: year } })
             .then((res: any) => {
                 setNewAcademicYear(newArrVal);
                 setdatatoDelete({});
