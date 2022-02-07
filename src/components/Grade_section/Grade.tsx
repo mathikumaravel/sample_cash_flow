@@ -81,12 +81,7 @@ const Grade = () => {
                                 Add
                               </Button>
                             ) : (
-                              <Button
-                                className="btn btn-sm btn-secondary"
-                                onClick={() => setStatusGradeAdd(false)}
-                              >
-                                Cancel
-                              </Button>
+                             null
                             )}
                           </div>
                         </div>
@@ -284,15 +279,28 @@ const Grade = () => {
                             </Col>
                           </Row>
                           <div className="card-footer py3">
+                            <Row>
+                              <Col>
+                              <Button
+                           style={{ marginLeft: "80%" }}
+                                className="btn btn-secondary"
+                                onClick={() => setStatusGradeAdd(false)}
+                              >
+                                Cancel
+                              </Button>
+                              {" "}
                             <Button
                           
                               type="submit"
                               className="btn btn-danger btn-save"
                               onClick={() => postData()}
-                              style={{ marginLeft: "90%" }}
+                             
                             >
                               Save
                             </Button>
+                              </Col>
+                            </Row>
+                          
                           </div>
                          
                         </div>

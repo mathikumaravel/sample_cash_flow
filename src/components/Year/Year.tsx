@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState,useCallback } from "react";
+import { useEffect, useState } from "react";
 import { baseUrl } from "../../index";
 import Sidebar from "../Layouts/Sidebar";
 import Navbar from "../Layouts/Navbar";
@@ -28,34 +28,34 @@ const Year = () => {
 
   //Modal Popup
 
-  const dataSearch:any =
-  allAcademicYear.length &&
-  allAcademicYear.sort().filter((data: any) => {
-      return Object.keys(data).some((key) =>
-        data[key]
-          .toString()
-          .toLowerCase()
-          .includes(filter.toString().toLowerCase())
-      ); 
-  });
+  // const dataSearch:any =
+  // allAcademicYear.length &&
+  // allAcademicYear.sort().filter((data: any) => {
+  //     return Object.keys(data).some((key) =>
+  //       data[key]
+  //         .toString()
+  //         .toLowerCase()
+  //         .includes(filter.toString().toLowerCase())
+  //     ); 
+  // });
 
 
   const [show, setShow] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  let NUM_OF_RECORDS = allAcademicYear.length;
-  let LIMIT = 5;
+  // const [currentPage, setCurrentPage] = useState(1);
+  // let NUM_OF_RECORDS = allAcademicYear.length;
+  // let LIMIT = 5;
 
-  const onPageChanged:any = useCallback(
-    (event:any, page:any) => {
-      event.preventDefault();
-      setCurrentPage(page);
-    },
-    [setCurrentPage]
-  );
-  const currentData:any = allAcademicYear.slice(
-    (currentPage - 1) * LIMIT,
-    (currentPage - 1) * LIMIT + LIMIT
-  );
+  // const onPageChanged:any = useCallback(
+  //   (event:any, page:any) => {
+  //     event.preventDefault();
+  //     setCurrentPage(page);
+  //   },
+  //   [setCurrentPage]
+  // );
+  // const currentData:any = allAcademicYear.slice(
+  //   (currentPage - 1) * LIMIT,
+  //   (currentPage - 1) * LIMIT + LIMIT
+  // );
 
 
   const handleClose = () => {
@@ -170,14 +170,8 @@ const Year = () => {
                               >
                                 Add
                               </Button>
-                            ) : (
-                              <Button
-                                className="btn btn-sm btn-secondary"
-                                onClick={() => setStatusAcademicYearAdd(false)}
-                              >
-                                Cancel
-                              </Button>
-                            )}
+                            ) : (null)
+                            }
                           </div>
                         </div>
                       </a>
@@ -233,9 +227,9 @@ const Year = () => {
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  {dataSearch && 
-                                    dataSearch.length && 
-                                    dataSearch.map(
+                                  {allAcademicYear && 
+                                    allAcademicYear.length && 
+                                    allAcademicYear.map(
                                       (values: any, index: any) => {
                                         return (
                                           <tr key={index}>
@@ -269,13 +263,13 @@ const Year = () => {
                             </div>
                           </div>
                           <div className="pagination-wrapper">
-                            <Pagination
+                            {/* <Pagination
                               totalRecords={NUM_OF_RECORDS}
                               pageLimit={LIMIT}
                               pageNeighbours={1}
                               onPageChanged={onPageChanged}
                               currentPage={currentPage}
-                            />
+                            /> */}
                           </div>
                           <Modal show={show} onHide={SuddenhandleClose}>
                             <Modal.Header closeButton>
@@ -350,16 +344,28 @@ const Year = () => {
                           </Container>
                           <br></br>
                           <div className="card-footer py3">
+                          <Row>
+                             <Col>
+                          <Button
+                            style={{ marginLeft:"80%"}}
+                                className="btn btn-secondary"
+                                onClick={() => setStatusAcademicYearAdd(false)}
+                              >
+                                Cancel
+                              </Button>
+                              {" "} 
                             <Button
                               type="submit"
                               className="btn btn-danger btn-save"
                               onClick={(e: any) => {
                                 handleSubmit(e);
                               }}
-                              style={{ marginLeft: "90%" }}
+                              
                             >
                               Save
                             </Button>
+                            </Col>
+                            </Row>
                           </div>
                         </div>
                       )}

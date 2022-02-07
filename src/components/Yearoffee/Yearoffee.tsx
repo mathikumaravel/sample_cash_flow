@@ -37,12 +37,7 @@ const Yearoffee = () => {
                                   Add
                                 </Button>
                               ) : (
-                                <Button
-                                  className="btn btn-sm btn-secondary"
-                                  onClick={() => setStatusFeeDetailsAdd(false)}
-                                >
-                                  Cancel
-                                </Button>
+                                null
                               )}
                             </div>
                           </div>
@@ -410,14 +405,27 @@ const Yearoffee = () => {
                                 </Col>
                               </Row>
                               <div className="card-footer py3">
+                                <Row>
+                                  <Col>
+                                  <Button
+                                  className="btn btn-secondary"
+                                  onClick={() => setStatusFeeDetailsAdd(false)}
+                                  style={{ marginLeft: "80%" }}
+                                >
+                                  Cancel
+                                </Button>
+                                {" "}
                                 <Button
                                   type="submit"
                                   className="btn btn-danger btn-save"
                                   onClick={() => setStatusFeeDetailsEdit(false)}
-                                  style={{ marginLeft: "90%" }}
+                                  
                                 >
                                   Save
                                 </Button>
+                                  </Col>
+                                </Row>
+                             
                               </div>
                             </div>
                           )}

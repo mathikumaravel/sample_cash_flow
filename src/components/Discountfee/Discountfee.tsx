@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Sidebar from "../Layouts/Sidebar";
 import Navbar from "../Layouts/Navbar";
-import { Button, Table, Pagination, Form } from "react-bootstrap";
+import { Button, Table, Pagination, Form,Row,Col } from "react-bootstrap";
 
 const Discountfee = () =>{
 
@@ -39,12 +39,7 @@ const Discountfee = () =>{
                           Add
                         </Button>
                       ) : (
-                        <Button
-                          className="btn btn-sm btn-secondary"
-                          onClick={() => setStatusDiscountfeeAdd(false)}
-                        >
-                          Cancel
-                        </Button>
+                        null
                       )}
                     </div>
                   </div>
@@ -409,12 +404,26 @@ const Discountfee = () =>{
                     </Form.Label>
                                     </div>
                     <div className="card-footer py3">
+                      <Row>
+                        <Col>
+                        <Button
+                        style={{marginLeft:"80%"}}
+                          className="btn btn-secondary"
+                          onClick={() => setStatusDiscountfeeAdd(false)}
+                        >
+                          Cancel
+                        </Button>
+                        {" "}
                               <Button
                             type="submit"
                           className="btn btn-danger btn-save"
                           onClick={() => setStatusDiscountfeeEdit(false)}
-                          style={{marginLeft:"90%"}}
+                          
                         >Save</Button>
+                        </Col>
+                      </Row>
+
+                      
                         </div>
                       </div>)}
 
