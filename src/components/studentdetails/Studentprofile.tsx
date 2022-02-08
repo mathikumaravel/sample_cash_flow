@@ -9,12 +9,15 @@ import axios, { AxiosResponse } from "axios";
 
 
 
-const StudentProfileId = () => {
+const StudentProfile = () => {
   //To Make Edit
   const [search, setSearch] = useState<any>({
     text: "",
     suggestions: [],
   });
+
+
+  
 
   const [statusStudentEdit, setStatusStudentEdit] = useState(false);
   const [isComponentVisible, setIsComponentVisible] = useState(true);
@@ -110,7 +113,7 @@ const StudentProfileId = () => {
               <div className="container" style={{ marginLeft: "3%" }}>
                 <div className="d-sm-flex align-items-center justify-content-between mb-4">
                   <div className="col-xl-12 col-md-2 mb-5 text-center">
-                    {/* <Form className="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-10 my-md-0 mw-100">
+                    <Form className="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-10 my-md-0 mw-100">
                       <div className="input-group">
                         <Form.Control
                           type="search"
@@ -121,7 +124,7 @@ const StudentProfileId = () => {
                            style={{ width: "480px" }} 
                             // value={search.text}
                            onChange={onTextChanged}
-                        /> */}
+                        />
 
                         {/* {suggestions.length > 0 && isComponentVisible && (
                           <div>
@@ -138,7 +141,7 @@ const StudentProfileId = () => {
                             ))}
                           </div>
                         )} */}
-                        {/* <div className="input-group-append">
+                        <div className="input-group-append">
                           <Button
                             className="btn btn-danger"
                             type="button"
@@ -151,20 +154,18 @@ const StudentProfileId = () => {
                           </Button>
                         </div>
                       </div>
-                    </Form> */}
+                    </Form>
                   </div>
                 </div>
 
-               
+                {!statusStudentSearch ? (
                   <div>
                     <Form>
                       <div className="row">
                         <div className="col-lg-6">
                           <div className="card shadow mb-5">
-                          <div className="card-header py-2">
-                            <h4 className="m-0 text-danger">
-                                <a>Profile</a>
-                               
+                            <div className="card-body bg-transparent">
+                              <div style={{ marginLeft: "80%" }}>
                                 {!statusStudentEdit ? (
                                   <i
                                     className="fa fa-edit profile_btn-edit btn"
@@ -173,21 +174,28 @@ const StudentProfileId = () => {
                                       fontSize: "25px",
                                       color: "red",
                                       cursor: "pointer",
-                                      marginLeft: "70%" ,
                                     }}
                                   ></i>
                                 ) : (
-                                  <>
-                                      <i className="fa fa-save btn"
+                                  <Row>
+                                    <Col md={5}>
+                                      <i
+                                        className="fa fa-save btn"
                                         onClick={()=>searchedit()}
                                         style={{
                                           fontSize: "25px",
                                           color: "red",
                                           cursor: "pointer",
-                                          marginLeft: "70%" ,
                                         }}
                                       ></i>
-                                   
+                                    </Col>
+                                    <Col
+                                      md={5}
+                                      style={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                      }}
+                                    >
                                       <i
                                         className="fa fa-times"
                                         aria-hidden="true"
@@ -198,18 +206,12 @@ const StudentProfileId = () => {
                                           fontSize: "25px",
                                           color: "red",
                                           cursor: "pointer",
-                                          
                                         }}
-                                  
                                       ></i>
-                                   </>
+                                    </Col>
+                                  </Row>
                                 )}
-                              
-                              </h4>
-                           
-                        </div>
-                            <div className="card-body bg-transparent">
-                              
+                              </div>
                               <Form.Group as={Row}>
                                 <Form.Label column sm="4">
                                   <strong>Student Name</strong>
@@ -299,7 +301,7 @@ const StudentProfileId = () => {
                                       className="col-md-6 text-black"
                                       id="stud_name"
                                     >
-                                     000123
+                                      {statusStudentDetails.student_id}
                                     </div>
                                   ) : (
                                     <Form.Control
@@ -319,9 +321,6 @@ const StudentProfileId = () => {
                         <div className="col-lg-5">
                           <div className="card shadow mb-5">
                             <div className="card-body bg-transparent">
-                            <Form.Group as={Row}>
-                                <Form.Label> </Form.Label>
-                              </Form.Group>
                               <Form.Group as={Row}>
                                 <Form.Label column sm="4">
                                   <strong>Father Name</strong>
@@ -504,7 +503,9 @@ const StudentProfileId = () => {
                     ></Feesdetails>
                     <Academicfees></Academicfees>
                   </div>
-                
+                ) : (
+                  <div style={{ textAlign: "center" }}>No Data found</div>
+                )}
               </div>
             </div>
           </div>
@@ -513,4 +514,4 @@ const StudentProfileId = () => {
     </div>
   );
 };
-export default StudentProfileId;
+export default StudentProfile;

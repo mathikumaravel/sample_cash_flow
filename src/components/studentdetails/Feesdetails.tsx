@@ -1,4 +1,5 @@
 import react from "react";
+import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 const Feesdetails = (props:any) => {
@@ -14,7 +15,7 @@ const Feesdetails = (props:any) => {
                                 <a>
                                     <i className="far fa-clone"></i> Payment
                                 </a>{" "}
-                            {status === 'active' ? 
+                            {status === 'aa' ? 
                                <Link to='/Stu_pay'> <a className="btn btn-success btn-sm float-right">
                                     Pay or View All
                                 </a></Link>:null}
@@ -61,7 +62,7 @@ const Feesdetails = (props:any) => {
                         </div>
                         <div className="card-body">
                             <div className="row">
-                                <div className="col-xl-6 col-md-3 mb-4">
+                                <div className="col-xl-4 col-md-4 mb-4">
                                     <div>
                                         <h6>Academic Year</h6>
                                     </div>
@@ -70,12 +71,48 @@ const Feesdetails = (props:any) => {
                                     </div>
                                 </div>
 
-                                <div className="col-xl-6 col-md-3 mb-4">
+                                <div className="col-xl-4 col-md-4 mb-4">
                                     <div>
                                         <h6>Balance ₹</h6>
                                     </div>
                                     <div>
                                         <label>332</label>
+                                    </div>
+                                </div>
+                                <div className="col-xl-4 col-md-4 mb-4">
+                                    <div>
+                                        <h6>Action</h6>
+                                    </div>
+                                    <div>
+                                        <Button className="btn-success btn-sm">Pay / View All</Button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="row">
+                                <div className="col-xl-4 col-md-4 mb-4">
+                                    <div>
+                                        <h6>Academic Year</h6>
+                                    </div>
+                                    <div>
+                                        <label>2023-2024</label>
+                                    </div>
+                                </div>
+
+                                <div className="col-xl-4 col-md-4 mb-4">
+                                    <div>
+                                        <h6>Balance</h6>
+                                    </div>
+                                    <div>
+                                        <label>0</label>
+                                    </div>
+                                </div>
+                                <div className="col-xl-4 col-md-4 mb-4">
+                                    <div>
+                                        <h6>Action</h6>
+                                    </div>
+                                    <div>
+                                        <Button className="btn-success btn-sm" disabled>Pay / View All</Button>
                                     </div>
                                 </div>
                             </div>
