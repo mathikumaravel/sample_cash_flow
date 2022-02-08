@@ -52,7 +52,7 @@ const Sidebar = () => {
           >
             <div className="bg-white py-2 collapse-inner rounded">
               <h6 className="collapse-header">Custom</h6>
-           <Link to="/Student" className="collapse-item">
+           <Link to="/studentrecord" className="collapse-item">
                 Student
               </Link>   
               <Link to="/Stu_add" className="collapse-item">

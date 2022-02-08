@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { baseUrl } from "../../index";
 import Sidebar from "../Layouts/Sidebar";
 import Navbar from "../Layouts/Navbar";
-import { Button, Table, Pagination, Form, Container, Row, Col, Modal, Spinner } from "react-bootstrap";
+import { Button, Table, Form, Container, Row, Col, Modal, Spinner } from "react-bootstrap";
 import { getAccessToken } from "../../config/getAccessToken";
 import axios from "axios";
 
@@ -84,13 +84,11 @@ const Year = () => {
 		e.preventDefault();
 		try {
 			getAccessToken();
-			const res: any = await axios
-				.post(`${baseUrl}academic_year`, { academic_year: `${acdYear.fromYear}-${acdYear.toYear}` })
-				.then((res: any) => {
-					console.log(res.data);
-					getAllAcademicYear();
-					setStatusAcademicYearAdd(false);
-				});
+			const res: any = await axios.post(`${baseUrl}academic_year`, { academic_year: `${acdYear.fromYear}-${acdYear.toYear}` }).then((res: any) => {
+				console.log(res.data);
+				getAllAcademicYear();
+				setStatusAcademicYearAdd(false);
+			});
 		} catch (err) {
 			alert("Incorrect Username and Password");
 		}
@@ -115,10 +113,7 @@ const Year = () => {
 													</h4>
 													<div style={{ textAlign: "right" }}>
 														{!statusAcademicYearAdd ? (
-															<Button
-																type="submit"
-																className="btn btn-primary btn-sm btn-save"
-																onClick={() => setStatusAcademicYearAdd(true)}>
+															<Button type="submit" className="btn btn-primary btn-sm btn-save" onClick={() => setStatusAcademicYearAdd(true)}>
 																Add
 															</Button>
 														) : (
@@ -132,73 +127,57 @@ const Year = () => {
 													<div className="table-responsive">
 														<div className="dataTables_wrapper dt-bootstrap4 no-footer">
 															<div id="dataTable_filter" className="dataTables_filter">
-																<Form.Label
-																	htmlFor="inputPassword5"
-																	style={{ marginLeft: "75%" }}>
+																<Form.Label htmlFor="inputPassword5" style={{ marginLeft: "75%" }}>
 																	Search:
-																	<Form.Control
-																		type="search"
-																		className="form-control form-control-sm"
-																	/>
+																	<Form.Control type="search" className="form-control form-control-sm" />
 																</Form.Label>
 															</div>
 														</div>
 													</div>
 													<div className="row">
 														<div className="col-sm-12">
-															<Table
-																className="table dataTable no-footer"
-																width="100%"
-																style={{ width: "100%" }}>
+															<Table className="table dataTable no-footer" width="100%" style={{ width: "100%" }}>
 																<thead>
 																	<tr role="row">
-																		<th
-																			className="sorting_asc"
-																			style={{ width: "73px" }}>
+																		<th className="sorting_asc" style={{ width: "73px" }}>
 																			No.
 																		</th>
-																		<th
-																			className="sorting"
-																			style={{ width: "114px" }}>
+																		<th className="sorting" style={{ width: "114px" }}>
 																			Academic Year
 																		</th>
-																		<th
-																			className="sorting"
-																			style={{ width: "63px" }}>
+																		<th className="sorting" style={{ width: "63px" }}>
 																			Actions
 																		</th>
 																	</tr>
 																</thead>
 																<tbody>
 																	{allAcademicYear && allAcademicYear.length ? (
-																		allAcademicYear.map(
-																			(values: any, index: any) => {
-																				return (
-																					<tr key={index}>
-																						<td>{index + 1}</td>
-																						<td>{values.academic_year}</td>
-																						<td>
-																							<Button
-																								variant="danger"
-																								onClick={() => {
-																									// deleteAnAcademicYear(
-																									//     values.year_id,
-																									//     index
-																									// );
-																									setdatatoDelete({
-																										index: index,
-																										year: values.academic_year,
-																										id: values.year_id,
-																									});
-																									handleShow();
-																								}}>
-																								Delete
-																							</Button>
-																						</td>
-																					</tr>
-																				);
-																			}
-																		)
+																		allAcademicYear.map((values: any, index: any) => {
+																			return (
+																				<tr key={index}>
+																					<td>{index + 1}</td>
+																					<td>{values.academic_year}</td>
+																					<td>
+																						<Button
+																							variant="danger"
+																							onClick={() => {
+																								// deleteAnAcademicYear(
+																								//     values.year_id,
+																								//     index
+																								// );
+																								setdatatoDelete({
+																									index: index,
+																									year: values.academic_year,
+																									id: values.year_id,
+																								});
+																								handleShow();
+																							}}>
+																							Delete
+																						</Button>
+																					</td>
+																				</tr>
+																			);
+																		})
 																	) : (
 																		<>
 																			<tr style={{ textAlign: "center" }}>
@@ -207,10 +186,7 @@ const Year = () => {
 																					style={{
 																						textAlign: "center",
 																					}}>
-																					<Spinner
-																						animation="border"
-																						variant="danger"
-																					/>
+																					<Spinner animation="border" variant="danger" />
 																				</td>
 																			</tr>
 																		</>
@@ -225,12 +201,26 @@ const Year = () => {
                                                             <Pagination.Prev />
                                                             <Pagination.Item>{1}</Pagination.Item>
                                                             <Pagination.Ellipsis />
+>>>>>>> commonbranch
 
-                                                            <Pagination.Item>{10}</Pagination.Item>
-                                                            <Pagination.Item>{11}</Pagination.Item>
-                                                            <Pagination.Item active>{12}</Pagination.Item>
-                                                            <Pagination.Item>{13}</Pagination.Item>
-                                                            <Pagination.Item disabled>{14}</Pagination.Item>
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    try {
+      getAccessToken();
+      const res: any = await axios
+        .post(`${baseUrl}academic_year`, {
+          academic_year: `${acdYear.fromYear}-${acdYear.toYear}`,
+        })
+        .then((res: any) => {
+          console.log(res.data);
+          getAllAcademicYear();
+          setStatusAcademicYearAdd(false);
+        });
+    } catch (err) {
+      alert("Incorrect Username and Password");
+    }
+  };
+
 
                                                             <Pagination.Ellipsis />
                                                             <Pagination.Item>{20}</Pagination.Item>
@@ -242,9 +232,7 @@ const Year = () => {
 														<Modal.Header closeButton>
 															<Modal.Title>Delete {datatoDelete.year}</Modal.Title>
 														</Modal.Header>
-														<Modal.Body>
-															Are You Sure You What To Delete {datatoDelete.year} ?
-														</Modal.Body>
+														<Modal.Body>Are You Sure You What To Delete {datatoDelete.year} ?</Modal.Body>
 														<Modal.Footer>
 															<Button variant="secondary" onClick={SuddenhandleClose}>
 																Close
@@ -271,29 +259,20 @@ const Year = () => {
 																		}}>
 																		{FromAcdYear &&
 																			FromAcdYear.length &&
-																			FromAcdYear.map(
-																				(values: any, index: any) => {
-																					return (
-																						<option
-																							value={values}
-																							key={index}>
-																							{values}
-																						</option>
-																					);
-																				}
-																			)}
+																			FromAcdYear.map((values: any, index: any) => {
+																				return (
+																					<option value={values} key={index}>
+																						{values}
+																					</option>
+																				);
+																			})}
 																	</Form.Select>
 																</Form.Group>
 															</Col>
 															<Col md="6">
 																<Form.Group className="mb-3" controlId="formBasicEmail">
 																	<Form.Label>To Academic Year</Form.Label>
-																	<Form.Control
-																		type="text"
-																		placeholder="Disabled input"
-																		value={acdYear.toYear}
-																		disabled
-																	/>
+																	<Form.Control type="text" placeholder="Disabled input" value={acdYear.toYear} disabled />
 																</Form.Group>
 															</Col>
 														</Row>
@@ -301,9 +280,7 @@ const Year = () => {
 													<br></br>
 													<div className="card-footer">
 														<div style={{ display: "flex", justifyContent: "right" }}>
-															<Button
-																className="btn btn btn-secondary"
-																onClick={() => setStatusAcademicYearAdd(false)}>
+															<Button className="btn btn btn-secondary" onClick={() => setStatusAcademicYearAdd(false)}>
 																Cancel
 															</Button>
 															&nbsp;

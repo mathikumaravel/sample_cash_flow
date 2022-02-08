@@ -73,6 +73,7 @@ const Studentpay = () => {
 															<tr>
 																<th> </th>
 
+
 																<td style={{ width: "10%" }}>
 																	{!RefundTableStatus ? (
 																		<Button onClick={() => setRefundTableStatus(true)} className="btn btn-primary refbtn">
@@ -179,7 +180,6 @@ const Studentpay = () => {
 																	</td>
 																</tr>
 															</tbody>
-
 															<tfoot>
 																<tr>
 																	<th>Total</th>

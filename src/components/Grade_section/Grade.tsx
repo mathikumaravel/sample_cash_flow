@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Sidebar from "../Layouts/Sidebar";
 import Navbar from "../Layouts/Navbar";
-import { Button, Table, Pagination, Form, Col, Row, Container, Modal,Spinner } from "react-bootstrap";
+import { Button, Table, Pagination, Form, Col, Row, Container, Modal, Spinner } from "react-bootstrap";
 import axios, { AxiosResponse } from "axios";
 import { getAccessToken } from "../../config/getAccessToken";
 import { baseUrl } from "../../index";
@@ -72,7 +72,7 @@ const Grade = () => {
 	const deleteSection = (gradeid: any, index: any) => {
 		getAccessToken();
 		axios.delete(`${baseUrl}grade_section?`, { data: { id: gradeid } }).then((res: any) => {
-			setStatusList([])
+			setStatusList([]);
 			getAllGradeSectionData();
 			console.log(res.data);
 		});
@@ -91,7 +91,6 @@ const Grade = () => {
 		}
 		setClickedGrade(newArr);
 	};
-
 	console.log(clickedGrade);
 
 	return (
@@ -113,10 +112,7 @@ const Grade = () => {
 													</h4>
 													<div style={{ textAlign: "right" }}>
 														{!statusGradeAdd ? (
-															<Button
-																type="submit"
-																className="btn btn-primary btn-sm btn-save"
-																onClick={() => setStatusGradeAdd(true)}>
+															<Button type="submit" className="btn btn-primary btn-sm btn-save" onClick={() => setStatusGradeAdd(true)}>
 																Add
 															</Button>
 														) : (
@@ -130,24 +126,16 @@ const Grade = () => {
 													<div className="table-responsive">
 														<div className="dataTables_wrapper dt-bootstrap4 no-footer">
 															<div id="dataTable_filter" className="dataTables_filter">
-																<Form.Label
-																	htmlFor="inputPassword5"
-																	style={{ marginLeft: "75%" }}>
+																<Form.Label htmlFor="inputPassword5" style={{ marginLeft: "75%" }}>
 																	Search:
-																	<Form.Control
-																		type="search"
-																		className="form-control form-control-sm"
-																	/>
+																	<Form.Control type="search" className="form-control form-control-sm" />
 																</Form.Label>
 															</div>
 														</div>
 													</div>
 													<div className="row">
 														<div className="col-sm-12">
-															<Table
-																className="table dataTable no-footer"
-																width="100%"
-																style={{ width: "100%" }}>
+															<Table className="table dataTable no-footer" width="100%" style={{ width: "100%" }}>
 																<thead>
 																	<tr role="row">
 																		<th className="sorting_asc">No.</th>
@@ -158,14 +146,11 @@ const Grade = () => {
 																	</tr>
 																</thead>
 																<tbody>
-																	{statusList &&
-																		statusList.length ?
+																	{statusList && statusList.length ? (
 																		statusList.map((data: any, index: any) => {
 																			return (
 																				<tr>
-																					<td
-																						className="sorting_1"
-																						key={index}>
+																					<td className="sorting_1" key={index}>
 																						{index + 1}
 																					</td>
 																					<td>{data.academic_year}</td>
@@ -191,18 +176,20 @@ const Grade = () => {
 																					</td>
 																				</tr>
 																			);
-																		}):(<>
+																		})
+																	) : (
+																		<>
 																			<tr style={{ textAlign: "center" }}>
 																				<td
 																					colSpan={5}
 																					style={{
 																						textAlign: "center",
-																					}}
-																				>
+																					}}>
 																					<Spinner animation="border" variant="danger" />
 																				</td>
 																			</tr>
-																		</>)}
+																		</>
+																	)}
 																</tbody>
 															</Table>
 														</div>
@@ -214,6 +201,7 @@ const Grade = () => {
 															<Pagination.Item>{1}</Pagination.Item>
 															<Pagination.Ellipsis />
 
+=======
 															<Pagination.Item>{10}</Pagination.Item>
 															<Pagination.Item>{11}</Pagination.Item>
 															<Pagination.Item active>{12}</Pagination.Item>
@@ -247,10 +235,7 @@ const Grade = () => {
 												<>
 													<Container>
 														<Row>
-															<Form.Group
-																as={Row}
-																className="mb-12 pb-4"
-																controlId="formPlaintextPassword">
+															<Form.Group as={Row} className="mb-12 pb-4" controlId="formPlaintextPassword">
 																<Form.Label
 																	column
 																	sm="4"
@@ -267,18 +252,9 @@ const Grade = () => {
 																		}}>
 																		{allAcademicYear &&
 																			allAcademicYear.length &&
-																			allAcademicYear.map(
-																				(values: any, index: any) => {
-																					return (
-																						<option
-																							value={
-																								values.academic_year
-																							}>
-																							{values.academic_year}
-																						</option>
-																					);
-																				}
-																			)}
+																			allAcademicYear.map((values: any, index: any) => {
+																				return <option value={values.academic_year}>{values.academic_year}</option>;
+																			})}
 																	</Form.Select>
 																</Col>
 															</Form.Group>
@@ -314,10 +290,7 @@ const Grade = () => {
 																		);
 																	})}
 															</Col>
-															<Form.Group
-																as={Row}
-																className="mb-12 pt-4 pb-2"
-																controlId="formPlaintextPassword">
+															<Form.Group as={Row} className="mb-12 pt-4 pb-2" controlId="formPlaintextPassword">
 																<Form.Label
 																	column
 																	sm="4"
@@ -339,20 +312,14 @@ const Grade = () => {
 														</Row>
 													</Container>
 													<div className="card-footer">
-														<div style={{display:"flex",justifyContent:'right'}}>
-														<Button
-															className="btn  btn-secondary"
-															onClick={() => setStatusGradeAdd(false)}>
-															Cancel
-														</Button>{" "}
-														&nbsp;
-														<Button
-															type="submit"
-															className="btn btn-danger btn-save"
-															onClick={() => handleSubmit()}
-															>
-															Save
-														</Button>
+														<div style={{ display: "flex", justifyContent: "right" }}>
+															<Button className="btn  btn-secondary" onClick={() => setStatusGradeAdd(false)}>
+																Cancel
+															</Button>{" "}
+															&nbsp;
+															<Button type="submit" className="btn btn-danger btn-save" onClick={() => handleSubmit()}>
+																Save
+															</Button>
 														</div>
 													</div>
 												</>
