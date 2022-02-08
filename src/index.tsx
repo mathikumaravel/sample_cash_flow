@@ -1,12 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
+import Routers from './config/Routers';
+
+export const baseUrl= "http://3.13.152.87/api/v1/"
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Routers/>
   </React.StrictMode>,
   document.getElementById('root')
 );
