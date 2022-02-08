@@ -111,7 +111,7 @@ const Student = () => {
               <div className="container" style={{ marginLeft: "3%" }}>
                 <div className="d-sm-flex align-items-center justify-content-between mb-4">
                   <div className="col-xl-12 col-md-2 mb-5 text-center">
-                    <Form className="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-10 my-md-0 mw-100">
+                    {/* <Form className="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-10 my-md-0 mw-100">
                       <div className="input-group">
                         <Form.Control
                           type="search"
@@ -122,7 +122,7 @@ const Student = () => {
                            style={{ width: "480px" }} 
                             // value={search.text}
                            onChange={onTextChanged}
-                        />
+                        /> */}
 
                         {/* {suggestions.length > 0 && isComponentVisible && (
                           <div>
@@ -139,7 +139,7 @@ const Student = () => {
                             ))}
                           </div>
                         )} */}
-                        <div className="input-group-append">
+                        {/* <div className="input-group-append">
                           <Button
                             className="btn btn-danger"
                             type="button"
@@ -152,11 +152,11 @@ const Student = () => {
                           </Button>
                         </div>
                       </div>
-                    </Form>
+                    </Form> */}
                   </div>
                 </div>
 
-                {!statusStudentSearch ? (
+               
                   <div>
                     <Form>
                       <div className="row">
@@ -505,9 +505,7 @@ const Student = () => {
                     ></Feesdetails>
                     <Academicfees></Academicfees>
                   </div>
-                ) : (
-                  <div style={{ textAlign: "center" }}>No Data found</div>
-                )}
+                
               </div>
             </div>
           </div>

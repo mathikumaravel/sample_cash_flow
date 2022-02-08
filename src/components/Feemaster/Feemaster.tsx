@@ -23,17 +23,61 @@ const Feemaster = () => {
   const [orderId, setOrderId] = useState<any>("");
   const [duplication, setDuplication] = useState(false);
   const [getFeeMaster, setGetFeeMaster] = useState<any>([]);
-  const [allAcademicYear, setAllAcademicYear] = useState<any[]>([]);
-  const [academicDropdown,setAcademicDropdown] = useState<any>("");
+  const [datatoDelete, setdatatoDelete] = useState<any>({});
+  const [loading,setloading] = useState<any>(true);
+  const [filter,setfilter] = useState<any>([]);
 
-  console.log(academicDropdown);
+
+  const [show, setShow] = useState(false);
+  const handleClose = () => {
+    setShow(false);
+    deleteParticularDiscount(datatoDelete.id, datatoDelete.index);
+  };
+  const SuddenhandleClose = () => {
+    setShow(false);
+    setdatatoDelete({});
+  };
+  const handleShow = () => {
+    setShow(true);
+  };
+
+  const deleteParticularDiscount = (id: any, index: any) => {
+    let newArrVal = getFeeMaster;
+    newArrVal.splice(index, 1);
+    getAccessToken();
+    axios
+        .delete(`${baseUrl}fee_master/delete?`, { data: { id: id } })
+        .then((res: any) => {
+          console.log(res)
+            feemastertype(newArrVal);
+            setdatatoDelete({});
+        })
+        .catch((e: any) => {
+            console.log(e);
+        });
+};
+
+const dataSearch:any =
+getFeeMaster.length &&
+getFeeMaster.sort().filter((data: any) => {
+      return Object.keys(data).some((key) =>
+        data[key]
+          .toString()
+          .toLowerCase()
+          .includes(filter.toString().toLowerCase())
+      ); 
+  });
+
+
 
   const getfee = () => {
     getAccessToken();
     axios
       .get(`${baseUrl}fee_master/show_all`)
       .then((res: any) => {
+        console.log(res.data)
         setGetFeeMaster(res.data.fee_masters);
+        setloading(false)
       })
       .catch((e: any) => {
         console.log(e);
@@ -42,10 +86,9 @@ const Feemaster = () => {
 
   useEffect(() => {
     getfee();
-    getAllAcademicYear();
   }, []);
 
-  const DiscountFeeTypeName = (newArrVal: any) => {
+  const feemastertype = (newArrVal: any) => {
     setGetFeeMaster([...newArrVal]);
   };
 
@@ -62,14 +105,14 @@ const Feemaster = () => {
         getAccessToken();
         const res: any = await axios
           .post(`${baseUrl}fee_master/create`, {
-            academic_year: "2021-2022",
+            academic_year: null,
             fee_type_name: feeTypeName,
             order_id: orderId,
           })
           .then((res: any) => {
             console.log(res.data);
             getfee();
-            statusFeeMasterAdd(false);
+            setStatusFeeMasterAdd(false)
             setDuplication(false);
             setFeeTypeName("");
             setOrderId("");
@@ -82,26 +125,10 @@ const Feemaster = () => {
     }
   };
 
-  const getAllAcademicYear = () => {
-    getAccessToken();
-    axios
-      .get(`${baseUrl}academic_year/show`)
-      .then((res: any) => {
-        console.log(res.data.academic_years)
-        setAllAcademicYear(res.data.academic_years);
-      })
-      .catch((e: any) => {
-        console.log(e);
-      });
-  };
 
-  const Academic = (newArrVal: any) => {
-    setAllAcademicYear([...newArrVal]);
-  };
 
-  console.log(allAcademicYear)
 
-  
+
 
   return (
     <div>
@@ -150,11 +177,13 @@ const Feemaster = () => {
                                   <Form.Label
                                     htmlFor="inputPassword5"
                                     style={{ marginLeft: "75%" }}
+       
                                   >
                                     Search:
                                     <Form.Control
                                       type="search"
                                       className="form-control form-control-sm"
+                                      onChange={(e) => setfilter(e.target.value)}
                                     />
                                   </Form.Label>
                                 </div>
@@ -167,14 +196,9 @@ const Feemaster = () => {
                                   width="100%"
                                   style={{ width: "100%" }}
                                 >
+                                  
                                   <thead>
                                     <tr role="row">
-                                    <th
-                                        className="sorting_asc"
-                                        style={{ width: "73px" }}
-                                      >
-                                       Academic year
-                                      </th>
                                       <th
                                         className="sorting_asc"
                                         style={{ width: "73px" }}
@@ -196,43 +220,19 @@ const Feemaster = () => {
                                     </tr>
                                   </thead>
                                   <tbody>
-                                    {getFeeMaster &&
-                                      getFeeMaster.length &&
-                                      getFeeMaster.map(
+                            {loading ? ( <Spinner animation="border" style={{marginLeft:"300px"}} variant="danger" />) : ( dataSearch &&
+                                      dataSearch.length &&
+                                      dataSearch.map(
                                         (values: any, index: any) => {
                                           return (
                                             <tr>
                                               <td>
                                                 {" "}
-                                                {!statusFeeMasterEdit ? (
-                                                  <div>
-                                                    {values.academic_year}
-                                                  </div>
-                                                ) : (
-                                                  <div>
-                                                    <Form.Control
-                                                      style={{ width: "100%" }}
-                                                      type="text"
-                                                      defaultValue="Admission Fees"
-                                                    />
-                                                  </div>
-                                                )}
-                                              </td>
-                                              <td>
-                                                {" "}
-                                                {!statusFeeMasterEdit ? (
+                                          
                                                   <div>
                                                     {values.fee_type_name}
                                                   </div>
-                                                ) : (
-                                                  <div>
-                                                    <Form.Control
-                                                      style={{ width: "100%" }}
-                                                      type="text"
-                                                      defaultValue="Admission Fees"
-                                                    />
-                                                  </div>
-                                                )}
+                                                
                                               </td>
                                               <td
                                                 style={{ width: "30%" }}
@@ -242,68 +242,30 @@ const Feemaster = () => {
                                               </td>
 
                                               <td>
-                                                {" "}
-                                                {!statusFeeMasterEdit ? (
-                                                  <div>
-                                                    <i
-                                                      style={{
-                                                        marginLeft: "10px",
-                                                        cursor: "pointer",
-                                                      }}
-                                                      onClick={() =>
-                                                        setStatusFeeMasterEdit(
-                                                          true
-                                                        )
-                                                      }
-                                                      className="fa fa-edit fa-1x text-success"
-                                                    ></i>
-                                                    <i
-                                                      style={{
-                                                        marginLeft: "10px",
-                                                        cursor: "pointer",
-                                                      }}
-                                                      className="far fa-trash-alt text-danger"
-                                                    ></i>
-                                                  </div>
-                                                ) : (
-                                                  <div>
-                                                    <i
-                                                      style={{
-                                                        marginLeft: "10px",
-                                                        cursor: "pointer",
-                                                      }}
-                                                      onClick={() =>
-                                                        setStatusFeeMasterEdit(
-                                                          false
-                                                        )
-                                                      }
-                                                      className="fa fa-times fa-1x text-danger"
-                                                      aria-hidden="true"
-                                                    ></i>
-                                                    <i
-                                                      style={{
-                                                        marginLeft: "10px",
-                                                        cursor: "pointer",
-                                                      }}
-                                                      onClick={() =>
-                                                        setStatusFeeMasterEdit(
-                                                          false
-                                                        )
-                                                      }
-                                                      className="fa fa-save btn text-danger"
-                                                    ></i>
-                                                  </div>
-                                                )}
+                                                <Button
+                                                  variant="danger"
+                                                  onClick={() => {
+                                                    setdatatoDelete({
+                                                      name: values.fee_type_name,
+                                                      index: index,
+                                                      id: values.fee_master_id,
+                                                    });
+                                                    handleShow();
+                                                  }}
+                                                >
+                                                  Delete
+                                                </Button>
                                               </td>
                                             </tr>
                                           );
                                         }
-                                      )}
+                                      ) ) }
+                                  
                                   </tbody>
                                 </Table>
                               </div>
                             </div>
-                            <div style={{ marginLeft: "20%" }}>
+                            <div style={{ marginLeft: "10%" }}>
                               <Pagination>
                                 <Pagination.First />
                                 <Pagination.Prev />
@@ -322,88 +284,88 @@ const Feemaster = () => {
                                 <Pagination.Last />
                               </Pagination>
                             </div>
+
+                            <Modal show={show} onHide={SuddenhandleClose}>
+                              <Modal.Header closeButton>
+                                <Modal.Title>Delete {datatoDelete.name}</Modal.Title>
+                              </Modal.Header>
+                              <Modal.Body>Are You Sure You What To Delete {datatoDelete.name} ?</Modal.Body>
+                              <Modal.Footer>
+                                <Button variant="secondary" onClick={SuddenhandleClose}>
+                                  Close
+                                </Button>
+                                <Button variant="danger" onClick={handleClose}>
+                                  Delete
+                                </Button>
+                              </Modal.Footer>
+                            </Modal>
                           </div>
                         ) : (
                           <div>
-                            <Row className="mb-4">
-                              <Col sm="4" className="mb-4">
-                                <Form.Label style={{ marginLeft: "40px" }}>
-                                Academic year{" "}
-                                </Form.Label>
-                              </Col>
-                              <Col sm="6">
-                                <Form.Select
-                                  className="form-control" onChange={(e) => setAcademicDropdown(e.target.value)}>
-                                    <option selected disabled value="">--Select AcademicYear--</option>
-                                {allAcademicYear && allAcademicYear.length && allAcademicYear.map((value:any,index) => 
-                                 {
-                                  return (
-                                    <option value="2020-2021">{value.academic_year}</option>
-                                   )
-                                 }
-                                )}
-                                  
-                                </Form.Select>
-                              </Col>
-                              <Col sm="4" className="mb-4">
-                                <Form.Label style={{ marginLeft: "40px" }}>
-                                  Fee Type Name{" "}
-                                </Form.Label>
-                              </Col>
-                              <Col sm="6">
-                                <Form.Control
-                                  type="text"
-                                  onChange={(e: any) => {
-                                    setFeeTypeName(e.target.value);
-                                  }}
-                                />
-                              </Col>{" "}
-                              <Col sm="4">
-                                <Form.Label style={{ marginLeft: "40px" }}>
-                                  Order
-                                </Form.Label>
-                              </Col>
-                              <Col sm="6">
-                                <Form.Control
-                                  type="text"
-                                  onChange={(e: any) => {
-                                    setOrderId(e.target.value);
-                                  }}
-                                />
-                              </Col>
-                            </Row>
-                            
-                            <div className="card-footer py3">
-                           <Row>
-                             <Col>
-                             <Button
-                                  style={{ marginLeft:"80%"}}
-                                  className="btn btn-secondary"
-                                  onClick={() => setStatusFeeMasterAdd(false)}
-                                >
-                                  Cancel
-                                </Button>{' '}
-                                
-                              <Button
-                                type="submit"
-                                className={
-                                  duplication
-                                    ? "disabled btn btn-danger btn-save"
-                                    : "btn btn-danger btn-save"
-                                }
-                                onClick={(e: any) => {
-                                  handleSubmit(e);
-                                }}
-                                
-                              >
-                                Save
-                              </Button>
+                            <div style={{ marginBottom: "20px" }}>
+                              <Row>
 
-                             </Col>
-                           </Row>
-                              
-                              
-                    
+                                <Col sm="4" className="mb-4">
+                                  <Form.Label style={{ marginLeft: "40px" }}>
+                                    Fee Type Name{" "}
+                                  </Form.Label>
+                                </Col>
+                                <Col sm="6">
+                                  <Form.Control
+                                    type="text"
+                                    onChange={(e: any) => {
+                                      setFeeTypeName(e.target.value);
+                                    }}
+                                  />
+                                </Col>{" "}
+                                <Col sm="4">
+                                  <Form.Label style={{ marginLeft: "40px" }}>
+                                    Order
+                                  </Form.Label>
+                                </Col>
+                                <Col sm="6">
+                                  <Form.Control
+                                    type="text"
+                                    onChange={(e: any) => {
+                                      setOrderId(e.target.value);
+                                    }}
+                                  />
+                                </Col>
+                              </Row>
+                            </div>
+
+                            <div className="card-footer py3">
+                              <Row>
+                                <Col>
+                                  <Button
+                                    style={{ marginLeft: "80%" }}
+                                    className="btn btn-secondary"
+                                    onClick={() => setStatusFeeMasterAdd(false)}
+                                  >
+                                    Cancel
+                                  </Button>{' '}
+
+                                  <Button
+                                    type="submit"
+
+                                    onClick={(e: any) => {
+                                      handleSubmit(e);
+                                    }}
+                                    className={
+                                      duplication
+                                        ? "disabled btn btn-danger btn-save"
+                                        : "btn btn-danger btn-save"
+                                    }
+
+                                  >
+                                    Save
+                                  </Button>
+
+                                </Col>
+                              </Row>
+
+
+
                             </div>
                           </div>
                         )}

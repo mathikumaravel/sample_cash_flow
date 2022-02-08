@@ -14,6 +14,8 @@ import Feemaster from '../components/Feemaster/Feemaster';
 import Discountfee from '../components/Discountfee/Discountfee';
 import Year from '../components/Year/Year';
 import Grade from '../components/Grade_section/Grade';
+import Studentrecord from '../components/studentdetails/Studentrecord';
+
 
 const PrivateRoute = (props:any) => {
     let history = useHistory<any>();
@@ -39,6 +41,7 @@ function Routers(props:any){
 <Switch>
 <Route exact={true} path="/" component={Login} />
 <PrivateRoute path='/Dashboard' component={Dashboard}/>
+<PrivateRoute path='/studentrecord' component={Studentrecord} />
 <PrivateRoute  path='/Student' component={Student}/>
 <PrivateRoute path='/Stu_pay' component={Studentpay}/>
 <PrivateRoute path='/Stu_add' component={Studentadd}/>
