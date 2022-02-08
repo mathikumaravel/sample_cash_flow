@@ -74,7 +74,7 @@ const Sidebar = () => {
                 Year
               </Link>
               <Link to="/Grade_section" className="collapse-item">  
-               Grade&section
+               Grade & section
               </Link>
             </div>
           </div>
