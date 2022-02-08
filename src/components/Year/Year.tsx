@@ -44,7 +44,7 @@ const Year = () => {
 		axios
 			.get(`${baseUrl}academic_year/show`)
 			.then((res: any) => {
-				console.log(res.data);
+				console.log(res.data.academic_years);
 				setAllAcademicYear(res.data.academic_years);
 			})
 			.catch((e: any) => {

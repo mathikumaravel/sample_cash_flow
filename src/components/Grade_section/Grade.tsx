@@ -35,8 +35,8 @@ const Grade = () => {
 	};
 
 	const getAllGradeSectionData = () => {
-		axios.get(`${baseUrl}grade_section/show all`).then((response: AxiosResponse) => {
-			setStatusList(response.data);
+		axios.get(`${baseUrl}grade_section/show_all?page=1&per_page=100`).then((response: AxiosResponse) => {
+			setStatusList(response.data.grade_sections);
 		});
 	};
 

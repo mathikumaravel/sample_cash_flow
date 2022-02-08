@@ -9,12 +9,15 @@ import axios, { AxiosResponse } from "axios";
 
 
 
-const StudentProfileId = () => {
+const StudentProfile = () => {
   //To Make Edit
   const [search, setSearch] = useState<any>({
     text: "",
     suggestions: [],
   });
+
+
+  
 
   const [statusStudentEdit, setStatusStudentEdit] = useState(false);
   const [isComponentVisible, setIsComponentVisible] = useState(true);
@@ -511,4 +514,4 @@ const StudentProfileId = () => {
     </div>
   );
 };
-export default StudentProfileId;
+export default StudentProfile;

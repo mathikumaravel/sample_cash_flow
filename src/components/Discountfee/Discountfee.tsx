@@ -93,10 +93,10 @@ const Discountfee = () => {
     const getgetDiscountFeeTypeName = () => {
         getAccessToken();
         axios
-            .get(`${baseUrl}discount_type_masters/show all`)
+            .get(`${baseUrl}discount_type_masters/show_all?page=1&per_page=100`)
             .then((res: any) => {
                 console.log(res.data);
-                setGetDiscountFeeTypeName(res.data);
+                setGetDiscountFeeTypeName(res.data.discount_type_masters);
             })
             .catch((e: any) => {
                 console.log(e);
@@ -289,7 +289,7 @@ const Discountfee = () => {
                                                                 </div>
                                                             </div>
                                                             <div style={{ marginLeft: "20%" }}>
-                                                                <Pagination>
+                                                                {/* <Pagination>
                                                                     <Pagination.First />
                                                                     <Pagination.Prev />
                                                                     <Pagination.Item>{1}</Pagination.Item>
@@ -305,7 +305,7 @@ const Discountfee = () => {
                                                                     <Pagination.Item>{20}</Pagination.Item>
                                                                     <Pagination.Next />
                                                                     <Pagination.Last />
-                                                                </Pagination>
+                                                                </Pagination> */}
                                                             </div>
                                                             <Modal show={show} onHide={SuddenhandleClose}>
                                                                 <Modal.Header closeButton>
