@@ -22,3 +22,7 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield !important;
 }
+
+.cashflow-heading{
+  color: #e84118 !important;
+}

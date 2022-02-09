@@ -5,6 +5,8 @@ import Navbar from "../Layouts/Navbar";
 import { Button, Table, Form, Container, Row, Col, Modal, Spinner } from "react-bootstrap";
 import { getAccessToken } from "../../config/getAccessToken";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Year = () => {
 	//Academic Year
@@ -63,6 +65,15 @@ const Year = () => {
 		axios
 			.delete(`${baseUrl}academic_year/delete?`, { data: { year_id: year } })
 			.then((res: any) => {
+				toast.success("Year Deleted Successfully", {
+					position: "top-right",
+					autoClose: 5000,
+					hideProgressBar: false,
+					closeOnClick: true,
+					pauseOnHover: true,
+					draggable: true,
+					progress: undefined,
+				});
 				setNewAcademicYear(newArrVal);
 				setdatatoDelete({});
 			})
@@ -84,8 +95,29 @@ const Year = () => {
 		e.preventDefault();
 		try {
 			getAccessToken();
-			const res: any = await axios.post(`${baseUrl}academic_year`, { academic_year: `${acdYear.fromYear}-${acdYear.toYear}` }).then((res: any) => {
+			const res: any = await axios.post(`${baseUrl}academic_year/new_academic_year`, { academic_year: `${acdYear.fromYear}-${acdYear.toYear}` }).then((res: any) => {
 				console.log(res.data);
+				if (res.data.year_id) {
+					toast.success("Year Added Successfully", {
+						position: "top-right",
+						autoClose: 5000,
+						hideProgressBar: false,
+						closeOnClick: true,
+						pauseOnHover: true,
+						draggable: true,
+						progress: undefined,
+					});
+				} else {
+					toast.warning("Year Already Added", {
+						position: "top-right",
+						autoClose: 5000,
+						hideProgressBar: false,
+						closeOnClick: true,
+						pauseOnHover: true,
+						draggable: true,
+						progress: undefined,
+					});
+				}
 				getAllAcademicYear();
 				setStatusAcademicYearAdd(false);
 			});
@@ -96,6 +128,7 @@ const Year = () => {
 
 	return (
 		<div>
+			<ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
 			<div id="page-top">
 				<div id="wrapper">
 					<Sidebar></Sidebar>
@@ -196,6 +229,17 @@ const Year = () => {
 														</div>
 													</div>
 													<div style={{ marginLeft: "20%" }}>
+														<ToastContainer
+															position="top-right"
+															autoClose={5000}
+															hideProgressBar={false}
+															newestOnTop={false}
+															closeOnClick
+															rtl={false}
+															pauseOnFocusLoss
+															draggable
+															pauseOnHover
+														/>
 														{/* <Pagination>
                                                             <Pagination.First />
                                                             <Pagination.Prev />

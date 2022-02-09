@@ -5,6 +5,8 @@ import Navbar from "../Layouts/Navbar";
 import { Button, Table, Pagination, Form, Spinner, Modal } from "react-bootstrap";
 import axios from "axios";
 import { getAccessToken } from "../../config/getAccessToken";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Discountfee = () => {
 	const [statusDiscountfeeEdit, setStatusDiscountfeeEdit] = useState(false);
@@ -48,6 +50,15 @@ const Discountfee = () => {
 		axios
 			.delete(`${baseUrl}discount_type_masters/delete?`, { data: { dis_feetype_id: id } })
 			.then((res: any) => {
+				toast.success("Deleted Successfully", {
+					position: "top-right",
+					autoClose: 5000,
+					hideProgressBar: false,
+					closeOnClick: true,
+					pauseOnHover: true,
+					draggable: true,
+					progress: undefined,
+				});
 				DiscountFeeTypeName(newArrVal);
 				setdatatoDelete({});
 			})
@@ -59,13 +70,30 @@ const Discountfee = () => {
 	const updateDiscountFeeTypeName = () => {
 		delete editingDiscountFeeYear.id;
 		getAccessToken();
-		if (editingDiscountFeeYear.name == "") {
-			alert("Please Enter A Value");
+		if (editingDiscountFeeYear.name.length <=0 ) {
+			toast.warning("Please Enter A Value", {
+				position: "top-right",
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+			});
 		} else {
 			axios
 				.put(`${baseUrl}discount_type_masters/update`, { dis_feetype_id: editingDiscountFeeYear.dis_id, dis_feetype_name: editingDiscountFeeYear.name })
 				.then((res: any) => {
 					console.log(res.data);
+					toast.success("Discount Fee Type Master Updated", {
+						position: "top-right",
+						autoClose: 5000,
+						hideProgressBar: false,
+						closeOnClick: true,
+						pauseOnHover: true,
+						draggable: true,
+						progress: undefined,
+					});
 					setGetDiscountFeeTypeName([]);
 					getgetDiscountFeeTypeName();
 					setEditingDiscountFeeYear({});
@@ -73,6 +101,15 @@ const Discountfee = () => {
 				})
 				.catch((e: any) => {
 					console.log(e);
+					toast.error("Updation Failed", {
+						position: "top-right",
+						autoClose: 5000,
+						hideProgressBar: false,
+						closeOnClick: true,
+						pauseOnHover: true,
+						draggable: true,
+						progress: undefined,
+					});
 					setEditingDiscountFeeYear({});
 					setUpdateDiscountData("");
 				});
@@ -113,14 +150,32 @@ const Discountfee = () => {
 	const handleSubmit = async (e: any) => {
 		setDuplication(true);
 		e.preventDefault();
-		if (discountFeeTypeName == "") {
-			alert("Please Enter A Value");
+		if (discountFeeTypeName.length <=0 ) {
+		
+			toast.warning("Please Enter A Value", {
+				position: "top-right",
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+			});
 			setDuplication(false);
 		} else {
 			try {
 				getAccessToken();
 				const res: any = await axios.post(`${baseUrl}discount_type_masters/create`, { dis_feetype_name: discountFeeTypeName }).then((res: any) => {
 					console.log(res.data);
+					toast.success("Discount Fee Type Master Added", {
+						position: "top-right",
+						autoClose: 5000,
+						hideProgressBar: false,
+						closeOnClick: true,
+						pauseOnHover: true,
+						draggable: true,
+						progress: undefined,
+					});
 					getgetDiscountFeeTypeName();
 					setStatusDiscountfeeAdd(false);
 					setDuplication(false);
@@ -136,6 +191,7 @@ const Discountfee = () => {
 
 	return (
 		<div>
+			<ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
 			<div id="page-top">
 				<div id="wrapper">
 					<Sidebar></Sidebar>
