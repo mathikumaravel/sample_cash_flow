@@ -27,7 +27,7 @@ const Studentpay = () => {
 															<a>
 																<i className="far fa-clone pr-1"></i>Fees
 															</a>{" "}
-															<Link to="/Student">
+															<Link to="/StudentprofileSearch">
 																<a className="btn btn-success btn float-right">Back</a>
 															</Link>
 														</h4>
@@ -38,7 +38,7 @@ const Studentpay = () => {
 															<a>
 																<i className="far fa-clone pr-1"></i>Refund
 															</a>{" "}
-															<Link to="/Student">
+															<Link to="/StudentprofileSearch">
 																<a className="btn btn-success btn float-right">Back</a>
 															</Link>
 														</h4>

@@ -109,17 +109,19 @@ const StudentprofileSearch = () => {
 													<div className="card shadow mb-5">
                                                     <div className="card-header py-2">
 																<h4 className="m-0 text-danger">
-																	<a>Profile</a>
+																
 
 																	{!statusStudentEdit ? (
 																		<i
 																			className="fa fa-edit profile_btn-edit btn"
 																			onClick={() => setStatusStudentEdit(true)}
+
 																			style={{
 																				fontSize: "25px",
 																				color: "red",
 																				cursor: "pointer",
-																				marginLeft: "70%",
+																				display:'flex',
+																				float:'right'
 																			}}></i>
 																	) : (
 																		<>
@@ -130,18 +132,22 @@ const StudentprofileSearch = () => {
 																					fontSize: "25px",
 																					color: "red",
 																					cursor: "pointer",
-																					marginLeft: "70%",
+																					display:'grid',
+																			    	float:'right',
+																					alignItems:'center'
 																				}}></i>
 
 																			<i
-																				className="fa fa-times"
-																				aria-hidden="true"
+																				className="fa fa- btn" 
 																				onClick={() => setStatusStudentEdit(false)}
 																				style={{
 																					fontSize: "25px",
 																					color: "red",
 																					cursor: "pointer",
-																				}}></i>
+																					display:'grid',
+																			    	float:'right',
+																					alignItems:'center'
+																				}}>X</i>
 																		</>
 																	)}
 																</h4>
@@ -224,6 +230,7 @@ const StudentprofileSearch = () => {
 
 												<div className="col-lg-5">
 													<div className="card shadow mb-5">
+
 														<div className="card-body bg-transparent">
 															<Form.Group as={Row}>
 																<Form.Label column sm="4">
