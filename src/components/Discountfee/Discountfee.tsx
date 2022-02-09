@@ -18,6 +18,7 @@ const Discountfee = () => {
     const [updateDiscountData, setUpdateDiscountData] = useState("");
     const [datatoDelete, setdatatoDelete] = useState<any>({});
     const [duplication, setDuplication] = useState(false);
+    const [filter, setfilter] = useState<any>([]);
 
     console.log(editingDiscountFeeYear);
 
@@ -147,6 +148,12 @@ const Discountfee = () => {
         getgetDiscountFeeTypeName();
     }, []);
 
+    const dataSearch: any =
+    getDiscountFeeTypeName.length &&
+    getDiscountFeeTypeName.sort().filter((data: any) => {
+			return Object.keys(data).some((key) => data[key].toString().toLowerCase().includes(filter.toString().toLowerCase()));
+		});
+
     const handleSubmit = async (e: any) => {
         setDuplication(true);
         e.preventDefault();
@@ -232,7 +239,7 @@ const Discountfee = () => {
                                                             <div id="dataTable_filter" className="dataTables_filter">
                                                                 <Form.Label htmlFor="inputPassword5" style={{ marginLeft: "75%" }}>
                                                                     Search:
-                                                                    <Form.Control type="search" className="form-control form-control-sm" />
+                                                                    <Form.Control type="search" className="form-control form-control-sm" onChange={(e) => setfilter(e.target.value)} />
                                                                 </Form.Label>
                                                             </div>
 
@@ -247,12 +254,12 @@ const Discountfee = () => {
                                                                             </tr>
                                                                         </thead>
                                                                         <tbody>
-                                                                            {getDiscountFeeTypeName && getDiscountFeeTypeName.length ? (
-                                                                                getDiscountFeeTypeName.map((values: any, index: any) => {
+                                                                            {dataSearch && dataSearch.length ? (
+                                                                                dataSearch.map((values: any, index: any) => {
                                                                                     return (
                                                                                         <tr key={index}>
                                                                                             <td>{index + 1}</td>
-                                                                                            {index == editingDiscountFeeYear.id ? (
+                                                                                            {index === editingDiscountFeeYear.id ? (
                                                                                                 <>
                                                                                                     <td>
                                                                                                         {" "}
