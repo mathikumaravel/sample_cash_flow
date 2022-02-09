@@ -206,7 +206,7 @@ const Studentrecord = () => {
                       </thead>
                       <tbody>
                         <tr>
-                         <td> <Link to="/Student">ASAIN</Link></td>
+                         <td> <Link to="/StudentprofileSearch">ASAIN</Link></td>
                           <td>1001</td>
                           <td>9788888909</td>
                           <td>I</td>

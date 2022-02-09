@@ -5,6 +5,8 @@ import { Button, Table, Pagination, Form, Col, Row, Spinner, Modal } from "react
 import axios, { AxiosResponse } from "axios";
 import { getAccessToken } from "../../config/getAccessToken";
 import { baseUrl } from "../../index";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Yearoffee = () => {
 	const [statusFeeDetailsEdit, setStatusFeeDetailsEdit] = useState(false);
@@ -143,6 +145,51 @@ const Yearoffee = () => {
 
 	const handleSubmit = () => {
 		let newfeeTypeName = feeTypeName.toString();
+		if(amount.length<=0 || addGrade.length<=0 || academicYear.length<=0 || newfeeTypeName.length<=0) {
+			if(amount.length<=0) {
+			toast.warning("Enter Amount", {
+				position: "top-right",
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+			});
+		}else if(addGrade.length<=0) {
+			toast.warning("Enter Grade", {
+				position: "top-right",
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+			});
+		}
+		else if(academicYear.length<=0) {
+			toast.warning("Enter Academic Year", {
+				position: "top-right",
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+			});
+		}
+		else if(newfeeTypeName.length<=0) {
+			toast.warning("Enter Fee Type Name", {
+				position: "top-right",
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+			});
+		}
+		}else{
 		getAccessToken();
 		axios
 			.post(`${baseUrl}year_of_fee/create`, {
@@ -152,8 +199,18 @@ const Yearoffee = () => {
 				fee_master_id: newfeeTypeName,
 			})
 			.then((res: any) => {
+				toast.success("Year oF Fee Added", {
+					position: "top-right",
+					autoClose: 5000,
+					hideProgressBar: false,
+					closeOnClick: true,
+					pauseOnHover: true,
+					draggable: true,
+					progress: undefined,
+				});
 				setStatusFeeDetailsEdit(false);
 			});
+		}
 	};
 
 	useEffect(() => {
@@ -171,6 +228,17 @@ const Yearoffee = () => {
 	};
 
 	const updatingYearOfFee = () => {
+		if(updateYearOfFee.length <=0){
+			toast.warning("Enter Amount", {
+				position: "top-right",
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+			});
+		}else{
 		getAccessToken();
 		axios
 			.put(`${baseUrl}year_of_fee/update`, {
@@ -183,11 +251,21 @@ const Yearoffee = () => {
 			.then((res: any) => {
 				console.log(res.data);
 				if (res.data == true) {
+					toast.success("Year oF Fee Updated Successsfully", {
+						position: "top-right",
+						autoClose: 5000,
+						hideProgressBar: false,
+						closeOnClick: true,
+						pauseOnHover: true,
+						draggable: true,
+						progress: undefined,
+					});
 					setEditingYearOfFee({});
 					setUpdateYearOfFee("");
 					list_fee_details();
 				}
 			});
+		}
 	};
 
 	const deleteParticularDiscount = (fee_master_id: any) => {
@@ -195,6 +273,15 @@ const Yearoffee = () => {
 		axios
 			.delete(`${baseUrl}year_of_fee/delete?id=${fee_master_id}`)
 			.then((res: any) => {
+				toast.success("Year oF Fee Deleted Successsfully", {
+					position: "top-right",
+					autoClose: 5000,
+					hideProgressBar: false,
+					closeOnClick: true,
+					pauseOnHover: true,
+					draggable: true,
+					progress: undefined,
+				});
 				setdatatoDelete({});
 				setEditingYearOfFee({});
 				setUpdateYearOfFee("");
@@ -210,6 +297,7 @@ const Yearoffee = () => {
 	// console.log(academicYear, feeTypeName, addGrade, amount);
 	return (
 		<div>
+			<ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
 			<div id="page-top">
 				<div id="wrapper">
 					<Sidebar></Sidebar>
