@@ -8,6 +8,9 @@ import { baseUrl } from "../../index";
 import { romanLetters } from "../../utils/romanLetters";
 import { getAllAcademicYear } from "../../Api/year_api";
 import { getAllGradeSectionAdd } from "../../Api/grade_section";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const Grade = () => {
 	const [statusGradeEdit, setStatusGradeEdit] = useState(false);
 	const [statusGradeAdd, setStatusGradeAdd] = useState(false);
@@ -55,26 +58,89 @@ const Grade = () => {
 	}, []);
 
 	const handleSubmit = () => {
-		clickedGrade.forEach((element: any) => {
-			let sendData = { academic_year: academic_year_data, grade: element, section: academic_section };
-			getAccessToken();
-			axios.post(`${baseUrl}grade_section/create`, sendData).then((res: any) => {
-				setStatusList([]);
-				getAllGradeSectionData();
+		if (academic_year_data.length <= 0 || clickedGrade.length <= 0 || academic_section.length <= 0) {
+			if (academic_year_data.length <= 0) {
+				alert("a");
+				toast.error("Please Select Academic Year", {
+					position: "top-right",
+					autoClose: 5000,
+					hideProgressBar: false,
+					closeOnClick: true,
+					pauseOnHover: true,
+					draggable: true,
+					progress: undefined,
+				});
+			} else if (clickedGrade.length <= 0) {
+				toast.error("Please Select Academic Grade", {
+					position: "top-right",
+					autoClose: 5000,
+					hideProgressBar: false,
+					closeOnClick: true,
+					pauseOnHover: true,
+					draggable: true,
+					progress: undefined,
+				});
+			} else {
+				toast.error("Please Enter Section", {
+					position: "top-right",
+					autoClose: 5000,
+					hideProgressBar: false,
+					closeOnClick: true,
+					pauseOnHover: true,
+					draggable: true,
+					progress: undefined,
+				});
+			}
+		} else {
+			clickedGrade.forEach((element: any) => {
+				let sendData = { academic_year: academic_year_data, grade: element, section: academic_section };
+				getAccessToken();
+				axios.post(`${baseUrl}grade_section/create`, sendData).then((res: any) => {
+					toast.success("Grade & Section Added Successfully", {
+						position: "top-right",
+						autoClose: 5000,
+						hideProgressBar: false,
+						closeOnClick: true,
+						pauseOnHover: true,
+						draggable: true,
+						progress: undefined,
+					});
+					setStatusList([]);
+					getAllGradeSectionData();
+				});
 			});
-		});
-		setStatusGradeAdd(false);
-		setClickedGrade([]);
-		setAcademic_year_data(allAcademicYear[0].academic_year);
-		setAcademic_section("");
+			setStatusGradeAdd(false);
+			setClickedGrade([]);
+			setAcademic_year_data(allAcademicYear[0].academic_year);
+			setAcademic_section("");
+		}
 	};
 
 	const deleteSection = (gradeid: any, index: any) => {
 		getAccessToken();
-		axios.delete(`${baseUrl}grade_section?`, { data: { id: gradeid } }).then((res: any) => {
+		axios.delete(`${baseUrl}grade_section/delete?`, { data: { id: gradeid } }).then((res: any) => {
+			toast.success("Grade & Section Deleted Successfully", {
+				position: "top-right",
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+			});
 			setStatusList([]);
 			getAllGradeSectionData();
 			console.log(res.data);
+		}).catch((e)=>{
+			toast.error("Grade & Section Deletion Error", {
+				position: "top-right",
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+			});
 		});
 	};
 
@@ -195,6 +261,7 @@ const Grade = () => {
 														</div>
 													</div>
 													<div style={{ marginLeft: "100px" }}>
+														
 														{/* <Pagination>
 															<Pagination.First />
 															<Pagination.Prev />
@@ -230,9 +297,31 @@ const Grade = () => {
 															</Button>
 														</Modal.Footer>
 													</Modal>
+													<ToastContainer
+															position="top-right"
+															autoClose={5000}
+															hideProgressBar={false}
+															newestOnTop={false}
+															closeOnClick
+															rtl={false}
+															pauseOnFocusLoss
+															draggable
+															pauseOnHover
+														/>
 												</div>
 											) : (
 												<>
+												<ToastContainer
+															position="top-right"
+															autoClose={5000}
+															hideProgressBar={false}
+															newestOnTop={false}
+															closeOnClick
+															rtl={false}
+															pauseOnFocusLoss
+															draggable
+															pauseOnHover
+														/>
 													<Container>
 														<Row>
 															<Form.Group as={Row} className="mb-12 pb-4" controlId="formPlaintextPassword">
@@ -277,6 +366,7 @@ const Grade = () => {
 																				label={`${romanvalues}`}
 																				name="group1"
 																				type="checkbox"
+																				key={index}
 																				value={romanvalues}
 																				onChange={(e: any) => {
 																					console.log(e.target.value);
@@ -313,7 +403,7 @@ const Grade = () => {
 													</Container>
 													<div className="card-footer">
 														<div style={{ display: "flex", justifyContent: "right" }}>
-															<Button className="btn  btn-secondary" onClick={() => setStatusGradeAdd(false)}>
+															<Button className="btn  btn-secondary" onClick={() => {setStatusGradeAdd(false);setClickedGrade([]);setAcademic_section('');setAcademic_year_data(allAcademicYear[0].academic_year);}}>
 																Cancel
 															</Button>{" "}
 															&nbsp;
