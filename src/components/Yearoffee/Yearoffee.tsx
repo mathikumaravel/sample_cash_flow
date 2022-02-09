@@ -208,7 +208,8 @@ const Yearoffee = () => {
 					draggable: true,
 					progress: undefined,
 				});
-				setStatusFeeDetailsEdit(false);
+				setStatusFeeDetailsAdd(false);
+				list_fee_details();
 			});
 		}
 	};
