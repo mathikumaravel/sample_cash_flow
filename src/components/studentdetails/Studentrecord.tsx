@@ -211,7 +211,7 @@ const Studentrecord = () => {
                           <td>9788888909</td>
                           <td>I</td>
                           <td>A</td>
-                          <td> <a href="/Stu_pay" style={{ color:'#008000'}} >Paid</a></td>
+                          <td> <p style={{ color:'green'}}>paid </p></td>
                         </tr>
                         <tr>
                         <td><Link to="/Student" >Mohan</Link></td>
@@ -219,7 +219,7 @@ const Studentrecord = () => {
                           <td>9788888909</td>
                           <td>II</td>
                           <td>B</td>
-                          <td> <a style={{ color:'#FF0000'}} >Unpaid</a></td>
+                          <td> <Link to="/Stu_pay" style={{ color:' red '}}>UnPaid</Link></td>
                         </tr>
                         
                       </tbody>
