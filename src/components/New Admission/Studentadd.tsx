@@ -170,7 +170,7 @@ const Studentadd = () => {
     <div>
       <div id="page-top">
         <div id="wrapper">
-          <Sidebar></Sidebar>
+        <Sidebar data={"Stu_add"}></Sidebar>
           <div id="content-wrapper" className="d-flex flex-column">
             <div id="content">
               <Navbar></Navbar>

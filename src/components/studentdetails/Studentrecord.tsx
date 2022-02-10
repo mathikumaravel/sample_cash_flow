@@ -104,7 +104,7 @@ const Studentrecord = () => {
   return (
     <div id="page-top">
       <div id="wrapper">
-        <Sidebar></Sidebar>
+        <Sidebar data={"studentrecord"}></Sidebar>
         <div id="content-wrapper" className="d-flex flex-column">
           <div className="student-profile py-2">
             <div id="content">

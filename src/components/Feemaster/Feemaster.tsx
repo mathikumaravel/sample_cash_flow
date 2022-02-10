@@ -164,7 +164,7 @@ const Feemaster = () => {
 			<ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
 			<div id="page-top">
 				<div id="wrapper">
-					<Sidebar></Sidebar>
+					<Sidebar data={"Fee_master"}></Sidebar>
 					<div id="content-wrapper" className="d-flex flex-column">
 						<div id="content">
 							<Navbar></Navbar>
