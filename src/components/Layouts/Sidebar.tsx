@@ -35,28 +35,28 @@ const Sidebar = (props:any) => {
                     <div id="collapseTwo" className="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                         <div className="bg-white py-2 collapse-inner rounded">
                             <h6 className="collapse-header">Custom</h6>
-                            <Link to="/studentrecord" className={activeValue == "studentrecord" ? "active collapse-item" : "collapse-item"  }>
+                            <Link to="/studentrecord" className={activeValue === "studentrecord" ? "active collapse-item" : "collapse-item"  }>
                                 Student
                             </Link>
-                            <Link to="/Stu_add" className={activeValue == "Stu_add" ? "active collapse-item" : "collapse-item"  }>
+                            <Link to="/Stu_add" className={activeValue === "Stu_add" ? "active collapse-item" : "collapse-item"  }>
                                 New Admission
                             </Link>
-                            <Link to="/Stupro" className={activeValue == "Stupro" ? "active collapse-item" : "collapse-item"  }>
+                            <Link to="/Stupro" className={activeValue === "Stupro" ? "active collapse-item" : "collapse-item"  }>
                                 Promotion
                             </Link>
-                            <Link to="/Stu_fees" className={activeValue == "Stu_fees" ? "active collapse-item" : "collapse-item"  }>
+                            <Link to="/Stu_fees" className={activeValue === "Stu_fees" ? "active collapse-item" : "collapse-item"  }>
                                 Year of Fee
                             </Link>
-                            <Link to="/Fee_master" className={activeValue == "Fee_master" ? "active collapse-item" : "collapse-item"  }>
+                            <Link to="/Fee_master" className={activeValue === "Fee_master" ? "active collapse-item" : "collapse-item"  }>
                                 Fee Master
                             </Link>
-                            <Link to="/Discounttype" className={activeValue == "Discounttype" ? "active collapse-item" : "collapse-item"  }>
+                            <Link to="/Discounttype" className={activeValue === "Discounttype" ? "active collapse-item" : "collapse-item"  }>
                                 Discount Fee Type Master
                             </Link>
-                            <Link to="/Academicyear" className={activeValue == "Academicyear" ? "active collapse-item" : "collapse-item"  }>
+                            <Link to="/Academicyear" className={activeValue === "Academicyear" ? "active collapse-item" : "collapse-item"  }>
                                 Year
                             </Link>
-                            <Link to="/Grade_section" className={activeValue == "Grade_section" ? "active collapse-item" : "collapse-item"  }>
+                            <Link to="/Grade_section" className={activeValue === "Grade_section" ? "active collapse-item" : "collapse-item"  }>
                                 Grade & section
                             </Link>
                         </div>
@@ -70,21 +70,46 @@ const Sidebar = (props:any) => {
                     <div id="collapseTransport" className="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                         <div className="bg-white py-2 collapse-inner rounded">
                             {/* <h6 className="collapse-header"></h6> */}
-                            <Link to="/placesprice" className={activeValue == "Placesprice" ? "active collapse-item" : "collapse-item"  }>
+                            <Link to="/placesprice" className={activeValue === "Placesprice" ? "active collapse-item" : "collapse-item"  }>
                                 Places
                             </Link>
-                            <Link to="/placesstoppings" className={activeValue == "placesstoppings" ? "active collapse-item" : "collapse-item"  }>
+                            <Link to="/placesstoppings" className={activeValue === "placesstoppings" ? "active collapse-item" : "collapse-item"  }>
                                 Places & Stoppings
                             </Link>
-                            <Link to="/vechiledetails" className={activeValue == "vechiledetails" ? "active collapse-item" : "collapse-item"  }>
+                            <Link to="/vechiledetails" className={activeValue === "vechiledetails" ? "active collapse-item" : "collapse-item"  }>
                                 Vechile Details
                             </Link>
-                            <Link to="/transportallocation" className={activeValue == "transportallocation" ? "active collapse-item" : "collapse-item"  }>
+                            <Link to="/transportallocation" className={activeValue === "transportallocation" ? "active collapse-item" : "collapse-item"  }>
                                 Vechile & Place Allocation
                             </Link>
                         </div>
                     </div>
                 </li>
+
+                <li className="nav-item">
+                    <a className="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseHostal" aria-expanded="true" aria-controls="collapseHostal">
+                        <i className="fa fa-hotel"></i>
+                        <span>Hostal</span>
+                    </a>
+                    <div id="collapseHostal" className="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                        <div className="bg-white py-2 collapse-inner rounded">
+                            {/* <h6 className="collapse-header"></h6> */}
+                            
+                            
+                            <Link to="/hostal_fees" className={activeValue === "hostal_fees" ? "active collapse-item" : "collapse-item"  }>
+                                Hostal Fees
+                            </Link>
+                            <Link to="/room_no" className={activeValue === "room_no" ? "active collapse-item" : "collapse-item"  }>
+                                Room No & Capacity
+                            </Link>
+                            <Link to="/hostal_name" className={activeValue === "hostal_name" ? "active collapse-item" : "collapse-item"  }>
+                                Hostal Name
+                            </Link>
+                           
+                        </div>
+                    </div>
+                </li>
+
                 <li className="nav-item">
                     <a className="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
                         <i className="fas fa-chalkboard-teacher"></i>

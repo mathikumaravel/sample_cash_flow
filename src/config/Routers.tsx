@@ -18,6 +18,9 @@ import Studentrecord from "../components/studentdetails/Studentrecord";
 import StudentProfile from "../components/studentdetails/Studentprofile";
 import StudentprofileSearch from "../components/studentdetails/StudentprofileSearch";
 import Placesprice from "../components/Transport/Placesprice";
+import Hostalname from "../components/Hostal/Hostalname";
+import RoomNo from "../components/Hostal/RoomNo"
+import HostalFee from "../components/Hostal/HostalFee";
 
 const PrivateRoute = (props: any) => {
     let history = useHistory<any>();
@@ -52,7 +55,10 @@ function Routers(props: any) {
                 <PrivateRoute path="/Grade_section" component={Grade} />
                 <PrivateRoute path="/studentprofile" component={StudentProfile} />
                 <PrivateRoute path="/StudentprofileSearch" component={StudentprofileSearch} />
-                <PrivateRoute path="/placesprice" component={Placesprice} />
+                 <PrivateRoute path="/placesprice" component={Placesprice} />
+                 <PrivateRoute path="/hostal_name" component={Hostalname} />
+                 <PrivateRoute path="/room_no" component={RoomNo}/>
+                 <PrivateRoute path="/hostal_fees" component={HostalFee}/>
             </Switch>
         </BrowserRouter>
     );
