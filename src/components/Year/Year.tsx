@@ -138,7 +138,7 @@ const Year = () => {
 			<ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
 			<div id="page-top">
 				<div id="wrapper">
-					<Sidebar></Sidebar>
+					<Sidebar data={"Academicyear"}></Sidebar>
 					<div id="content-wrapper" className="d-flex flex-column">
 						<div id="content">
 							<Navbar></Navbar>
