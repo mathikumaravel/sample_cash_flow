@@ -380,14 +380,7 @@ const Yearoffee = () => {
 																</table>
 															</div>
 															<div>
-																<div className="dataTables_wrapper dt-bootstrap4 no-footer">
-																	<div id="dataTable_filter" className="dataTables_filter">
-																		<Form.Label style={{ marginLeft: "78%" }}>
-																			Search:
-																			<Form.Control type="search" className="form-control form-control-sm" />
-																		</Form.Label>
-																	</div>
-																</div>
+																
 
 																<div className="row">
 																	<div className="col-sm-12">

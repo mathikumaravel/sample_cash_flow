@@ -1,7 +1,17 @@
 import { useState, useEffect, useRef } from "react";
 import Sidebar from "../Layouts/Sidebar";
 import Navbar from "../Layouts/Navbar";
-import { Button, Table, Pagination, Form, Col, Row, Container, Modal, Spinner } from "react-bootstrap";
+import {
+  Button,
+  Table,
+  Pagination,
+  Form,
+  Col,
+  Row,
+  Container,
+  Modal,
+  Spinner,
+} from "react-bootstrap";
 import axios, { AxiosResponse } from "axios";
 import { getAccessToken } from "../../config/getAccessToken";
 import { baseUrl } from "../../index";
@@ -12,6 +22,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Grade = () => {
+
     const [statusGradeEdit, setStatusGradeEdit] = useState(false);
     const [statusGradeAdd, setStatusGradeAdd] = useState(false);
     const [statusList, setStatusList] = useState<any>([]);
@@ -481,6 +492,3 @@ const Grade = () => {
     );
 };
 export default Grade;
-function e(e: any, any: any) {
-    throw new Error("Function not implemented.");
-}

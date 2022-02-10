@@ -16,6 +16,8 @@ const Year = () => {
 	const [acdYear, setAcdYear] = useState<any>({ fromYear: "", toYear: 0 });
 	const [allAcademicYear, setAllAcademicYear] = useState<any[]>([]);
 	const [datatoDelete, setdatatoDelete] = useState<any>({});
+	const [filter, setfilter] = useState<any>([]);
+
 
 	//Modal Popup
 	const [show, setShow] = useState(false);
@@ -30,6 +32,11 @@ const Year = () => {
 	const handleShow = () => {
 		setShow(true);
 	};
+	const dataSearch: any =
+	allAcademicYear.length &&
+	allAcademicYear.sort().filter((data: any) => {
+			return Object.keys(data).some((key) => data[key].toString().toLowerCase().includes(filter.toString().toLowerCase()));
+		});
 
 	const callTheYearUpdater = () => {
 		console.log(new Date().getFullYear());
@@ -162,7 +169,7 @@ const Year = () => {
 															<div id="dataTable_filter" className="dataTables_filter">
 																<Form.Label htmlFor="inputPassword5" style={{ marginLeft: "75%" }}>
 																	Search:
-																	<Form.Control type="search" className="form-control form-control-sm" />
+																	<Form.Control type="search" className="form-control form-control-sm" onChange={(e) => setfilter(e.target.value)} />
 																</Form.Label>
 															</div>
 														</div>
@@ -184,8 +191,8 @@ const Year = () => {
 																	</tr>
 																</thead>
 																<tbody>
-																	{allAcademicYear && allAcademicYear.length ? (
-																		allAcademicYear.map((values: any, index: any) => {
+																	{dataSearch && dataSearch.length ? (
+																		dataSearch.map((values: any, index: any) => {
 																			return (
 																				<tr key={index}>
 																					<td>{index + 1}</td>
