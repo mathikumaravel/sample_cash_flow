@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 
 import "../config/Axiosconfiq";
-import { BrowserRouter, Route, Switch, useHistory } from "react-router-dom";
+import { BrowserRouter, Route, Switch, useHistory,HashRouter } from "react-router-dom";
 import Login from "../components/auth/Login";
 import StudentProfileId from "../components/studentdetails/Student";
 import Dashboard from "../components/Dashboard/Dashboard";
@@ -39,7 +39,7 @@ function Routers(props: any) {
     }
 
     return (
-        <BrowserRouter>
+        <HashRouter hashType="noslash">
             <Switch>
                 <Route exact={true} path="/" component={Login} />
                 <PrivateRoute path="/Dashboard" component={Dashboard} />
@@ -60,7 +60,7 @@ function Routers(props: any) {
                  <PrivateRoute path="/room_no" component={RoomNo}/>
                  <PrivateRoute path="/hostal_fees" component={HostalFee}/>
             </Switch>
-        </BrowserRouter>
+        </HashRouter >
     );
 }
 export default Routers;
