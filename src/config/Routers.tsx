@@ -39,28 +39,37 @@ function Routers(props: any) {
     }
 
     return (
-        <HashRouter hashType="noslash">
+        // <HashRouter hashType="noslash">
+        //     <Switch>
+        //         <Route exact={true} path="/" component={Login} />
+        //         <PrivateRoute path="/Dashboard" component={Dashboard} />
+        //         <PrivateRoute path="/studentrecord" component={Studentrecord} />
+        //         <PrivateRoute path="/StudentProfileId" component={StudentProfileId} />
+        //         <PrivateRoute path="/Stu_pay" component={Studentpay} />
+        //         <PrivateRoute path="/Stu_add" component={Studentadd} />
+        //         <PrivateRoute path="/Stupro" component={Promotion} />
+        //         <PrivateRoute path="/Stu_fees" component={Yearoffee} />
+        //         <PrivateRoute path="/Fee_master" component={Feemaster} />
+        //         <PrivateRoute path="/Discounttype" component={Discountfee} />
+        //         <PrivateRoute path="/Academicyear" component={Year} />
+        //         <PrivateRoute path="/Grade_section" component={Grade} />
+        //         <PrivateRoute path="/studentprofile" component={StudentProfile} />
+        //         <PrivateRoute path="/StudentprofileSearch" component={StudentprofileSearch} />
+        //          <PrivateRoute path="/placesprice" component={Placesprice} />
+        //          <PrivateRoute path="/hostal_name" component={Hostalname} />
+        //          <PrivateRoute path="/room_no" component={RoomNo}/>
+        //          <Route path="/hostal_fees" component={HostalFee} />
+        //          <PrivateRoute path="/hostal_fees" component={HostalFee}/>
+        //     </Switch>
+        // </HashRouter >
+        <BrowserRouter>
             <Switch>
-                <Route exact={true} path="/" component={Login} />
-                <PrivateRoute path="/Dashboard" component={Dashboard} />
-                <PrivateRoute path="/studentrecord" component={Studentrecord} />
-                <PrivateRoute path="/StudentProfileId" component={StudentProfileId} />
-                <PrivateRoute path="/Stu_pay" component={Studentpay} />
-                <PrivateRoute path="/Stu_add" component={Studentadd} />
-                <PrivateRoute path="/Stupro" component={Promotion} />
-                <PrivateRoute path="/Stu_fees" component={Yearoffee} />
-                <PrivateRoute path="/Fee_master" component={Feemaster} />
-                <PrivateRoute path="/Discounttype" component={Discountfee} />
-                <PrivateRoute path="/Academicyear" component={Year} />
-                <PrivateRoute path="/Grade_section" component={Grade} />
-                <PrivateRoute path="/studentprofile" component={StudentProfile} />
-                <PrivateRoute path="/StudentprofileSearch" component={StudentprofileSearch} />
-                 <PrivateRoute path="/placesprice" component={Placesprice} />
-                 <PrivateRoute path="/hostal_name" component={Hostalname} />
-                 <PrivateRoute path="/room_no" component={RoomNo}/>
-                 <PrivateRoute path="/hostal_fees" component={HostalFee}/>
-            </Switch>
-        </HashRouter >
+
+        <Route path="/hostal_fees" component={HostalFee} />
+        <Route path="/Stu_pay" component={Studentpay} />
+        <Route path="/Stu_add" component={Studentadd} />
+        </Switch>
+        </BrowserRouter >
     );
 }
 export default Routers;
