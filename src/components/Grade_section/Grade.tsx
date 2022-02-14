@@ -1,17 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import Sidebar from "../Layouts/Sidebar";
 import Navbar from "../Layouts/Navbar";
-import {
-  Button,
-  Table,
-  Pagination,
-  Form,
-  Col,
-  Row,
-  Container,
-  Modal,
-  Spinner,
-} from "react-bootstrap";
+import { Button, Table, Pagination, Form, Col, Row, Container, Modal, Spinner } from "react-bootstrap";
 import axios, { AxiosResponse } from "axios";
 import { getAccessToken } from "../../config/getAccessToken";
 import { baseUrl } from "../../index";
@@ -22,7 +12,6 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Grade = () => {
-
     const [statusGradeEdit, setStatusGradeEdit] = useState(false);
     const [statusGradeAdd, setStatusGradeAdd] = useState(false);
     const [statusList, setStatusList] = useState<any>([]);
@@ -33,13 +22,15 @@ const Grade = () => {
     const [academic_year_data, setAcademic_year_data] = useState("");
     const [academic_section, setAcademic_section] = useState("");
     const [datatoDelete, setdatatoDelete] = useState<any>({});
+    const [spinnerLoad, setSpinnerLoad] = useState<any>(true);
 
     //Pagination
     const [currentPage, setCurrentPage] = useState(1);
-    const [perPage, setPerPage] = useState(2);
+    const [perPage, setPerPage] = useState(100);
     const [totalButtons, setTotalButtons] = useState(0);
     const [createButtons, setCreateButtons] = useState<any[]>([]);
     const [pageToMove, setPageToMove] = useState(currentPage);
+
     //Modal Popup
     const [show, setShow] = useState(false);
     const handleClose = () => {
@@ -56,6 +47,7 @@ const Grade = () => {
 
     const getAllGradeSectionData = () => {
         axios.get(`${baseUrl}grade_section/show_all?page=${currentPage}&per_page=${perPage}`).then((response: AxiosResponse) => {
+            setSpinnerLoad(false);
             setStatusList(response.data.grade_sections);
             setCurrentPage(response.data.page);
             setTotalButtons(response.data.total_page);
@@ -136,6 +128,7 @@ const Grade = () => {
     };
 
     const deleteSection = (gradeid: any, index: any) => {
+        setSpinnerLoad(true);
         getAccessToken();
         axios
             .delete(`${baseUrl}grade_section/delete?`, { data: { id: gradeid } })
@@ -180,7 +173,6 @@ const Grade = () => {
         setClickedGrade(newArr);
     };
     console.log(clickedGrade);
-    
 
     const timeToCreateButtons = () => {
         let items: any[] = [];
@@ -264,7 +256,16 @@ const Grade = () => {
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
-                                                                    {statusList && statusList.length ? (
+                                                                    {spinnerLoad ? (
+                                                                        <td
+                                                                            colSpan={5}
+                                                                            style={{
+                                                                                textAlign: "center",
+                                                                            }}
+                                                                        >
+                                                                            <Spinner animation="border" variant="danger" />
+                                                                        </td>
+                                                                    ) : statusList && statusList.length ? (
                                                                         statusList.map((data: any, index: any) => {
                                                                             return (
                                                                                 <tr>
@@ -305,7 +306,7 @@ const Grade = () => {
                                                                                         textAlign: "center",
                                                                                     }}
                                                                                 >
-                                                                                    <Spinner animation="border" variant="danger" />
+                                                                                    No Data Found
                                                                                 </td>
                                                                             </tr>
                                                                         </>
@@ -316,7 +317,7 @@ const Grade = () => {
                                                     </div>
                                                     <div>
                                                         <Row>
-                                                            <Col sm={4}>
+                                                            {/* <Col sm={4}>
                                                                 <div>
                                                                     <Form.Select onChange={(e: any) => setPerPage(e.target.value)} style={{ width: "30%", marginLeft: "20%" }}>
                                                                         <option value="2">2</option>
@@ -332,7 +333,7 @@ const Grade = () => {
                                                                 <div style={{ display: "flex", marginLeft: "40%", width: "200%" }}>
                                                                     <Pagination>{createButtons}</Pagination>
                                                                 </div>
-                                                            </Col>
+                                                            </Col> */}
                                                         </Row>
                                                     </div>
                                                     <Modal show={show} onHide={SuddenhandleClose}>

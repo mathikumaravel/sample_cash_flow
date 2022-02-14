@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Sidebar from "../Layouts/Sidebar";
 import { baseUrl } from "../../index";
 import Navbar from "../Layouts/Navbar";
-import { Button, Table, Pagination, Form, Spinner, Modal,Row,Col } from "react-bootstrap";
+import { Button, Table, Pagination, Form, Spinner, Modal, Row, Col } from "react-bootstrap";
 import axios from "axios";
 import { getAccessToken } from "../../config/getAccessToken";
 import { ToastContainer, toast } from "react-toastify";
@@ -19,6 +19,7 @@ const Discountfee = () => {
     const [datatoDelete, setdatatoDelete] = useState<any>({});
     const [duplication, setDuplication] = useState(false);
     const [filter, setfilter] = useState<any>([]);
+    const [spinnerLoad, setSpinnerLoad] = useState<any>(true);
 
     console.log(editingDiscountFeeYear);
 
@@ -45,6 +46,7 @@ const Discountfee = () => {
     }, [updateDiscountData]);
 
     const deleteParticularDiscount = (id: any, index: any) => {
+        setSpinnerLoad(true);
         let newArrVal = getDiscountFeeTypeName;
         newArrVal.splice(index, 1);
         getAccessToken();
@@ -134,6 +136,7 @@ const Discountfee = () => {
             .then((res: any) => {
                 console.log(res.data);
                 setGetDiscountFeeTypeName(res.data.discount_type_masters);
+                setSpinnerLoad(false);
             })
             .catch((e: any) => {
                 console.log(e);
@@ -142,6 +145,7 @@ const Discountfee = () => {
 
     const DiscountFeeTypeName = (newArrVal: any) => {
         setGetDiscountFeeTypeName([...newArrVal]);
+        setSpinnerLoad(false);
     };
 
     useEffect(() => {
@@ -149,10 +153,10 @@ const Discountfee = () => {
     }, []);
 
     const dataSearch: any =
-    getDiscountFeeTypeName.length &&
-    getDiscountFeeTypeName.sort().filter((data: any) => {
-			return Object.keys(data).some((key) => data[key].toString().toLowerCase().includes(filter.toString().toLowerCase()));
-		});
+        getDiscountFeeTypeName.length &&
+        getDiscountFeeTypeName.sort().filter((data: any) => {
+            return Object.keys(data).some((key) => data[key].toString().toLowerCase().includes(filter.toString().toLowerCase()));
+        });
 
     const handleSubmit = async (e: any) => {
         setDuplication(true);
@@ -227,7 +231,7 @@ const Discountfee = () => {
                                                                 Add
                                                             </Button>
                                                         ) : (
-                                                           <></>
+                                                            <></>
                                                         )}
                                                     </div>
                                                 </div>
@@ -254,7 +258,16 @@ const Discountfee = () => {
                                                                             </tr>
                                                                         </thead>
                                                                         <tbody>
-                                                                            {dataSearch && dataSearch.length ? (
+                                                                            {spinnerLoad ? (
+                                                                                <td
+                                                                                    colSpan={4}
+                                                                                    style={{
+                                                                                        textAlign: "center",
+                                                                                    }}
+                                                                                >
+                                                                                    <Spinner animation="border" variant="danger" />
+                                                                                </td>
+                                                                            ) : dataSearch && dataSearch.length ? (
                                                                                 dataSearch.map((values: any, index: any) => {
                                                                                     return (
                                                                                         <tr key={index}>
@@ -330,7 +343,7 @@ const Discountfee = () => {
                                                                                                 textAlign: "center",
                                                                                             }}
                                                                                         >
-                                                                                            <Spinner animation="border" variant="danger" />
+                                                                                           No Data Found
                                                                                         </td>
                                                                                     </tr>
                                                                                 </>
@@ -377,7 +390,7 @@ const Discountfee = () => {
                                                 </div>
                                             ) : (
                                                 <div>
-                                                    <div style={{display:'flex',justifyContent:'center'}}>
+                                                    <div style={{ display: "flex", justifyContent: "center" }}>
                                                         <Form.Label style={{ textAlign: "center" }}>
                                                             Discount Fee Type Name
                                                             <Form.Control
@@ -397,20 +410,23 @@ const Discountfee = () => {
                                                                     onClick={(e: any) => {
                                                                         handleSubmit(e);
                                                                     }}
-																	style={{display:'flex',float:"right",marginLeft:'2%'}}
+                                                                    style={{ display: "flex", float: "right", marginLeft: "2%" }}
                                                                     className={duplication ? "disabled btn btn-danger btn-save" : "btn btn-danger btn-save"}
                                                                 >
                                                                     Save
-                                                                </Button> &nbsp;{" "}
-																<Button
+                                                                </Button>{" "}
+                                                                &nbsp;{" "}
+                                                                <Button
                                                                     variant="secondary"
                                                                     onClick={() => {
-                                                                        setEditingDiscountFeeYear({});setStatusDiscountfeeAdd(false);	
+                                                                        setEditingDiscountFeeYear({});
+                                                                        setStatusDiscountfeeAdd(false);
                                                                     }}
-																	style={{display:'flex',float:"right"}}
+                                                                    style={{ display: "flex", float: "right" }}
                                                                 >
                                                                     Cancel
-                                                                </Button>{" "}&nbsp;
+                                                                </Button>{" "}
+                                                                &nbsp;
                                                             </Col>
                                                         </Row>
                                                     </div>

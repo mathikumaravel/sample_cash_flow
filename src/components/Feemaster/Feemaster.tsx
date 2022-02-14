@@ -259,7 +259,7 @@ const Feemaster = () => {
 															</div>
 														</div>
 														<div style={{ marginLeft: "10%" }}>
-															<Pagination>
+															{/* <Pagination>
 																<Pagination.First />
 																<Pagination.Prev />
 																<Pagination.Item>{1}</Pagination.Item>
@@ -275,7 +275,7 @@ const Feemaster = () => {
 																<Pagination.Item>{20}</Pagination.Item>
 																<Pagination.Next />
 																<Pagination.Last />
-															</Pagination>
+															</Pagination> */}
 														</div>
 
 														<Modal show={show} onHide={SuddenhandleClose}>
