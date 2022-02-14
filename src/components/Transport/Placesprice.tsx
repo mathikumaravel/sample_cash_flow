@@ -8,7 +8,7 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const Year = () => {
+const Placesprice = () => {
     //Academic Year
     const [statusAcademicYearEdit, setStatusAcademicYearEdit] = useState(false);
     const [statusAcademicYearAdd, setStatusAcademicYearAdd] = useState(false);
@@ -16,8 +16,9 @@ const Year = () => {
     const [acdYear, setAcdYear] = useState<any>({ fromYear: "", toYear: 0 });
     const [allAcademicYear, setAllAcademicYear] = useState<any[]>([]);
     const [datatoDelete, setdatatoDelete] = useState<any>({});
-    const [filter, setfilter] = useState<any>([]);
-    const [spinnerLoad, setSpinnerLoad] = useState<any>(true);
+
+    // Transport places
+    const placesList = [{place:'namakkal',price:'4500'}, {place:'paramathi-velur',price:'2500'}, {place:'velur',price:'3500'}];
 
     //Modal Popup
     const [show, setShow] = useState(false);
@@ -32,11 +33,6 @@ const Year = () => {
     const handleShow = () => {
         setShow(true);
     };
-    const dataSearch: any =
-        allAcademicYear.length &&
-        allAcademicYear.sort().filter((data: any) => {
-            return Object.keys(data).some((key) => data[key].toString().toLowerCase().includes(filter.toString().toLowerCase()));
-        });
 
     const callTheYearUpdater = () => {
         console.log(new Date().getFullYear());
@@ -55,7 +51,6 @@ const Year = () => {
             .then((res: any) => {
                 console.log(res.data.academic_years);
                 setAllAcademicYear(res.data.academic_years);
-                setSpinnerLoad(false);
             })
             .catch((e: any) => {
                 console.log(e);
@@ -64,11 +59,9 @@ const Year = () => {
 
     const setNewAcademicYear = (newArrVal: any) => {
         setAllAcademicYear([...newArrVal]);
-		setSpinnerLoad(false)
     };
 
     const deleteAnAcademicYear = (year: any, index: any) => {
-		setSpinnerLoad(true)
         let newArrVal = allAcademicYear;
         newArrVal.splice(index, 1);
         getAccessToken();
@@ -141,7 +134,7 @@ const Year = () => {
             <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
             <div id="page-top">
                 <div id="wrapper">
-                    <Sidebar data={"Academicyear"}></Sidebar>
+                    <Sidebar data={"Placesprice"}></Sidebar>
                     <div id="content-wrapper" className="d-flex flex-column">
                         <div id="content">
                             <Navbar></Navbar>
@@ -152,7 +145,7 @@ const Year = () => {
                                             <a style={{ color: "rgb(230, 39, 39)" }}>
                                                 <div className="card-header mb-4 bg-transparent border-1 text-center">
                                                     <h4 className="mb-0 ">
-                                                        <i className="far fa-clone pr-1"></i> Academic Year
+                                                        <i className="far fa-clone pr-1"></i> Transport places
                                                     </h4>
                                                     <div style={{ textAlign: "right" }}>
                                                         {!statusAcademicYearAdd ? (
@@ -172,7 +165,7 @@ const Year = () => {
                                                             <div id="dataTable_filter" className="dataTables_filter">
                                                                 <Form.Label htmlFor="inputPassword5" style={{ marginLeft: "75%" }}>
                                                                     Search:
-                                                                    <Form.Control type="search" className="form-control form-control-sm" onChange={(e) => setfilter(e.target.value)} />
+                                                                    <Form.Control type="search" className="form-control form-control-sm" />
                                                                 </Form.Label>
                                                             </div>
                                                         </div>
@@ -183,10 +176,13 @@ const Year = () => {
                                                                 <thead>
                                                                     <tr role="row">
                                                                         <th className="sorting_asc" style={{ width: "73px" }}>
-                                                                            No.
+                                                                            S.No.
                                                                         </th>
                                                                         <th className="sorting" style={{ width: "114px" }}>
-                                                                            Academic Year
+                                                                            Places
+                                                                        </th>
+                                                                        <th className="sorting" style={{ width: "114px" }}>
+                                                                            Price
                                                                         </th>
                                                                         <th className="sorting" style={{ width: "63px" }}>
                                                                             Actions
@@ -194,21 +190,13 @@ const Year = () => {
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
-                                                                    {spinnerLoad ? (
-                                                                        <td
-                                                                            colSpan={4}
-                                                                            style={{
-                                                                                textAlign: "center",
-                                                                            }}
-                                                                        >
-                                                                            <Spinner animation="border" variant="danger" />
-                                                                        </td>
-                                                                    ) : dataSearch && dataSearch.length ? (
-                                                                        dataSearch.map((values: any, index: any) => {
+                                                                    {placesList && placesList.length ? (
+                                                                        placesList.map((values: any, index: any) => {
                                                                             return (
                                                                                 <tr key={index}>
                                                                                     <td>{index + 1}</td>
-                                                                                    <td>{values.academic_year}</td>
+                                                                                    <td>{values.place}</td>
+                                                                                    <td>{values.price}</td>
                                                                                     <td>
                                                                                         <Button
                                                                                             variant="danger"
@@ -217,12 +205,12 @@ const Year = () => {
                                                                                                 //     values.year_id,
                                                                                                 //     index
                                                                                                 // );
-                                                                                                setdatatoDelete({
-                                                                                                    index: index,
-                                                                                                    year: values.academic_year,
-                                                                                                    id: values.year_id,
-                                                                                                });
-                                                                                                handleShow();
+                                                                                                // setdatatoDelete({
+                                                                                                //     index: index,
+                                                                                                //     year: values.placeholder,
+                                                                                                //     id: values.price,
+                                                                                                // });
+                                                                                                // handleShow();
                                                                                             }}
                                                                                         >
                                                                                             Delete
@@ -240,7 +228,7 @@ const Year = () => {
                                                                                         textAlign: "center",
                                                                                     }}
                                                                                 >
-                                                                                    No Data Found
+                                                                                    <Spinner animation="border" variant="danger" />
                                                                                 </td>
                                                                             </tr>
                                                                         </>
@@ -261,37 +249,6 @@ const Year = () => {
                                                             draggable
                                                             pauseOnHover
                                                         />
-                                                        {/* <Pagination>
-                                                            <Pagination.First />
-                                                            <Pagination.Prev />
-                                                            <Pagination.Item>{1}</Pagination.Item>
-                                                            <Pagination.Ellipsis />
->>>>>>> commonbranch
-
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-    try {
-      getAccessToken();
-      const res: any = await axios
-        .post(`${baseUrl}academic_year`, {
-          academic_year: `${acdYear.fromYear}-${acdYear.toYear}`,
-        })
-        .then((res: any) => {
-          console.log(res.data);
-          getAllAcademicYear();
-          setStatusAcademicYearAdd(false);
-        });
-    } catch (err) {
-      alert("Incorrect Username and Password");
-    }
-  };
-
-
-                                                            <Pagination.Ellipsis />
-                                                            <Pagination.Item>{20}</Pagination.Item>
-                                                            <Pagination.Next />
-                                                            <Pagination.Last />
-                                                        </Pagination> */}
                                                     </div>
                                                     <Modal show={show} onHide={SuddenhandleClose}>
                                                         <Modal.Header closeButton>
@@ -314,31 +271,14 @@ const Year = () => {
                                                         <Row className="justify-content-md-center">
                                                             <Col md="6">
                                                                 <Form.Group className="mb-3" controlId="formBasicEmail">
-                                                                    <Form.Label>From Academic Year</Form.Label>
-                                                                    <Form.Select
-                                                                        onChange={(e: any) => {
-                                                                            setAcdYear({
-                                                                                fromYear: e.target.value,
-                                                                                toYear: Number(e.target.value) + 1,
-                                                                            });
-                                                                        }}
-                                                                    >
-                                                                        {FromAcdYear &&
-                                                                            FromAcdYear.length &&
-                                                                            FromAcdYear.map((values: any, index: any) => {
-                                                                                return (
-                                                                                    <option value={values} key={index}>
-                                                                                        {values}
-                                                                                    </option>
-                                                                                );
-                                                                            })}
-                                                                    </Form.Select>
+                                                                    <Form.Label>Place</Form.Label>
+                                                                    <Form.Control type="text" placeholder="" value="" />
                                                                 </Form.Group>
                                                             </Col>
                                                             <Col md="6">
                                                                 <Form.Group className="mb-3" controlId="formBasicEmail">
-                                                                    <Form.Label>To Academic Year</Form.Label>
-                                                                    <Form.Control type="text" placeholder="Disabled input" value={acdYear.toYear} disabled />
+                                                                    <Form.Label>Price</Form.Label>
+                                                                    <Form.Control type="number" placeholder="" value="" />
                                                                 </Form.Group>
                                                             </Col>
                                                         </Row>
@@ -374,4 +314,4 @@ const Year = () => {
         </div>
     );
 };
-export default Year;
+export default Placesprice;

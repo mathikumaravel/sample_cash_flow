@@ -164,7 +164,7 @@ const Feemaster = () => {
 			<ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
 			<div id="page-top">
 				<div id="wrapper">
-					<Sidebar></Sidebar>
+					<Sidebar data={"Fee_master"}></Sidebar>
 					<div id="content-wrapper" className="d-flex flex-column">
 						<div id="content">
 							<Navbar></Navbar>
@@ -259,7 +259,7 @@ const Feemaster = () => {
 															</div>
 														</div>
 														<div style={{ marginLeft: "10%" }}>
-															<Pagination>
+															{/* <Pagination>
 																<Pagination.First />
 																<Pagination.Prev />
 																<Pagination.Item>{1}</Pagination.Item>
@@ -275,7 +275,7 @@ const Feemaster = () => {
 																<Pagination.Item>{20}</Pagination.Item>
 																<Pagination.Next />
 																<Pagination.Last />
-															</Pagination>
+															</Pagination> */}
 														</div>
 
 														<Modal show={show} onHide={SuddenhandleClose}>

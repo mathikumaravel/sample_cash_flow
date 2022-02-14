@@ -8,7 +8,7 @@ const Promotion = () => {
   return (
     <div id="page-top">
       <div id="wrapper">
-        <Sidebar></Sidebar>
+        <Sidebar data={"Stupro"}></Sidebar>
         <div className="d-flex flex-column">
           <div id="content">
             <Navbar></Navbar>
