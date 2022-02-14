@@ -34,7 +34,7 @@ const StudentprofileSearch = () => {
 		setIsComponentVisible(true);
 		setSearch({ suggestions, text: value });
 	};
-
+	
 	const suggestionSelected = (value: any) => {
 		setIsComponentVisible(false);
 
@@ -56,6 +56,7 @@ const StudentprofileSearch = () => {
     useEffect(()=>{
         searchData();
     },[])
+	
   
 	const searchedit = () => {
 		axios
