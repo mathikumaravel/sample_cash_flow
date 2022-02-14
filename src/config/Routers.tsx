@@ -18,6 +18,7 @@ import Studentrecord from "../components/studentdetails/Studentrecord";
 import StudentProfile from "../components/studentdetails/Studentprofile";
 import StudentprofileSearch from "../components/studentdetails/StudentprofileSearch";
 import Placesprice from "../components/Transport/Placesprice";
+import Placesspotting from "../components/Transport/Placesspotting"
 
 const PrivateRoute = (props: any) => {
     let history = useHistory<any>();
@@ -53,6 +54,7 @@ function Routers(props: any) {
                 <PrivateRoute path="/studentprofile" component={StudentProfile} />
                 <PrivateRoute path="/StudentprofileSearch" component={StudentprofileSearch} />
                 <PrivateRoute path="/placesprice" component={Placesprice} />
+                <PrivateRoute path="/placesstoppings" component={Placesspotting} />
             </Switch>
         </BrowserRouter>
     );

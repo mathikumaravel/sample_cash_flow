@@ -76,12 +76,6 @@ const Sidebar = (props:any) => {
                             <Link to="/placesstoppings" className={activeValue == "placesstoppings" ? "active collapse-item" : "collapse-item"  }>
                                 Places & Stoppings
                             </Link>
-                            <Link to="/vechiledetails" className={activeValue == "vechiledetails" ? "active collapse-item" : "collapse-item"  }>
-                                Vechile Details
-                            </Link>
-                            <Link to="/transportallocation" className={activeValue == "transportallocation" ? "active collapse-item" : "collapse-item"  }>
-                                Vechile & Place Allocation
-                            </Link>
                         </div>
                     </div>
                 </li>
