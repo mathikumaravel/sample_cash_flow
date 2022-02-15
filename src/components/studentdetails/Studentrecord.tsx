@@ -3,18 +3,28 @@ import Sidebar from "../Layouts/Sidebar";
 import Navbar from "../Layouts/Navbar";
 import Feesdetails from "./Feesdetails";
 import Academicfees from "./Academicfees";
-import { Row, Col, Form, Button, Container,Table } from "react-bootstrap";
-import {Link } from 'react-router-dom'
+import {
+  Row,
+  Col,
+  Form,
+  Button,
+  Container,
+  Table,
+  Card,
+  ListGroup,
+} from "react-bootstrap";
+import { Link } from "react-router-dom";
 import axios, { AxiosResponse } from "axios";
-
-
-
+import { baseUrl } from "../../index";
+import { getAccessToken } from "../../config/getAccessToken";
 
 const Studentrecord = () => {
   //To Make Edit
   const [search, setSearch] = useState<any>({
     text: "",
-    suggestions: [],
+    studentid: "",
+    PhoneNumber: "",
+    GradeId: "",
   });
   const [statusStudentEdit, setStatusStudentEdit] = useState(false);
   const [isComponentVisible, setIsComponentVisible] = useState(true);
@@ -24,69 +34,88 @@ const Studentrecord = () => {
   );
   const [statusStudentSearch, setStatusStudentSearch] = useState<any>({});
   const [statusStudentDetails, setStatusStudentDetails] = useState<any>({});
+  const [Autosearch, setAutoSearch] = useState<any>([]);
+  const [suggest, setSuggest] = useState<any>([]);
+  const [suggestions, setsuggestions] = useState<any>([]);
+  const [acdyear, setAcdYear] = useState<any>([]);
+  const [Grdsec, setGrdsec] = useState<any>([]);
+  const [academicYear, setAcademicYear] = useState<any>("");
+  const [gradeSectionList, setGradeSectionList] = useState<any>([]);
+  const [gradeBasedOnYearFinal, setGradeBasedOnYearFinal] = useState<any>([]);
+  const [addGrade, setAddGrade] = useState("");
+  const [filterParticularYear, setFilterParticularYear] = useState<any>([]);
+  const [academicYearFinal, setAcademicYearFinal] = useState<any>([]);
+  const [sectionBasedOnGrade, SetsectionBasedOnGrade] = useState<any>([]);
+  const [addSection, setAddSection] = useState("");
 
-  console.log(statusStudentDetails)
+  
 
-  const onTextChanged = (e: any) => {
-    const value = e.target.value;
-    setStatusStudentSearch(value);
-    let suggestions: any = {};
-    if (value.length > 0) {
-      const regex = new RegExp(`^${value}`, "i");
-      suggestions = statusStudentDetails.sort().filter((v: any) => regex.test(v.student_admissions_id));
+  const [gradea,setGradea] = useState<any>([]);
+
+  useEffect(() => {
+    if (gradeSectionList && gradeSectionList.length) {
+      let mySet1 = new Set();
+      gradeSectionList.forEach((element: any) => {
+        mySet1.add(element.academic_year);
+      });
+      setAcademicYearFinal([...mySet1]);
+      handleSearch(gradeSectionList, gradeSectionList[0].academic_year);
     }
-    setIsComponentVisible(true);
-    setSearch({ suggestions, text: value });
-  };
+    console.log(gradeSectionList);
+  }, [gradeSectionList]);
 
+  useEffect(() => {
+    if (filterParticularYear && filterParticularYear.length) {
+      let mySet1 = new Set();
+      filterParticularYear.forEach((element: any) => {
+        mySet1.add(element.grade);
+      });
+      setGradeBasedOnYearFinal([...mySet1]);
+      handlesection(filterParticularYear, filterParticularYear[0].grade);
+    }
+    
+  }, [filterParticularYear]);
 
-  const suggestionSelected = (value: any) => {
+  const onSuggesthandler = (value: any) => {
     setIsComponentVisible(false);
 
-    setSearch({
-      text: value.student_admissions_id,
-      suggestions: [],
+    setAutoSearch({
+      text: value.student_name,
+      studentid: value.student_id,
+      PhoneNumber: value.phone_number,
+      GradeId: value.grade_id,
     });
   };
 
-  const { suggestions } = search;
-
-
-
-  const searchData = () => {
-    axios
-      .get(
-        `https://61ea85bfc9d96b0017700bb9.mockapi.io/search/${statusStudentSearch}`
-      )
-      .then((response: AxiosResponse) => {
-        setStatusStudentDetails(response.data);
-      });
+  const Searchauto = () => {
+    if (Autosearch.length > 0) {
+      getAccessToken();
+      axios
+        .get(
+          `${baseUrl}student_admissions_search/student_search?q=${Autosearch}`
+        )
+        .then((response: AxiosResponse) => {
+          setSuggest(response.data);
+          setIsComponentVisible(true);
+        });
+    }
   };
 
-  const searchedit = () => {
+  useEffect(() => {
+    getAccessToken();
     axios
-      .put(
-        `https://61ea85bfc9d96b0017700bb9.mockapi.io/search/${statusStudentDetails.student_admissions_id}`,
-        {
-          student_name: statusStudentDetails.student_name,
-          grade_id: statusStudentDetails.grade_id,
-          section: statusStudentDetails.section,
-          father_name: statusStudentDetails.father_name,
-          student_id: statusStudentDetails.student_id,
-          phone_number: statusStudentDetails.phone_number,
-          alt_phone_number: statusStudentDetails.alt_phone_number,
-          address: statusStudentDetails.address,
-          email: statusStudentDetails.email,
-          status: statusStudentDetails.status,
-        }
-      )
-      .then((response: AxiosResponse) => {
-        setStatusStudentDetails(response.data);
+      .get(`${baseUrl}grade_section/show_all`)
+      .then((res: any) => {
+        setGradeSectionList(res.data.grade_sections);
+        console.log(res.data.grade_sections)
       })
-      .catch((error) => {
-        alert(error);
-      });
-  };
+      .catch((error) => console.log(error));
+  }, []);
+
+  useEffect(() => {
+    console.log(Autosearch);
+    Autosearch && Autosearch.length > 0 ? Searchauto() : setSuggest("");
+  }, [Autosearch]);
 
   const onClear = () => {
     setStatusStudentSearch("");
@@ -97,7 +126,49 @@ const Studentrecord = () => {
     setStatusStudentDetails({ ...statusStudentDetails, [name]: value });
   };
 
+  const handleSearch = (gradeSectionList: any, searchInput: any) => {
+    console.log(gradeSectionList, "++", searchInput);
+    setAddGrade("");
+    setAcademicYear(searchInput);
+    let mySet1 = new Set();
+    let resultData = gradeSectionList.filter((obj: any) =>
+      Object.values(obj)
+        .flat()
+        .some((v) =>
+          `${v}`.toLowerCase().includes(`${searchInput}`.toLowerCase())
+        )
+    );
+    let selectedYearArr: any = [];
+    resultData.forEach((element: any) => {
+      selectedYearArr.push(element);
+      mySet1.add(element.grade);
+    });
+    setGradeBasedOnYearFinal([...mySet1]);
+    setFilterParticularYear(selectedYearArr);
+    setAddGrade(resultData[0].grade);
+  };
 
+  const handlesection = (sectionList: any, searchInput: any) => {
+    console.log(sectionList, "++", searchInput);
+    setAddGrade("");
+    setAcademicYear(searchInput);
+    let mySet1 = new Set();
+    let resultData = gradeSectionList.filter((obj: any) =>
+      Object.values(obj)
+        .flat()
+        .some((v) =>
+          `${v}`.toLowerCase().includes(`${searchInput}`.toLowerCase())
+        )
+    );
+    let selectedYearArr: any = [];
+    resultData.forEach((element: any) => {
+      selectedYearArr.push(element);
+      mySet1.add(element.section);
+    });
+    SetsectionBasedOnGrade([...mySet1]);
+    
+    setAddSection(resultData[0].section);
+};
 
   // console.log(statusStudentDetails)
 
@@ -110,126 +181,160 @@ const Studentrecord = () => {
             <div id="content">
               <Navbar></Navbar>
               <div className="container" style={{ marginLeft: "3%" }}>
-                <div className="d-sm-flex align-items-center justify-content-between mb-4">
+                <div className="d-sm-flex align-items-center justify-content-between mb-5">
                   <Container>
                     <Row>
-                      <Col>
-                        <div>
-                          <div className="input-group">
-                            <Form.Control
-                              type="search"
-                              className="form-control bg-light border-20 small"
-                              placeholder="Search for Name,ID,PhoneNo..."
-
-                              // value={search.text}
-                              onChange={onTextChanged}
-                            />
-
-                            {/* {suggestions.length > 0 && isComponentVisible && (
-                          <div>
-                            {suggestions.map((item: any) => (
-                              <div key={statusStudentDetails.student_admissions_id}>
-                                <div
-                                  key={item.student_admissions_id}
-                                  onClick={() => suggestionSelected(item)}
-                                >
-                                  {item.student_admissions_id}
-                                  {item.student_name}
-                                </div>
+                      <Col md={5}>
+                        <Form.Control
+                          type="search"
+                          className="form-control bg-light border-20 small"
+                          placeholder="Search for Name,ID,PhoneNo..."
+                          value={
+                            Autosearch && Autosearch.text
+                              ? `${Autosearch.text}**${Autosearch.GradeId}**${Autosearch.PhoneNumber}**${Autosearch.studentid}`
+                              : Autosearch
+                          }
+                          onChange={(e: any) =>
+                            setAutoSearch(e.target.value.trim())
+                          }
+                        />
+                        <Card
+                          style={{
+                            cursor: "pointer",
+                            background: "Black",
+                            color: "white",
+                          }}
+                        >
+                          <ListGroup
+                            variant="flush"
+                            style={{ marginLeft: "10px" }}
+                          >
+                            {suggest.length > 0 && isComponentVisible && (
+                              <div>
+                                {suggest.map((item: any, i: any) => (
+                                  <div
+                                    key={i}
+                                    onClick={() => onSuggesthandler(item)}
+                                  >
+                                    {item.student_name}***
+                                    {item.grade_id}***
+                                    {item.phone_number}***
+                                    {item.student_id}
+                                  </div>
+                                ))}
                               </div>
-                            ))}
-                          </div>
-                        )} */}
-                            <Col md={2}>
-                              <Form.Select aria-label="Default select example">
-                                <option>--AcademicYear--</option>
-                                <option>2021-2022</option>
-                                <option>2023-2024</option>
-                                <option>2025-2026</option>
-                              </Form.Select>
-                            </Col>
-                            <Col md={2}>
-                              <Form.Select aria-label="Default select example">
-                                <option>--Grade--</option>
-                                <option>I</option>
-
-                              </Form.Select>
-                            </Col>
-                            <Col md={2}>
-                              <Form.Select aria-label="Default select example">
-                                <option>--Section--</option>
-                                <option>A</option>
-                                <option>B</option>
-                                <option>C</option>
-                              </Form.Select>
-                            </Col>
-                            <Col md={2}>
-                              <div className="input-group-append">
-                                <Button
-                                  className="btn btn-danger"
-                                  type="button"
-                                  onClick={() => {
-                                    searchData();
-                                    onClear();
-                                  }}
-                                >
-                                  <i className="fas fa-search fa-sm"></i>
-                                </Button>
-                              </div></Col>
-
-                          </div>
-
-                        </div>
-
+                            )}
+                          </ListGroup>
+                        </Card>
                       </Col>
 
-
+                      <Col md={2}>
+                        <Form.Select
+                          aria-label="Default select example"
+                          onChange={(e) => {
+                            setAcademicYear(e.target.value);
+                            handleSearch(gradeSectionList, e.target.value);
+                          }}
+                        >
+                          <option hidden>Academic Year</option>
+                          {academicYearFinal &&
+                            academicYearFinal.length &&
+                            academicYearFinal.map((academic: any) => {
+                              // console.log(academicYear)
+                              return <option>{academic}</option>;
+                            })}
+                        </Form.Select>
+                      </Col>
+                      <Col md={2}>
+                        <Form.Select aria-label="Default select example" onChange={(e) => {
+                            setGradea(e.target.value);
+                            handlesection(filterParticularYear, e.target.value);
+                          }}>
+                          <option hidden>Grade</option>
+                          {gradeBasedOnYearFinal &&
+                            gradeBasedOnYearFinal.length &&
+                            gradeBasedOnYearFinal.map((grade: any) => {
+                              // console.log(academicYear)
+                              return <option>{grade}</option>;
+                            })}
+                        </Form.Select>
+                      </Col>
+                      <Col md={2}>
+                        <Form.Select aria-label="Default select example">
+                          <option hidden>Section</option>
+                          {sectionBasedOnGrade &&
+                            sectionBasedOnGrade.length &&
+                            sectionBasedOnGrade.map((value: any, i: any) => {
+                              return <option>{value}</option>;
+                            })}
+                        </Form.Select>
+                      </Col>
+                      <Col md={1}>
+                        <div className="input-group-append">
+                          <Button
+                            className="btn btn-danger"
+                            type="button"
+                            onClick={() => {
+                              onClear();
+                            }}
+                          >
+                            <i className="fas fa-search fa-sm"></i>
+                          </Button>
+                        </div>
+                      </Col>
                     </Row>
                   </Container>
-
-
                 </div>
-           <div className="col-xl-11 text-center">
-                {!statusStudentSearch ? (
-                  <div>
-                   
-                    <Table striped bordered hover>
-                      <thead>
-                        <tr>
-                          <th>Name</th>
-                          <th>Admission ID</th>
-                          <th>PhoneNumber</th>
-                          <th>Grade</th>
-                          <th>Section</th>
-                          <th>Status</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                         <td> <Link to="/StudentprofileSearch">ASAIN</Link></td>
-                          <td>1001</td>
-                          <td>9788888909</td>
-                          <td>I</td>
-                          <td>A</td>
-                          <td> <p style={{ color:'green'}}>paid </p></td>
-                        </tr>
-                        <tr>
-                        <td><Link to="/Student" >Mohan</Link></td>
-                          <td>1002</td>
-                          <td>9788888909</td>
-                          <td>II</td>
-                          <td>B</td>
-                          <td> <Link to="/Stu_pay" style={{ color:' red '}}>UnPaid</Link></td>
-                        </tr>
-                        
-                      </tbody>
-                    </Table>
-                    
-                    
-                  </div>
-                ) : (
-                  <div style={{ textAlign: "center" }}>No Data found</div>
-                )}
+                <div className="col-xl-11 text-center">
+                  {!statusStudentSearch ? (
+                    <div>
+                      <Table striped bordered hover>
+                        <thead>
+                          <tr>
+                            <th>Name</th>
+                            <th>Admission ID</th>
+                            <th>PhoneNumber</th>
+                            <th>Grade</th>
+                            <th>Section</th>
+                            <th>Status</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>
+                              {" "}
+                              <Link to="/StudentprofileSearch">ASAIN</Link>
+                            </td>
+                            <td>1001</td>
+                            <td>9788888909</td>
+                            <td>I</td>
+                            <td>A</td>
+                            <td>
+                              {" "}
+                              <p style={{ color: "green" }}>paid </p>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <Link to="/Student">Mohan</Link>
+                            </td>
+                            <td>1002</td>
+                            <td>9788888909</td>
+                            <td>II</td>
+                            <td>B</td>
+                            <td>
+                              {" "}
+                              <Link to="/Stu_pay" style={{ color: " red " }}>
+                                UnPaid
+                              </Link>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </Table>
+                    </div>
+                  ) : (
+                   null
+                  )}
                 </div>
               </div>
             </div>

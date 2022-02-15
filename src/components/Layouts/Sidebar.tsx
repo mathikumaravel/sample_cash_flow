@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 
 const Sidebar = (props: any) => {
     let activeValue = props.data;
-    console.log(activeValue);
     return (
         <div>
             <ul className="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
@@ -34,6 +33,7 @@ const Sidebar = (props: any) => {
                     <div id="collapseTwo" className="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                         <div className="bg-white py-2 collapse-inner rounded">
                             <h6 className="collapse-header">Custom</h6>
+ 
                             <Link to="/studentrecord" className={activeValue === "studentrecord" ? "active collapse-item" : "collapse-item"}>
                                 Student
                             </Link>
@@ -56,6 +56,7 @@ const Sidebar = (props: any) => {
                                 Year
                             </Link>
                             <Link to="/Grade_section" className={activeValue === "Grade_section" ? "active collapse-item" : "collapse-item"}>
+ 
                                 Grade & section
                             </Link>
                         </div>
@@ -70,6 +71,7 @@ const Sidebar = (props: any) => {
                     <div id="collapseTransport" className="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                         <div className="bg-white py-2 collapse-inner rounded">
                             {/* <h6 className="collapse-header"></h6> */}
+ 
                             <Link to="/placesprice" className={activeValue === "Placesprice" ? "active collapse-item" : "collapse-item"}>
                                 Places
                             </Link>
@@ -96,11 +98,13 @@ const Sidebar = (props: any) => {
                             </Link>
                             <Link to="/Uniform" className="collapse-item">
                                 Uniform
+ 
                             </Link>
                         </div>
                     </div>
                 </li>
 
+ 
                 <li className="nav-item">
                     <div className="nav-link collapsed" style={{ cursor: "pointer" }} data-toggle="collapse" data-target="#collapseHostal" aria-expanded="true" aria-controls="collapseHostal">
                         <i className="fa fa-hotel"></i>

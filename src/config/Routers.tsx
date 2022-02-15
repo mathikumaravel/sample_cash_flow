@@ -19,18 +19,15 @@ import Studentrecord from "../components/studentdetails/Studentrecord";
 import StudentProfile from "../components/studentdetails/Studentprofile";
 import StudentprofileSearch from "../components/studentdetails/StudentprofileSearch";
 import Placesprice from "../components/Transport/Placesprice";
+ 
+import Hostalname from "../components/Hostal/Hostalname";
+import RoomNo from "../components/Hostal/RoomNo"
+import HostalFee from "../components/Hostal/HostalFee";
+ 
 import Placesspotting from "../components/Transport/Placesspotting";
 
-// const PrivateRoute = (props: any) => {
-//     let history = useHistory<any>();
-//     const token = localStorage.getItem("AccessToken");
-//     if (token) {
-//         return <Route exact={true} path={props.path} component={props.component} />;
-//     } else {
-//         history.push("/");
-//         return <Login {...props} />;
-//     }
-// };
+ 
+ 
 
 const PrivateRoute = (props: any) => {
 	let history = useHistory<any>();
@@ -78,4 +75,5 @@ const Routers = (props: any) => {
 	);
 };
 
+ 
 export default Routers;

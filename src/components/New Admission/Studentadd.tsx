@@ -8,12 +8,11 @@ import Axios from "axios";
 import {baseUrl} from "../../index";
 import {getAccessToken} from "../../config/getAccessToken"
 import moment from 'moment';    
-
+ 
 const Studentadd = () => {
    const [validated, setValidated] = useState(false);
    const [year, setYear] = useState<any>('');
    const [getYear, setacedamic] = useState<any>('');
-
     const [admissionNo, setAdmissionno] = useState<any>('');
     const [studentName,setStudentname] = useState<any>('');
     const [fromGrade,setFromgrade] = useState<any>('');
@@ -38,7 +37,9 @@ const Studentadd = () => {
     const [sectionBasedOnGrade, SetsectionBasedOnGrade] = useState<any>([]);
     const [addSection, setAddSection] = useState("");
     const [filterParticularYear, setFilterParticularYear] = useState<any>([]);
+ 
 
+ 
 
     useEffect(() => {
       if (gradeSectionList && gradeSectionList.length) {
@@ -51,6 +52,7 @@ const Studentadd = () => {
        }
       console.log(gradeSectionList);
   }, [gradeSectionList]);
+ 
 
   useEffect(() => {
     if (filterParticularYear && filterParticularYear.length) {
@@ -63,9 +65,10 @@ const Studentadd = () => {
     }
   }, [filterParticularYear]);
 
+ 
     console.log(admissionDate)
-    const handleSubmit = (e:any) => {
 
+    const handleSubmit = (e:any) => {
       const form = e.currentTarget;
       getAccessToken();
       if (form.checkValidity() === false) {
@@ -96,26 +99,23 @@ const Studentadd = () => {
 "status": "Active",
 "admission_no": admissionNo
       }
-    
         console.log(register)
         Axios.post(`${baseUrl}student_admission/new_student`, register
         )
-			  .then((response:any) => {
+              .then((response:any) => {
         console.log(response);
- 				return  response;
-			})
-			.catch((error) => {
-				return  error;
-			});
+                return  response;
+            })
+            .catch((error) => {
+                return  error;
+            });
     };
-     
     const handleChangeMobile = (e:any) => {
       const re = /^[0-9\b]+$/; //rules
       if (e.target.value === "" || re.test(e.target.value)) {
         setPhoneno(e.target.value);
       }
     }
-  
       const handleChangeMobileAlter = (e:any) => {
         const re = /^[0-9\b]+$/; //rules
         if (e.target.value === "" || re.test(e.target.value)) {
@@ -134,19 +134,20 @@ const Studentadd = () => {
           })
           .catch((error) => console.log(error));
       }, []);
-
-
         const handleSearch = (gradeSectionList: any, searchInput: any) => {
         console.log(gradeSectionList,"++",searchInput)
         setAddGrade("");
         setAcademicYear(searchInput);
         let mySet1 = new Set();
         let resultData = gradeSectionList.filter((obj: any) =>
-
             Object.values(obj)
                 .flat()
                 .some((v) => `${v}`.toLowerCase().includes(`${searchInput}`.toLowerCase()))
+ 
+       
+ 
         ); 
+
         let selectedYearArr:any=[]
         resultData.forEach((element: any) => {
           selectedYearArr.push(element)
@@ -155,15 +156,15 @@ const Studentadd = () => {
         setGradeBasedOnYearFinal([...mySet1]);
         setFilterParticularYear(selectedYearArr)
         setAddGrade(resultData[0].grade);
-
     };
-
     const handleSectionSearch = (sectionList: any, searchInput: any) => {
       console.log(sectionList,"++",searchInput)
       setAddSection("");
       setAcademicYear(searchInput);
       let mySet1 = new Set();
+ 
       let resultData = sectionList.filter((obj: any) => 
+ 
           Object.values(obj)
               .flat()
               .some((v) => `${v}`.toLowerCase().includes(`${searchInput}`.toLowerCase()))
@@ -173,15 +174,13 @@ const Studentadd = () => {
       });
       SetsectionBasedOnGrade([...mySet1]);
       setAddSection(resultData[0].section);
-
   };
+
+  
          console.log(sectionBasedOnGrade);
- 
      var date = new Date();
      var formatedDate = `${date.getDate()}-${date.getMonth()+1}-${date.getFullYear()}`
      console.log(formatedDate)
-
-
  
   return (
     <div>
@@ -201,7 +200,6 @@ const Studentadd = () => {
                       New Admission
                     </h4>
                   </div>
-
                   <Form noValidate validated={validated} onSubmit={handleSubmit}>
                     <div className="row">
                       <div className="col-md-6">
@@ -215,7 +213,7 @@ const Studentadd = () => {
                             </Form.Label>
                             <div className="col-md-6">
                             <InputGroup hasValidation>
-                              <Form.Control 
+                              <Form.Control
                               required
                                 type="text"
                                 placeholder="Admission No"
@@ -225,7 +223,6 @@ const Studentadd = () => {
                             </InputGroup>
                             </div>
                           </Form.Group>
-
                           <Form.Group
                             className="form-group row"
                             controlId="validationCustom01"
@@ -246,31 +243,28 @@ const Studentadd = () => {
                               </InputGroup>
                             </div>
                           </Form.Group>
-
                           <Form.Group
                             className="form-group row"
                             controlId="validationgrade"
                           >
-                            <Form.Label className="col-md-5 col-form-label text-md-right"> 
+                            <Form.Label className="col-md-5 col-form-label text-md-right">
                               From Grade<span className="text-danger"> </span>
                             </Form.Label>
                             <div className="col-md-6">
                             <InputGroup hasValidation>
                               <Form.Select onChange={(e) => setFromgrade(e.target.value)} required>
-  
-                                	{
-								 gradeBasedOnYearFinal&&
+                                    {
+                                 gradeBasedOnYearFinal&&
                  gradeBasedOnYearFinal.length &&
                  gradeBasedOnYearFinal.map((grade: any) => {
                     // console.log(academicYear)
-										return <option>{grade}</option>;
-									})}
+                                        return <option>{grade}</option>;
+                                    })}
                               </Form.Select>
                               <Form.Control.Feedback type="invalid">Please Enter Grede</Form.Control.Feedback>
                               </InputGroup>
                             </div>
                           </Form.Group>
-
                           <Form.Group
                             className="form-group row"
                             controlId="validationDate"
@@ -283,14 +277,11 @@ const Studentadd = () => {
                             <InputGroup hasValidation>
                               <Form.Control type="date" onChange={(e) => setDateofbirth(e.target.value)} required/>
                               <Form.Control.Feedback type="invalid">Please Enter DateofBirth</Form.Control.Feedback>
-
                               </InputGroup>
                             </div>
                           </Form.Group>
-
                           <Form.Group
                             className="form-group row"
-                            
                           >
                             <Form.Label className="col-md-5 col-form-label text-md-right">
                               Gender
@@ -320,7 +311,6 @@ const Studentadd = () => {
                                 </div>
                             </div>
                           </Form.Group>
-
                           <Form.Group
                             className="form-group row"
                             controlId="formBasicEmail"
@@ -336,7 +326,6 @@ const Studentadd = () => {
                               </InputGroup>
                             </div>
                           </Form.Group>
-
                           <Form.Group
                             className="form-group row"
                             controlId="Admission Date"
@@ -348,14 +337,11 @@ const Studentadd = () => {
                             <div className="col-md-6">
                             <InputGroup hasValidation>
                             <Form.Control type="date"   value={moment(admissionDate).format("YYYY-MM-DD")} onChange={(e) => setAdmissiondate(e.target.value)} />
-
                               {/* <Form.Control type="date" value="{formatedDate}"onChange={(e) => setAdmissiondate(e.target.value)} required/> */}
                               <Form.Control.Feedback type="invalid">Please Enter Admission Date</Form.Control.Feedback>
-                              
                               </InputGroup>
                             </div>
                           </Form.Group>
-
                           <Form.Group
                             className="form-group row"
                             controlId="formBasicEmail"
@@ -372,15 +358,13 @@ const Studentadd = () => {
                                       academicYearFinal.length &&
                                       academicYearFinal.map((academic: any) => {
                     // console.log(academicYear)
-										return <option>{academic}</option>;
-									})}
+                                        return <option>{academic}</option>;
+                                    })}
                               </Form.Select>
                               <Form.Control.Feedback type="invalid">Please Enter Academic Year</Form.Control.Feedback>
                               </InputGroup>
                             </div>
                           </Form.Group>
-
-                          
                         </div>
                       </div>
                       <div className="col-md-6">
@@ -408,7 +392,6 @@ const Studentadd = () => {
                               </InputGroup>
                             </div>
                           </Form.Group>
-
                           <Form.Group
                             className="form-group row"
                             controlId="formBasicEmail"
@@ -431,7 +414,6 @@ const Studentadd = () => {
                               </InputGroup>
                             </div>
                           </Form.Group>
-
                           <Form.Group
                             className="form-group row"
                             controlId="floatingTextarea"
@@ -447,7 +429,6 @@ const Studentadd = () => {
                               </InputGroup>
                             </div>
                           </Form.Group>
-
                           <Form.Group
                             className="form-group row"
                             controlId="formBasicEmail"
@@ -468,7 +449,6 @@ const Studentadd = () => {
                               </InputGroup>
                             </div>
                           </Form.Group>
-
                           <Form.Group
                             className="form-group row"
                             controlId="formBasicEmail"
@@ -489,7 +469,6 @@ const Studentadd = () => {
                               </InputGroup>
                             </div>
                           </Form.Group>
-
                           <Form.Group
                             className="form-group row"
                             controlId="floatingTextarea"
@@ -505,7 +484,6 @@ const Studentadd = () => {
                               </InputGroup>
                             </div>
                           </Form.Group>
-
                           <Form.Group
                             className="form-group row"
                             controlId="formBasicEmail"
@@ -522,7 +500,6 @@ const Studentadd = () => {
                                pattern="[0-9]*"
                                 placeholder="Phone No"
                               />
-                              
                             </div>
                           </Form.Group>
                           <Form.Group
@@ -539,9 +516,8 @@ const Studentadd = () => {
                               required
                                 type="text"
                                 pattern="[0-9]*"
-                                placeholder="Alt. Phone No"  
+                                placeholder="Alt. Phone No"
                               />
-                              
                             </div>
                           </Form.Group>
                         </div>
@@ -563,6 +539,5 @@ const Studentadd = () => {
       </div>
     </div>
   );
-
 };
 export default Studentadd;
