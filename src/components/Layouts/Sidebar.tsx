@@ -4,7 +4,7 @@ import { Link,useParams } from "react-router-dom";
 
 const Sidebar = (props:any) => {
     let activeValue = props.data;
-    console.log(activeValue)
+    
     return (
         <div>
             <ul className="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">

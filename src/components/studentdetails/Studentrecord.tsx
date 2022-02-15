@@ -3,7 +3,16 @@ import Sidebar from "../Layouts/Sidebar";
 import Navbar from "../Layouts/Navbar";
 import Feesdetails from "./Feesdetails";
 import Academicfees from "./Academicfees";
-import { Row, Col, Form, Button, Container, Table } from "react-bootstrap";
+import {
+  Row,
+  Col,
+  Form,
+  Button,
+  Container,
+  Table,
+  Card,
+  ListGroup,
+} from "react-bootstrap";
 import { Link } from "react-router-dom";
 import axios, { AxiosResponse } from "axios";
 import { baseUrl } from "../../index";
@@ -25,11 +34,47 @@ const Studentrecord = () => {
   );
   const [statusStudentSearch, setStatusStudentSearch] = useState<any>({});
   const [statusStudentDetails, setStatusStudentDetails] = useState<any>({});
-  const [Autosearch, setAutoSearch] = useState<any>("");
+  const [Autosearch, setAutoSearch] = useState<any>([]);
   const [suggest, setSuggest] = useState<any>([]);
   const [suggestions, setsuggestions] = useState<any>([]);
+  const [acdyear, setAcdYear] = useState<any>([]);
+  const [Grdsec, setGrdsec] = useState<any>([]);
+  const [academicYear, setAcademicYear] = useState<any>("");
+  const [gradeSectionList, setGradeSectionList] = useState<any>([]);
+  const [gradeBasedOnYearFinal, setGradeBasedOnYearFinal] = useState<any>([]);
+  const [addGrade, setAddGrade] = useState("");
+  const [filterParticularYear, setFilterParticularYear] = useState<any>([]);
+  const [academicYearFinal, setAcademicYearFinal] = useState<any>([]);
+  const [sectionBasedOnGrade, SetsectionBasedOnGrade] = useState<any>([]);
+  const [addSection, setAddSection] = useState("");
 
-  console.log(statusStudentDetails);
+  
+
+  const [gradea,setGradea] = useState<any>([]);
+
+  useEffect(() => {
+    if (gradeSectionList && gradeSectionList.length) {
+      let mySet1 = new Set();
+      gradeSectionList.forEach((element: any) => {
+        mySet1.add(element.academic_year);
+      });
+      setAcademicYearFinal([...mySet1]);
+      handleSearch(gradeSectionList, gradeSectionList[0].academic_year);
+    }
+    console.log(gradeSectionList);
+  }, [gradeSectionList]);
+
+  useEffect(() => {
+    if (filterParticularYear && filterParticularYear.length) {
+      let mySet1 = new Set();
+      filterParticularYear.forEach((element: any) => {
+        mySet1.add(element.grade);
+      });
+      setGradeBasedOnYearFinal([...mySet1]);
+      handlesection(filterParticularYear, filterParticularYear[0].grade);
+    }
+    
+  }, [filterParticularYear]);
 
   const onSuggesthandler = (value: any) => {
     setIsComponentVisible(false);
@@ -52,13 +97,24 @@ const Studentrecord = () => {
         .then((response: AxiosResponse) => {
           setSuggest(response.data);
           setIsComponentVisible(true);
-          console.log(suggest);
         });
     }
   };
 
   useEffect(() => {
-    Searchauto();
+    getAccessToken();
+    axios
+      .get(`${baseUrl}grade_section/show_all`)
+      .then((res: any) => {
+        setGradeSectionList(res.data.grade_sections);
+        console.log(res.data.grade_sections)
+      })
+      .catch((error) => console.log(error));
+  }, []);
+
+  useEffect(() => {
+    console.log(Autosearch);
+    Autosearch && Autosearch.length > 0 ? Searchauto() : setSuggest("");
   }, [Autosearch]);
 
   const onClear = () => {
@@ -69,6 +125,50 @@ const Studentrecord = () => {
     const { name, value } = event.target;
     setStatusStudentDetails({ ...statusStudentDetails, [name]: value });
   };
+
+  const handleSearch = (gradeSectionList: any, searchInput: any) => {
+    console.log(gradeSectionList, "++", searchInput);
+    setAddGrade("");
+    setAcademicYear(searchInput);
+    let mySet1 = new Set();
+    let resultData = gradeSectionList.filter((obj: any) =>
+      Object.values(obj)
+        .flat()
+        .some((v) =>
+          `${v}`.toLowerCase().includes(`${searchInput}`.toLowerCase())
+        )
+    );
+    let selectedYearArr: any = [];
+    resultData.forEach((element: any) => {
+      selectedYearArr.push(element);
+      mySet1.add(element.grade);
+    });
+    setGradeBasedOnYearFinal([...mySet1]);
+    setFilterParticularYear(selectedYearArr);
+    setAddGrade(resultData[0].grade);
+  };
+
+  const handlesection = (sectionList: any, searchInput: any) => {
+    console.log(sectionList, "++", searchInput);
+    setAddGrade("");
+    setAcademicYear(searchInput);
+    let mySet1 = new Set();
+    let resultData = gradeSectionList.filter((obj: any) =>
+      Object.values(obj)
+        .flat()
+        .some((v) =>
+          `${v}`.toLowerCase().includes(`${searchInput}`.toLowerCase())
+        )
+    );
+    let selectedYearArr: any = [];
+    resultData.forEach((element: any) => {
+      selectedYearArr.push(element);
+      mySet1.add(element.section);
+    });
+    SetsectionBasedOnGrade([...mySet1]);
+    
+    setAddSection(resultData[0].section);
+};
 
   // console.log(statusStudentDetails)
 
@@ -84,54 +184,89 @@ const Studentrecord = () => {
                 <div className="d-sm-flex align-items-center justify-content-between mb-5">
                   <Container>
                     <Row>
-                      <Col md={6}>
+                      <Col md={5}>
                         <Form.Control
                           type="search"
                           className="form-control bg-light border-20 small"
                           placeholder="Search for Name,ID,PhoneNo..."
                           value={
                             Autosearch && Autosearch.text
-                              ? `${Autosearch.text}${Autosearch.studentid}${Autosearch.PhoneNumber}${Autosearch.GradeId}`
+                              ? `${Autosearch.text}**${Autosearch.GradeId}**${Autosearch.PhoneNumber}**${Autosearch.studentid}`
                               : Autosearch
                           }
-                          onChange={(e: any) => setAutoSearch(e.target.value)}
+                          onChange={(e: any) =>
+                            setAutoSearch(e.target.value.trim())
+                          }
                         />
-                        {suggest.length > 0 && isComponentVisible && (
-                          <div>
-                            {suggest.map((item: any, i: any) => (
-                              <div
-                                key={i}
-                                onClick={() => onSuggesthandler(item)}
-                              >
-                                {item.student_name}***
-                                {item.student_id}***
-                                {item.phone_number}***
-                                {item.grade_id}
+                        <Card
+                          style={{
+                            cursor: "pointer",
+                            background: "Black",
+                            color: "white",
+                          }}
+                        >
+                          <ListGroup
+                            variant="flush"
+                            style={{ marginLeft: "10px" }}
+                          >
+                            {suggest.length > 0 && isComponentVisible && (
+                              <div>
+                                {suggest.map((item: any, i: any) => (
+                                  <div
+                                    key={i}
+                                    onClick={() => onSuggesthandler(item)}
+                                  >
+                                    {item.student_name}***
+                                    {item.grade_id}***
+                                    {item.phone_number}***
+                                    {item.student_id}
+                                  </div>
+                                ))}
                               </div>
-                            ))}
-                          </div>
-                        )}
+                            )}
+                          </ListGroup>
+                        </Card>
                       </Col>
 
                       <Col md={2}>
-                        <Form.Select aria-label="Default select example">
-                          <option>2021-2022</option>
-                          <option>2023-2024</option>
-                          <option>2025-2026</option>
+                        <Form.Select
+                          aria-label="Default select example"
+                          onChange={(e) => {
+                            setAcademicYear(e.target.value);
+                            handleSearch(gradeSectionList, e.target.value);
+                          }}
+                        >
+                          <option hidden>Academic Year</option>
+                          {academicYearFinal &&
+                            academicYearFinal.length &&
+                            academicYearFinal.map((academic: any) => {
+                              // console.log(academicYear)
+                              return <option>{academic}</option>;
+                            })}
                         </Form.Select>
                       </Col>
-                      <Col md={1}>
-                        <Form.Select aria-label="Default select example">
-                          <option>I</option>
-                          <option>II</option>
-                          <option>III</option>
+                      <Col md={2}>
+                        <Form.Select aria-label="Default select example" onChange={(e) => {
+                            setGradea(e.target.value);
+                            handlesection(filterParticularYear, e.target.value);
+                          }}>
+                          <option hidden>Grade</option>
+                          {gradeBasedOnYearFinal &&
+                            gradeBasedOnYearFinal.length &&
+                            gradeBasedOnYearFinal.map((grade: any) => {
+                              // console.log(academicYear)
+                              return <option>{grade}</option>;
+                            })}
                         </Form.Select>
                       </Col>
-                      <Col md={1}>
+                      <Col md={2}>
                         <Form.Select aria-label="Default select example">
-                          <option>A</option>
-                          <option>B</option>
-                          <option>C</option>
+                          <option hidden>Section</option>
+                          {sectionBasedOnGrade &&
+                            sectionBasedOnGrade.length &&
+                            sectionBasedOnGrade.map((value: any, i: any) => {
+                              return <option>{value}</option>;
+                            })}
                         </Form.Select>
                       </Col>
                       <Col md={1}>
@@ -198,7 +333,7 @@ const Studentrecord = () => {
                       </Table>
                     </div>
                   ) : (
-                    <div style={{ textAlign: "center" }}>No Data found</div>
+                   null
                   )}
                 </div>
               </div>
