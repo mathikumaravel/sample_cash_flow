@@ -8,6 +8,7 @@ import Axios from "axios";
 import {baseUrl} from "../../index";
 import {getAccessToken} from "../../config/getAccessToken"
 import moment from 'moment';    
+ 
 const Studentadd = () => {
    const [validated, setValidated] = useState(false);
    const [year, setYear] = useState<any>('');
@@ -36,6 +37,9 @@ const Studentadd = () => {
     const [sectionBasedOnGrade, SetsectionBasedOnGrade] = useState<any>([]);
     const [addSection, setAddSection] = useState("");
     const [filterParticularYear, setFilterParticularYear] = useState<any>([]);
+ 
+
+ 
 
     useEffect(() => {
       if (gradeSectionList && gradeSectionList.length) {
@@ -48,6 +52,20 @@ const Studentadd = () => {
        }
       console.log(gradeSectionList);
   }, [gradeSectionList]);
+ 
+
+  useEffect(() => {
+    if (filterParticularYear && filterParticularYear.length) {
+      let mySet1 = new Set();
+      filterParticularYear.forEach((element: any) => {
+        mySet1.add(element.grade);
+      });
+      setGradeBasedOnYearFinal([...mySet1]);
+      handleSectionSearch(filterParticularYear, filterParticularYear[0].grade);
+    }
+  }, [filterParticularYear]);
+
+ 
     console.log(admissionDate)
 
     const handleSubmit = (e:any) => {
@@ -125,7 +143,11 @@ const Studentadd = () => {
             Object.values(obj)
                 .flat()
                 .some((v) => `${v}`.toLowerCase().includes(`${searchInput}`.toLowerCase()))
-        );
+ 
+       
+ 
+        ); 
+
         let selectedYearArr:any=[]
         resultData.forEach((element: any) => {
           selectedYearArr.push(element)
@@ -140,7 +162,9 @@ const Studentadd = () => {
       setAddSection("");
       setAcademicYear(searchInput);
       let mySet1 = new Set();
-      let resultData = sectionList.filter((obj: any) =>
+ 
+      let resultData = sectionList.filter((obj: any) => 
+ 
           Object.values(obj)
               .flat()
               .some((v) => `${v}`.toLowerCase().includes(`${searchInput}`.toLowerCase()))
@@ -157,6 +181,7 @@ const Studentadd = () => {
      var date = new Date();
      var formatedDate = `${date.getDate()}-${date.getMonth()+1}-${date.getFullYear()}`
      console.log(formatedDate)
+ 
   return (
     <div>
       <div id="page-top">

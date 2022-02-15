@@ -1,6 +1,7 @@
+ 
 {
   "name": "cash_flow_react",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "private": true,
   "homepage": "/",
   "dependencies": {
@@ -61,3 +62,4 @@
     "@types/styled-components": "^5.1.21"
   }
 }
+
