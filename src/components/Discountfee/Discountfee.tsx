@@ -2,23 +2,24 @@ import { useState, useEffect } from "react";
 import Sidebar from "../Layouts/Sidebar";
 import { baseUrl } from "../../index";
 import Navbar from "../Layouts/Navbar";
-import { Button, Table, Pagination, Form, Spinner, Modal,Row,Col } from "react-bootstrap";
+import { Button, Table, Form, Spinner, Modal, Row, Col } from "react-bootstrap";
 import axios from "axios";
 import { getAccessToken } from "../../config/getAccessToken";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Discountfee = () => {
-    const [statusDiscountfeeEdit, setStatusDiscountfeeEdit] = useState(false);
     const [statusDiscountfeeAdd, setStatusDiscountfeeAdd] = useState(false);
 
     const [discountFeeTypeName, setDiscountFeeTypeName] = useState("");
     const [getDiscountFeeTypeName, setGetDiscountFeeTypeName] = useState<any[]>([]);
-    const [editingDiscountFeeYear, setEditingDiscountFeeYear] = useState<any>({});
+    const [editingDiscountFeeYear, setEditingDiscountFeeYear] = useState<any>({ name: "", id: "", dis_id: "" });
+    const [updateDiscountFeeYear, setUpdateDiscountFeeYear] = useState<any>({});
     const [updateDiscountData, setUpdateDiscountData] = useState("");
     const [datatoDelete, setdatatoDelete] = useState<any>({});
     const [duplication, setDuplication] = useState(false);
     const [filter, setfilter] = useState<any>([]);
+    const [spinnerLoad, setSpinnerLoad] = useState<any>(true);
 
     console.log(editingDiscountFeeYear);
 
@@ -36,15 +37,20 @@ const Discountfee = () => {
         setShow(true);
     };
 
-    useEffect(() => {
-        setEditingDiscountFeeYear({
+    const callToUpdate = () =>{
+        setUpdateDiscountFeeYear({
             name: updateDiscountData,
             id: editingDiscountFeeYear.id,
             dis_id: editingDiscountFeeYear.dis_id,
         });
+    }
+    
+    useEffect(() => {
+        callToUpdate();
     }, [updateDiscountData]);
 
     const deleteParticularDiscount = (id: any, index: any) => {
+        setSpinnerLoad(true);
         let newArrVal = getDiscountFeeTypeName;
         newArrVal.splice(index, 1);
         getAccessToken();
@@ -83,7 +89,7 @@ const Discountfee = () => {
             });
         } else {
             axios
-                .put(`${baseUrl}discount_type_masters/update`, { dis_feetype_id: editingDiscountFeeYear.dis_id, dis_feetype_name: editingDiscountFeeYear.name })
+                .put(`${baseUrl}discount_type_masters/update`, { dis_feetype_id: updateDiscountFeeYear.dis_id, dis_feetype_name: updateDiscountFeeYear.name })
                 .then((res: any) => {
                     console.log(res.data);
                     toast.success("Discount Fee Type Master Updated", {
@@ -134,6 +140,7 @@ const Discountfee = () => {
             .then((res: any) => {
                 console.log(res.data);
                 setGetDiscountFeeTypeName(res.data.discount_type_masters);
+                setSpinnerLoad(false);
             })
             .catch((e: any) => {
                 console.log(e);
@@ -142,6 +149,7 @@ const Discountfee = () => {
 
     const DiscountFeeTypeName = (newArrVal: any) => {
         setGetDiscountFeeTypeName([...newArrVal]);
+        setSpinnerLoad(false);
     };
 
     useEffect(() => {
@@ -149,10 +157,10 @@ const Discountfee = () => {
     }, []);
 
     const dataSearch: any =
-    getDiscountFeeTypeName.length &&
-    getDiscountFeeTypeName.sort().filter((data: any) => {
-			return Object.keys(data).some((key) => data[key].toString().toLowerCase().includes(filter.toString().toLowerCase()));
-		});
+        getDiscountFeeTypeName.length &&
+        getDiscountFeeTypeName.sort().filter((data: any) => {
+            return Object.keys(data).some((key) => data[key].toString().toLowerCase().includes(filter.toString().toLowerCase()));
+        });
 
     const handleSubmit = async (e: any) => {
         setDuplication(true);
@@ -171,7 +179,7 @@ const Discountfee = () => {
         } else {
             try {
                 getAccessToken();
-                const res: any = await axios.post(`${baseUrl}discount_type_masters/create`, { dis_feetype_name: discountFeeTypeName }).then((res: any) => {
+                await axios.post(`${baseUrl}discount_type_masters/create`, { dis_feetype_name: discountFeeTypeName }).then((res: any) => {
                     console.log(res.data);
                     toast.success("Discount Fee Type Master Added", {
                         position: "top-right",
@@ -208,7 +216,7 @@ const Discountfee = () => {
                                 <div className="col-xl-11 m-auto">
                                     <div className="col-lg-10" style={{ marginLeft: "10%", width: "90%" }}>
                                         <div className="card mb-3">
-                                            <a style={{ color: "rgb(230, 39, 39)" }}>
+                                            <div style={{ color: "rgb(230, 39, 39)" }}>
                                                 <div className="card-header mb-4 bg-transparent border-1 text-center">
                                                     <h4 className="mb-0 ">
                                                         <i className="far fa-clone pr-1"></i> Discount Fee Type Master
@@ -227,11 +235,11 @@ const Discountfee = () => {
                                                                 Add
                                                             </Button>
                                                         ) : (
-                                                           <></>
+                                                            <></>
                                                         )}
                                                     </div>
                                                 </div>
-                                            </a>
+                                            </div>
                                             {!statusDiscountfeeAdd ? (
                                                 <div className="card-body">
                                                     <div>
@@ -254,7 +262,16 @@ const Discountfee = () => {
                                                                             </tr>
                                                                         </thead>
                                                                         <tbody>
-                                                                            {dataSearch && dataSearch.length ? (
+                                                                            {spinnerLoad ? (
+                                                                                <td
+                                                                                    colSpan={4}
+                                                                                    style={{
+                                                                                        textAlign: "center",
+                                                                                    }}
+                                                                                >
+                                                                                    <Spinner animation="border" variant="danger" />
+                                                                                </td>
+                                                                            ) : dataSearch && dataSearch.length ? (
                                                                                 dataSearch.map((values: any, index: any) => {
                                                                                     return (
                                                                                         <tr key={index}>
@@ -330,7 +347,7 @@ const Discountfee = () => {
                                                                                                 textAlign: "center",
                                                                                             }}
                                                                                         >
-                                                                                            <Spinner animation="border" variant="danger" />
+                                                                                            No Data Found
                                                                                         </td>
                                                                                     </tr>
                                                                                 </>
@@ -377,7 +394,7 @@ const Discountfee = () => {
                                                 </div>
                                             ) : (
                                                 <div>
-                                                    <div style={{display:'flex',justifyContent:'center'}}>
+                                                    <div style={{ display: "flex", justifyContent: "center" }}>
                                                         <Form.Label style={{ textAlign: "center" }}>
                                                             Discount Fee Type Name
                                                             <Form.Control
@@ -397,20 +414,23 @@ const Discountfee = () => {
                                                                     onClick={(e: any) => {
                                                                         handleSubmit(e);
                                                                     }}
-																	style={{display:'flex',float:"right",marginLeft:'2%'}}
+                                                                    style={{ display: "flex", float: "right", marginLeft: "2%" }}
                                                                     className={duplication ? "disabled btn btn-danger btn-save" : "btn btn-danger btn-save"}
                                                                 >
                                                                     Save
-                                                                </Button> &nbsp;{" "}
-																<Button
+                                                                </Button>{" "}
+                                                                &nbsp;{" "}
+                                                                <Button
                                                                     variant="secondary"
                                                                     onClick={() => {
-                                                                        setEditingDiscountFeeYear({});setStatusDiscountfeeAdd(false);	
+                                                                        setEditingDiscountFeeYear({});
+                                                                        setStatusDiscountfeeAdd(false);
                                                                     }}
-																	style={{display:'flex',float:"right"}}
+                                                                    style={{ display: "flex", float: "right" }}
                                                                 >
                                                                     Cancel
-                                                                </Button>{" "}&nbsp;
+                                                                </Button>{" "}
+                                                                &nbsp;
                                                             </Col>
                                                         </Row>
                                                     </div>

@@ -7,6 +7,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Button } from "react-bootstrap";
 
+
 const Login = (props: any) => {
 	let history = useHistory<any>();
 
@@ -14,16 +15,6 @@ const Login = (props: any) => {
 	const [password, setPassword] = useState<any>("");
 
 	const notify = () => toast("Wow so easy!");
-
-	useEffect(() => {
-		const unloadCallback = (event: any) => {
-			event.preventDefault();
-			event.returnValue = "";
-			return "";
-		};
-		window.addEventListener("beforeunload", unloadCallback);
-		return () => window.removeEventListener("beforeunload", unloadCallback);
-	}, []);
 
 	const handleSubmit = async (e: any) => {
 		e.preventDefault();
@@ -63,7 +54,7 @@ const Login = (props: any) => {
                         progress: undefined,
                         });
 					localStorage.setItem("AccessToken", res.data.auth_token);
-					history.push("/studentrecord");
+					callToPush();
 				});
 			} catch (err: any) {
 				console.log(err.response.data.error_message);
@@ -79,6 +70,24 @@ const Login = (props: any) => {
 			}
 		}
 	};
+
+	const callToPush = () =>{
+		setTimeout(() => {
+			browser()
+			//history.push("/studentrecord");
+		  }, 1000);
+	}
+
+	const browser = () =>{
+		window.location.href = "/studentrecord"
+	}
+
+	useEffect(()=>{
+		const token = localStorage.getItem("AccessToken");
+		if(token?.length){
+			history.push("/studentrecord");
+		}
+	},[])
 
 	return (
 		<div className="container">

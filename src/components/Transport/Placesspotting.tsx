@@ -8,7 +8,7 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const Placesprice = () => {
+const Placesspotting = () => {
     //Academic Year
     const [statusAcademicYearAdd, setStatusAcademicYearAdd] = useState(false);
     const [FromAcdYear, setFromAcdYear] = useState<any[]>([]);
@@ -17,8 +17,16 @@ const Placesprice = () => {
     const [datatoDelete, setdatatoDelete] = useState<any>({});
 
     console.log(FromAcdYear)
+
     // Transport places
-    const placesList = [{year:'2021-2022',place:'namakkal',price:'4500'}, {year:'2021-2022',place:'paramathi-velur',price:'2500'}, {year:'2021-2022',place:'velur',price:'3500'}];
+    const placesList = [
+        {year:'2021-2022',place: "namakkal", stopping:'4 road - namakkal' ,price: "4500" },
+        {year:'2021-2022', place: "namakkal", stopping:'bustand - namakkal' ,price: "4500" },
+        {year:'2021-2022', place: "paramathi-velur", stopping:'bustand - paramathi-velur' ,price: "4500" },
+        {year:'2021-2022', place: "paramathi-velur", stopping:'pipe pass road' ,price: "4500" },
+        {year:'2021-2022', place: "velur",  stopping:'Super Market' , price: "2500" },
+        {year:'2021-2022', place: "velur",  stopping:'Sps press' ,price: "3500" },
+    ];
 
     //Modal Popup
     const [show, setShow] = useState(false);
@@ -134,7 +142,7 @@ const Placesprice = () => {
             <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
             <div id="page-top">
                 <div id="wrapper">
-                    <Sidebar data={"Placesprice"}></Sidebar>
+                    <Sidebar data={"placesstoppings"}></Sidebar>
                     <div id="content-wrapper" className="d-flex flex-column">
                         <div id="content">
                             <Navbar></Navbar>
@@ -145,7 +153,7 @@ const Placesprice = () => {
                                             <div style={{ color: "rgb(230, 39, 39)" }}>
                                                 <div className="card-header mb-4 bg-transparent border-1 text-center">
                                                     <h4 className="mb-0 ">
-                                                        <i className="far fa-clone pr-1"></i> Transport places
+                                                        <i className="far fa-clone pr-1"></i>Places & Spottings
                                                     </h4>
                                                     <div style={{ textAlign: "right" }}>
                                                         {!statusAcademicYearAdd ? (
@@ -179,10 +187,13 @@ const Placesprice = () => {
                                                                             S.No.
                                                                         </th>
                                                                         <th className="sorting" style={{ width: "114px" }}>
-                                                                            Academic Year
+                                                                            Year
                                                                         </th>
                                                                         <th className="sorting" style={{ width: "114px" }}>
                                                                             Places
+                                                                        </th>
+                                                                        <th className="sorting" style={{ width: "114px" }}>
+                                                                            Stoppings
                                                                         </th>
                                                                         <th className="sorting" style={{ width: "114px" }}>
                                                                             Term Fees
@@ -200,6 +211,7 @@ const Placesprice = () => {
                                                                                     <td>{index + 1}</td>
                                                                                     <td>{values.year}</td>
                                                                                     <td>{values.place}</td>
+                                                                                    <td>{values.stopping}</td>
                                                                                     <td>{values.price}</td>
                                                                                     <td>
                                                                                         <Button
@@ -273,13 +285,7 @@ const Placesprice = () => {
                                                 <div>
                                                     <Container>
                                                         <Row className="justify-content-md-center">
-                                                            <Col md="4">
-                                                                <Form.Group className="mb-3" controlId="formBasicEmail">
-                                                                    <Form.Label>Place</Form.Label>
-                                                                    <Form.Control type="text" placeholder="" value="" />
-                                                                </Form.Group>
-                                                            </Col>
-                                                            <Col md="4">
+                                                        <Col md="3">
                                                                 <Form.Group className="mb-3" controlId="formBasicEmail">
                                                                     <Form.Label>Academic year</Form.Label>
                                                                     <Form.Select>
@@ -289,9 +295,25 @@ const Placesprice = () => {
                                                                     </Form.Select>
                                                                 </Form.Group>
                                                             </Col>
-                                                            <Col md="4">
+                                                            <Col md="3">
+                                                                <Form.Group className="mb-3" controlId="formBasicEmail">
+                                                                    <Form.Label>Place</Form.Label>
+                                                                    <Form.Select>
+                                                                        <option>Namakkal</option>
+                                                                        <option>Paramathi-Velur</option>
+                                                                        <option>Velur</option>
+                                                                    </Form.Select>
+                                                                </Form.Group>
+                                                            </Col>
+                                                            <Col md="3">
                                                                 <Form.Group className="mb-3" controlId="formBasicEmail">
                                                                     <Form.Label>Term Fees</Form.Label>
+                                                                    <Form.Control type="text" placeholder="" value="4500" disabled />
+                                                                </Form.Group>
+                                                            </Col>
+                                                            <Col md="3">
+                                                                <Form.Group className="mb-3" controlId="formBasicEmail">
+                                                                    <Form.Label>Place Stoppings</Form.Label>
                                                                     <Form.Control type="number" placeholder="" value="" />
                                                                 </Form.Group>
                                                             </Col>
@@ -328,4 +350,4 @@ const Placesprice = () => {
         </div>
     );
 };
-export default Placesprice;
+export default Placesspotting;
