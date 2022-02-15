@@ -37,17 +37,18 @@ const Discountfee = () => {
         setShow(true);
     };
 
-    const callToUpdate = () =>{
+
+    useEffect(() => {
+        console.log(updateDiscountData);
+        
         setUpdateDiscountFeeYear({
-            name: updateDiscountData,
+            name: updateDiscountData.trim(),
             id: editingDiscountFeeYear.id,
             dis_id: editingDiscountFeeYear.dis_id,
         });
-    }
-    
-    useEffect(() => {
-        callToUpdate();
     }, [updateDiscountData]);
+
+    console.log(updateDiscountFeeYear)
 
     const deleteParticularDiscount = (id: any, index: any) => {
         setSpinnerLoad(true);
@@ -75,9 +76,8 @@ const Discountfee = () => {
     };
 
     const updateDiscountFeeTypeName = () => {
-        delete editingDiscountFeeYear.id;
         getAccessToken();
-        if (editingDiscountFeeYear.name.length <= 0) {
+        if (updateDiscountFeeYear.name.length <= 0) {
             toast.warning("Please Enter A Value", {
                 position: "top-right",
                 autoClose: 5000,
@@ -87,7 +87,9 @@ const Discountfee = () => {
                 draggable: true,
                 progress: undefined,
             });
+            setUpdateDiscountData("");
         } else {
+            delete editingDiscountFeeYear.id;
             axios
                 .put(`${baseUrl}discount_type_masters/update`, { dis_feetype_id: updateDiscountFeeYear.dis_id, dis_feetype_name: updateDiscountFeeYear.name })
                 .then((res: any) => {
@@ -298,6 +300,15 @@ const Discountfee = () => {
                                                                                                             Update
                                                                                                         </Button>
                                                                                                         {"  "}
+                                                                                                        <Button
+                                                                                                            variant="secondary"
+                                                                                                            onClick={() => {
+                                                                                                                setEditingDiscountFeeYear({});
+                                                                                                                setUpdateDiscountData("");
+                                                                                                            }}
+                                                                                                        >
+                                                                                                            Cancel
+                                                                                                        </Button>
                                                                                                     </td>
                                                                                                 </>
                                                                                             ) : (
