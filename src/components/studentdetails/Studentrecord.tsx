@@ -17,7 +17,6 @@ import { Link } from "react-router-dom";
 import axios, { AxiosResponse } from "axios";
 import { baseUrl } from "../../index";
 import { getAccessToken } from "../../config/getAccessToken";
-
 const Studentrecord = () => {
   //To Make Edit
   const [search, setSearch] = useState<any>({
@@ -28,7 +27,6 @@ const Studentrecord = () => {
   });
   const [statusStudentEdit, setStatusStudentEdit] = useState(false);
   const [isComponentVisible, setIsComponentVisible] = useState(true);
-
   const [statusStudentDetailsEdit, setStatusStudentDetailsEdit] = useState<any>(
     {}
   );
@@ -46,12 +44,16 @@ const Studentrecord = () => {
   const [filterParticularYear, setFilterParticularYear] = useState<any>([]);
   const [academicYearFinal, setAcademicYearFinal] = useState<any>([]);
   const [sectionBasedOnGrade, SetsectionBasedOnGrade] = useState<any>([]);
-  const [addSection, setAddSection] = useState("");
-
-  
-
-  const [gradea,setGradea] = useState<any>([]);
-
+  const [addSection, setAddSection] = useState<any>("");
+  const [section, setsection] = useState<any>("");
+  const [acas, setacas] = useState<any>("");
+  const [mainsearchh, setMainSearch] = useState<any>([]);
+  const [gradea, setGradea] = useState<any>("");
+  //manage state  Autosearch
+  //manage state  academicYear
+  //manage state  gradea
+  //manage state  section
+  console.log(mainsearchh);
   useEffect(() => {
     if (gradeSectionList && gradeSectionList.length) {
       let mySet1 = new Set();
@@ -61,9 +63,7 @@ const Studentrecord = () => {
       setAcademicYearFinal([...mySet1]);
       handleSearch(gradeSectionList, gradeSectionList[0].academic_year);
     }
-    console.log(gradeSectionList);
   }, [gradeSectionList]);
-
   useEffect(() => {
     if (filterParticularYear && filterParticularYear.length) {
       let mySet1 = new Set();
@@ -73,12 +73,9 @@ const Studentrecord = () => {
       setGradeBasedOnYearFinal([...mySet1]);
       handlesection(filterParticularYear, filterParticularYear[0].grade);
     }
-    
   }, [filterParticularYear]);
-
   const onSuggesthandler = (value: any) => {
     setIsComponentVisible(false);
-
     setAutoSearch({
       text: value.student_name,
       studentid: value.student_id,
@@ -86,7 +83,6 @@ const Studentrecord = () => {
       GradeId: value.grade_id,
     });
   };
-
   const Searchauto = () => {
     if (Autosearch.length > 0) {
       getAccessToken();
@@ -100,34 +96,37 @@ const Studentrecord = () => {
         });
     }
   };
-
+  const mainsearch = () => {
+    getAccessToken();
+    axios
+      .get(
+        `${baseUrl}student_admissions_search/search_student?academic_year=${acas}&grade_id=${gradea}&section=${section}`
+      )
+      .then((response: AxiosResponse) => {
+        setMainSearch(response.data);
+        console.log(response.data);
+      });
+  };
   useEffect(() => {
     getAccessToken();
     axios
       .get(`${baseUrl}grade_section/show_all`)
       .then((res: any) => {
         setGradeSectionList(res.data.grade_sections);
-        console.log(res.data.grade_sections)
       })
       .catch((error) => console.log(error));
   }, []);
-
   useEffect(() => {
-    console.log(Autosearch);
     Autosearch && Autosearch.length > 0 ? Searchauto() : setSuggest("");
   }, [Autosearch]);
-
   const onClear = () => {
     setStatusStudentSearch("");
   };
-
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setStatusStudentDetails({ ...statusStudentDetails, [name]: value });
   };
-
   const handleSearch = (gradeSectionList: any, searchInput: any) => {
-    console.log(gradeSectionList, "++", searchInput);
     setAddGrade("");
     setAcademicYear(searchInput);
     let mySet1 = new Set();
@@ -147,9 +146,7 @@ const Studentrecord = () => {
     setFilterParticularYear(selectedYearArr);
     setAddGrade(resultData[0].grade);
   };
-
   const handlesection = (sectionList: any, searchInput: any) => {
-    console.log(sectionList, "++", searchInput);
     setAddGrade("");
     setAcademicYear(searchInput);
     let mySet1 = new Set();
@@ -166,12 +163,9 @@ const Studentrecord = () => {
       mySet1.add(element.section);
     });
     SetsectionBasedOnGrade([...mySet1]);
-    
     setAddSection(resultData[0].section);
-};
-
+  };
   // console.log(statusStudentDetails)
-
   return (
     <div id="page-top">
       <div id="wrapper">
@@ -227,16 +221,16 @@ const Studentrecord = () => {
                           </ListGroup>
                         </Card>
                       </Col>
-
                       <Col md={2}>
                         <Form.Select
                           aria-label="Default select example"
                           onChange={(e) => {
                             setAcademicYear(e.target.value);
                             handleSearch(gradeSectionList, e.target.value);
+                            setacas(e.target.value);
                           }}
                         >
-                          <option hidden>Academic Year</option>
+                          <option value="">Academic Year</option>
                           {academicYearFinal &&
                             academicYearFinal.length &&
                             academicYearFinal.map((academic: any) => {
@@ -246,11 +240,14 @@ const Studentrecord = () => {
                         </Form.Select>
                       </Col>
                       <Col md={2}>
-                        <Form.Select aria-label="Default select example" onChange={(e) => {
+                        <Form.Select
+                          aria-label="Default select example"
+                          onChange={(e) => {
                             setGradea(e.target.value);
                             handlesection(filterParticularYear, e.target.value);
-                          }}>
-                          <option hidden>Grade</option>
+                          }}
+                        >
+                          <option value="">Grade</option>
                           {gradeBasedOnYearFinal &&
                             gradeBasedOnYearFinal.length &&
                             gradeBasedOnYearFinal.map((grade: any) => {
@@ -260,8 +257,11 @@ const Studentrecord = () => {
                         </Form.Select>
                       </Col>
                       <Col md={2}>
-                        <Form.Select aria-label="Default select example">
-                          <option hidden>Section</option>
+                        <Form.Select
+                          aria-label="Default select example"
+                          onChange={(e) => setsection(e.target.value)}
+                        >
+                          <option value="">Section</option>
                           {sectionBasedOnGrade &&
                             sectionBasedOnGrade.length &&
                             sectionBasedOnGrade.map((value: any, i: any) => {
@@ -275,7 +275,7 @@ const Studentrecord = () => {
                             className="btn btn-danger"
                             type="button"
                             onClick={() => {
-                              onClear();
+                              mainsearch();
                             }}
                           >
                             <i className="fas fa-search fa-sm"></i>
@@ -286,7 +286,7 @@ const Studentrecord = () => {
                   </Container>
                 </div>
                 <div className="col-xl-11 text-center">
-                  {!statusStudentSearch ? (
+                  {statusStudentSearch ? (
                     <div>
                       <Table striped bordered hover>
                         <thead>
@@ -300,41 +300,38 @@ const Studentrecord = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          <tr>
-                            <td>
-                              {" "}
-                              <Link to="/StudentprofileSearch">ASAIN</Link>
-                            </td>
-                            <td>1001</td>
-                            <td>9788888909</td>
-                            <td>I</td>
-                            <td>A</td>
-                            <td>
-                              {" "}
-                              <p style={{ color: "green" }}>paid </p>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>
-                              <Link to="/Student">Mohan</Link>
-                            </td>
-                            <td>1002</td>
-                            <td>9788888909</td>
-                            <td>II</td>
-                            <td>B</td>
-                            <td>
-                              {" "}
-                              <Link to="/Stu_pay" style={{ color: " red " }}>
-                                UnPaid
-                              </Link>
-                            </td>
-                          </tr>
+                          {mainsearchh && mainsearchh.length > 0? (
+                            mainsearchh.map((values: any, index: any) => {
+                              return (
+                                <tr key={index}>
+                                  <td>
+                                    {" "}
+                                    <Link to="/StudentprofileSearch">
+                                      No Name
+                                    </Link>
+                                  </td>
+                                  <td>{values.student_id}</td>
+                                  <td>{values.phone_number}</td>
+                                  <td>{values.grade_id}</td>
+                                  <td>{values.section}</td>
+                                  <td>
+                                    {" "}
+                                    <p style={{ color: "green" }}>paid </p>
+                                  </td>
+                                </tr>
+                              );
+                            })
+                          ) : (
+                            <tr>
+                              <td colSpan={6} className="text-center">
+                                No Data Found
+                              </td>
+                            </tr>
+                          )}
                         </tbody>
                       </Table>
                     </div>
-                  ) : (
-                   null
-                  )}
+                  ) : null}
                 </div>
               </div>
             </div>
