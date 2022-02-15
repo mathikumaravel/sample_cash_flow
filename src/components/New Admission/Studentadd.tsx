@@ -7,7 +7,8 @@ import Feedback from 'react-bootstrap/Feedback';
 import Axios from "axios";
 import {baseUrl} from "../../index";
 import {getAccessToken} from "../../config/getAccessToken"
-import moment from 'moment';
+import moment from 'moment';    
+
 const Studentadd = () => {
    const [validated, setValidated] = useState(false);
    const [year, setYear] = useState<any>('');
@@ -24,13 +25,11 @@ const Studentadd = () => {
     const [admissionDate,setAdmissiondate]=useState<any>(new Date());
     const [toSection,setToSection]=useState<any>('');
     const [previousSchoolInfo,setPreviousSchoolInfo]=useState<any>('');
-    const [fatherName,setFatherName]=useState<any>('');
+    const [fatherName,setFatherName] = useState<any>('');
     const [fatherOccupation,setFatherOccupation] = useState<any>('');
     const [address,setAddress] = useState<any>('');
     const [phoneNo,setPhoneno] = useState<any>('');
     const [alterPhoneno,setAlterPhoneno] = useState<any>('');
-
-
      const [addGrade, setAddGrade] = useState("");
     const [gradeBasedOnYearFinal, setGradeBasedOnYearFinal] = useState<any>([]);
     const [gradeSectionList, setGradeSectionList] = useState<any>([]);
@@ -38,7 +37,7 @@ const Studentadd = () => {
     const [sectionList, setSectionList] = useState<any>([]);
     const [sectionBasedOnGrade, SetsectionBasedOnGrade] = useState<any>([]);
     const [addSection, setAddSection] = useState("");
-
+    const [filterParticularYear, setFilterParticularYear] = useState<any>([]);
 
 
     useEffect(() => {
@@ -53,6 +52,17 @@ const Studentadd = () => {
       console.log(gradeSectionList);
   }, [gradeSectionList]);
 
+  useEffect(() => {
+    if (filterParticularYear && filterParticularYear.length) {
+      let mySet1 = new Set();
+      filterParticularYear.forEach((element: any) => {
+        mySet1.add(element.grade);
+      });
+      setGradeBasedOnYearFinal([...mySet1]);
+      handleSectionSearch(filterParticularYear, filterParticularYear[0].grade);
+    }
+  }, [filterParticularYear]);
+
     console.log(admissionDate)
     const handleSubmit = (e:any) => {
 
@@ -65,21 +75,26 @@ const Studentadd = () => {
       setValidated(true);
       const register:any =  {
         "student_name": studentName,
-        "DOB": dateofBirth,
-        "gender": gender,
-        "email": email,
-        "admission_date": admissionDate,
-        "academic_year": academicYear,
-        "grade_id": "I",
-        "section": "A",
-        "previous_school_info": previousSchoolInfo,
-        "father_name": fatherName,
-        "father_occupation": fatherOccupation,
-        "address": address,
-        "phone_number": phoneNo,
-        "alt_phone_number": "8072282551",
-        
-        "admission_no": admissionNo
+"DOB": dateofBirth,
+"gender": gender,
+"email": email,
+"admission_date": admissionDate,
+"academic_year": academicYear ,
+"grade_id": fromGrade,
+"to_grade_id": toGrade,
+"section": toSection,
+"to_section_id": "A",
+"student_type": "hostel",
+"previous_school_info": previousSchoolInfo,
+"father_name": fatherName,
+"father_occupation": fatherOccupation,
+"address": address,
+"phone_number": phoneNo,
+"alt_phone_number": alterPhoneno,
+"stu_code": "MVM",
+"student_id": "MVM100123",
+"status": "Active",
+"admission_no": admissionNo
       }
     
         console.log(register)
@@ -131,28 +146,28 @@ const Studentadd = () => {
             Object.values(obj)
                 .flat()
                 .some((v) => `${v}`.toLowerCase().includes(`${searchInput}`.toLowerCase()))
-        );
-
+        ); 
+        let selectedYearArr:any=[]
         resultData.forEach((element: any) => {
+          selectedYearArr.push(element)
             mySet1.add(element.grade);
         });
         setGradeBasedOnYearFinal([...mySet1]);
+        setFilterParticularYear(selectedYearArr)
         setAddGrade(resultData[0].grade);
 
     };
 
     const handleSectionSearch = (sectionList: any, searchInput: any) => {
       console.log(sectionList,"++",searchInput)
-      setAddGrade("");
+      setAddSection("");
       setAcademicYear(searchInput);
       let mySet1 = new Set();
-      let resultData = sectionList.filter((obj: any) =>
-
+      let resultData = sectionList.filter((obj: any) => 
           Object.values(obj)
               .flat()
               .some((v) => `${v}`.toLowerCase().includes(`${searchInput}`.toLowerCase()))
       );
-
       resultData.forEach((element: any) => {
           mySet1.add(element.section);
       });
@@ -165,12 +180,14 @@ const Studentadd = () => {
      var date = new Date();
      var formatedDate = `${date.getDate()}-${date.getMonth()+1}-${date.getFullYear()}`
      console.log(formatedDate)
+
+
  
   return (
     <div>
       <div id="page-top">
         <div id="wrapper">
-        <Sidebar data={"Stu_add"}></Sidebar>
+          <Sidebar></Sidebar>
           <div id="content-wrapper" className="d-flex flex-column">
             <div id="content">
               <Navbar></Navbar>
@@ -351,9 +368,9 @@ const Studentadd = () => {
                             <InputGroup hasValidation>
                               <Form.Select onChange={(e) => {setAcademicYear(e.target.value);handleSearch(gradeSectionList,e.target.value)}} required>
                                   {
-								 academicYearFinal&&
-                 academicYearFinal.length &&
-                 academicYearFinal.map((academic: any) => {
+                                      academicYearFinal&&
+                                      academicYearFinal.length &&
+                                      academicYearFinal.map((academic: any) => {
                     // console.log(academicYear)
 										return <option>{academic}</option>;
 									})}
@@ -378,7 +395,7 @@ const Studentadd = () => {
                             </Form.Label>
                             <div className="col-md-6">
                             <InputGroup hasValidation>
-                            <Form.Select onChange={(e) => {setFromgrade(e.target.value);handleSectionSearch(gradeSectionList,e.target.value)}} required>
+                            <Form.Select onChange={(e) => {setToGrade(e.target.value);handleSectionSearch(filterParticularYear,e.target.value)}} required>
                                 {
                               gradeBasedOnYearFinal&&
                               gradeBasedOnYearFinal.length &&
@@ -402,8 +419,7 @@ const Studentadd = () => {
                             </Form.Label>
                             <div className="col-md-6">
                             <InputGroup hasValidation>
-                              <Form.Select  onChange={(e) => {setToSection(e.target.value);handleSearch(gradeSectionList,e.target.value)}} required>
-                             
+                              <Form.Select  onChange={(e) => {setToSection(e.target.value);}} required>
                               {
                               sectionBasedOnGrade&&
                               sectionBasedOnGrade.length &&
@@ -500,6 +516,7 @@ const Studentadd = () => {
                             </Form.Label>
                             <div className="col-md-6">
                               <Form.Control
+                              onChange={(e) => setPhoneno(e.target.value)} 
                               required
                               type="text"
                                pattern="[0-9]*"
@@ -518,6 +535,7 @@ const Studentadd = () => {
                             </Form.Label>
                             <div className="col-md-6">
                               <Form.Control
+                              onChange={(e) => setAlterPhoneno(e.target.value)} 
                               required
                                 type="text"
                                 pattern="[0-9]*"
