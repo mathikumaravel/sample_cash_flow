@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Sidebar from "../Layouts/Sidebar";
 import Navbar from "../Layouts/Navbar";
-import { Button, Table, Pagination, Form, Col, Row, Spinner, Modal } from "react-bootstrap";
+import { Button, Table, Form, Col, Row, Spinner, Modal } from "react-bootstrap";
 import axios, { AxiosResponse } from "axios";
 import { getAccessToken } from "../../config/getAccessToken";
 import { baseUrl } from "../../index";
@@ -9,7 +9,6 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Yearoffee = () => {
-    const [statusFeeDetailsEdit, setStatusFeeDetailsEdit] = useState(false);
     const [statusFeeDetailsAdd, setStatusFeeDetailsAdd] = useState(false);
     const [gradeSectionList, setGradeSectionList] = useState<any>([]);
     const [feeMaster, setAllFeeMaster] = useState<any[]>([]);
@@ -34,6 +33,8 @@ const Yearoffee = () => {
     const [duplication, setDuplication] = useState(false);
 
     console.log(editingYearOfFee);
+
+    console.log(feeTypeName)
 
     //Modal Popup
     const [show, setShow] = useState(false);
@@ -120,6 +121,7 @@ const Yearoffee = () => {
         gradeSectionList.forEach((element: any) => {
             mySet1.add({ id: element.fee_master_id, name: element.fee_type_name });
         });
+
         setFeeTypeMasterNameFinal([...mySet1]);
         //	console.log(resultData);
         if (resultData && resultData.length) {
@@ -157,6 +159,7 @@ const Yearoffee = () => {
                     draggable: true,
                     progress: undefined,
                 });
+                setDuplication(false);
             } else if (addGrade.length <= 0) {
                 toast.warning("Enter Grade", {
                     position: "top-right",
@@ -167,6 +170,7 @@ const Yearoffee = () => {
                     draggable: true,
                     progress: undefined,
                 });
+                setDuplication(false);
             } else if (academicYear.length <= 0) {
                 toast.warning("Enter Academic Year", {
                     position: "top-right",
@@ -177,6 +181,7 @@ const Yearoffee = () => {
                     draggable: true,
                     progress: undefined,
                 });
+                setDuplication(false);
             } else if (newfeeTypeName.length <= 0) {
                 toast.warning("Enter Fee Type Name", {
                     position: "top-right",
@@ -187,6 +192,7 @@ const Yearoffee = () => {
                     draggable: true,
                     progress: undefined,
                 });
+                setDuplication(false);
             }
         } else {
             getAccessToken();
@@ -198,7 +204,7 @@ const Yearoffee = () => {
                     fee_master_id: newfeeTypeName,
                 })
                 .then((res: any) => {
-                    toast.success("Year oF Fee Added", {
+                    toast.success("Year Of Fee Added", {
                         position: "top-right",
                         autoClose: 5000,
                         hideProgressBar: false,
@@ -209,6 +215,9 @@ const Yearoffee = () => {
                     });
                     setStatusFeeDetailsAdd(false);
                     list_fee_details();
+                    setDuplication(false);
+                }).catch((error:any)=>{
+                    setDuplication(false);
                 });
         }
     };
@@ -251,7 +260,7 @@ const Yearoffee = () => {
                 })
                 .then((res: any) => {
                     console.log(res.data);
-                    if (res.data == true) {
+                    if (res.data === true) {
                         toast.success("Year oF Fee Updated Successsfully", {
                             position: "top-right",
                             autoClose: 5000,
@@ -570,7 +579,7 @@ const Yearoffee = () => {
                                                                         value={academicYear}
                                                                         onChange={(e: any) => {
                                                                             handleSearch(gradeSectionList, e.target.value);
-                                                                            handleFeeTypeNameSearch(feeMaster, e.target.value);
+                                                                            //handleFeeTypeNameSearch(feeMaster, e.target.value);
                                                                         }}
                                                                     >
                                                                         {feeMasterFinal &&
@@ -635,8 +644,10 @@ const Yearoffee = () => {
                                                                 &nbsp;
                                                                 <Button
                                                                     type="submit"
-                                                                    className="btn btn-danger btn-save"
+                                                                   // className="btn btn-danger btn-save"
+                                                                   className={duplication ? "disabled btn btn-danger btn-save" : "btn btn-danger btn-save"}
                                                                     onClick={() => {
+                                                                        setDuplication(true)
                                                                         handleSubmit();
                                                                     }}
                                                                 >

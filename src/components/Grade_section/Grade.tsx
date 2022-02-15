@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import Sidebar from "../Layouts/Sidebar";
 import Navbar from "../Layouts/Navbar";
 import { Button, Table, Pagination, Form, Col, Row, Container, Modal, Spinner } from "react-bootstrap";
@@ -7,22 +7,20 @@ import { getAccessToken } from "../../config/getAccessToken";
 import { baseUrl } from "../../index";
 import { romanLetters } from "../../utils/romanLetters";
 import { getAllAcademicYear } from "../../Api/year_api";
-import { getAllGradeSectionAdd } from "../../Api/grade_section";
+// import { getAllGradeSectionAdd } from "../../Api/grade_section";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Grade = () => {
-    const [statusGradeEdit, setStatusGradeEdit] = useState(false);
     const [statusGradeAdd, setStatusGradeAdd] = useState(false);
     const [statusList, setStatusList] = useState<any>([]);
-    const [statusGrade, setStatusgrade] = useState<any>([]);
-    const [statusSection, setStatussection] = useState<any>([]);
     const [allAcademicYear, setAllAcademicYear] = useState<any[]>([]);
     const [clickedGrade, setClickedGrade] = useState<any[]>([]);
     const [academic_year_data, setAcademic_year_data] = useState("");
     const [academic_section, setAcademic_section] = useState("");
     const [datatoDelete, setdatatoDelete] = useState<any>({});
     const [spinnerLoad, setSpinnerLoad] = useState<any>(true);
+    const [duplication, setDuplication] = useState(false);
 
     //Pagination
     const [currentPage, setCurrentPage] = useState(1);
@@ -30,6 +28,8 @@ const Grade = () => {
     const [totalButtons, setTotalButtons] = useState(0);
     const [createButtons, setCreateButtons] = useState<any[]>([]);
     const [pageToMove, setPageToMove] = useState(currentPage);
+
+    console.log(createButtons);
 
     //Modal Popup
     const [show, setShow] = useState(false);
@@ -81,6 +81,7 @@ const Grade = () => {
                     draggable: true,
                     progress: undefined,
                 });
+                setDuplication(false);
             } else if (clickedGrade.length <= 0) {
                 toast.error("Please Select Academic Grade", {
                     position: "top-right",
@@ -91,6 +92,7 @@ const Grade = () => {
                     draggable: true,
                     progress: undefined,
                 });
+                setDuplication(false);
             } else {
                 toast.error("Please Enter Section", {
                     position: "top-right",
@@ -102,22 +104,27 @@ const Grade = () => {
                     progress: undefined,
                 });
             }
+            setDuplication(false);
         } else {
             clickedGrade.forEach((element: any) => {
                 let sendData = { academic_year: academic_year_data, grade: element, section: academic_section };
                 getAccessToken();
                 axios.post(`${baseUrl}grade_section/create`, sendData).then((res: any) => {
-                    toast.success("Grade & Section Added Successfully", {
+                    toast.success(`${res.data.academic_year}-${res.data.grade}-${res.data.section} Added`, {
                         position: "top-right",
-                        autoClose: 5000,
+                        autoClose: 3000,
                         hideProgressBar: false,
                         closeOnClick: true,
                         pauseOnHover: true,
                         draggable: true,
                         progress: undefined,
                     });
+                    console.log(res.data.section)
                     setStatusList([]);
                     getAllGradeSectionData();
+                    setDuplication(false)
+                }).catch((err:any)=>{
+                    setDuplication(false);
                 });
             });
             setStatusGradeAdd(false);
@@ -215,7 +222,7 @@ const Grade = () => {
                                 <div className="col-xl-11 m-auto">
                                     <div className="col-lg-10" style={{ marginLeft: "10%", width: "90%" }}>
                                         <div className="card mb-3">
-                                            <a style={{ color: "rgb(230, 39, 39)" }}>
+                                            <div style={{ color: "rgb(230, 39, 39)" }}>
                                                 <div className="card-header mb-4 bg-transparent border-1 text-center">
                                                     <h4 className="mb-0 ">
                                                         <i className="far fa-clone pr-1"></i>Grade & Section
@@ -230,7 +237,7 @@ const Grade = () => {
                                                         )}
                                                     </div>
                                                 </div>
-                                            </a>
+                                            </div>
                                             {!statusGradeAdd ? (
                                                 <div className="card-body">
                                                     <div className="table-responsive">
@@ -317,6 +324,16 @@ const Grade = () => {
                                                     </div>
                                                     <div>
                                                         <Row>
+                                                            <Col sm={4}>
+                                                                <div>
+                                                                    <Form.Select onChange={(e: any) => setPerPage(e.target.value)} style={{ width: "30%", marginLeft: "20%" }}>
+                                                                        <option value="25">25</option>
+                                                                        <option value="30">30</option>
+                                                                        <option value="35">35</option>
+                                                                        <option value="40">40</option>
+                                                                    </Form.Select>
+                                                                </div>
+                                                            </Col>
                                                             {/* <Col sm={4}>
                                                                 <div>
                                                                     <Form.Select onChange={(e: any) => setPerPage(e.target.value)} style={{ width: "30%", marginLeft: "20%" }}>
@@ -474,7 +491,7 @@ const Grade = () => {
                                                                 Cancel
                                                             </Button>{" "}
                                                             &nbsp;
-                                                            <Button type="submit" className="btn btn-danger btn-save" onClick={() => handleSubmit()}>
+                                                            <Button type="submit"   className={duplication ? "disabled btn btn-danger btn-save" : "btn btn-danger btn-save"} onClick={() => {setDuplication(true);handleSubmit();}}>
                                                                 Save
                                                             </Button>
                                                         </div>

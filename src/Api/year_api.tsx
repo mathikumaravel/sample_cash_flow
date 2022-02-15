@@ -1,4 +1,3 @@
-import {useState} from 'react'
 import { getAccessToken } from "../config/getAccessToken";
 import axios from "axios";
 import {baseUrl} from "../index"

@@ -2,19 +2,19 @@ import { useState, useEffect } from "react";
 import Sidebar from "../Layouts/Sidebar";
 import { baseUrl } from "../../index";
 import Navbar from "../Layouts/Navbar";
-import { Button, Table, Pagination, Form, Spinner, Modal, Row, Col } from "react-bootstrap";
+import { Button, Table, Form, Spinner, Modal, Row, Col } from "react-bootstrap";
 import axios from "axios";
 import { getAccessToken } from "../../config/getAccessToken";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Discountfee = () => {
-    const [statusDiscountfeeEdit, setStatusDiscountfeeEdit] = useState(false);
     const [statusDiscountfeeAdd, setStatusDiscountfeeAdd] = useState(false);
 
     const [discountFeeTypeName, setDiscountFeeTypeName] = useState("");
     const [getDiscountFeeTypeName, setGetDiscountFeeTypeName] = useState<any[]>([]);
-    const [editingDiscountFeeYear, setEditingDiscountFeeYear] = useState<any>({});
+    const [editingDiscountFeeYear, setEditingDiscountFeeYear] = useState<any>({ name: "", id: "", dis_id: "" });
+    const [updateDiscountFeeYear, setUpdateDiscountFeeYear] = useState<any>({});
     const [updateDiscountData, setUpdateDiscountData] = useState("");
     const [datatoDelete, setdatatoDelete] = useState<any>({});
     const [duplication, setDuplication] = useState(false);
@@ -37,12 +37,16 @@ const Discountfee = () => {
         setShow(true);
     };
 
-    useEffect(() => {
-        setEditingDiscountFeeYear({
+    const callToUpdate = () =>{
+        setUpdateDiscountFeeYear({
             name: updateDiscountData,
             id: editingDiscountFeeYear.id,
             dis_id: editingDiscountFeeYear.dis_id,
         });
+    }
+    
+    useEffect(() => {
+        callToUpdate();
     }, [updateDiscountData]);
 
     const deleteParticularDiscount = (id: any, index: any) => {
@@ -85,7 +89,7 @@ const Discountfee = () => {
             });
         } else {
             axios
-                .put(`${baseUrl}discount_type_masters/update`, { dis_feetype_id: editingDiscountFeeYear.dis_id, dis_feetype_name: editingDiscountFeeYear.name })
+                .put(`${baseUrl}discount_type_masters/update`, { dis_feetype_id: updateDiscountFeeYear.dis_id, dis_feetype_name: updateDiscountFeeYear.name })
                 .then((res: any) => {
                     console.log(res.data);
                     toast.success("Discount Fee Type Master Updated", {
@@ -175,7 +179,7 @@ const Discountfee = () => {
         } else {
             try {
                 getAccessToken();
-                const res: any = await axios.post(`${baseUrl}discount_type_masters/create`, { dis_feetype_name: discountFeeTypeName }).then((res: any) => {
+                await axios.post(`${baseUrl}discount_type_masters/create`, { dis_feetype_name: discountFeeTypeName }).then((res: any) => {
                     console.log(res.data);
                     toast.success("Discount Fee Type Master Added", {
                         position: "top-right",
@@ -212,7 +216,7 @@ const Discountfee = () => {
                                 <div className="col-xl-11 m-auto">
                                     <div className="col-lg-10" style={{ marginLeft: "10%", width: "90%" }}>
                                         <div className="card mb-3">
-                                            <a style={{ color: "rgb(230, 39, 39)" }}>
+                                            <div style={{ color: "rgb(230, 39, 39)" }}>
                                                 <div className="card-header mb-4 bg-transparent border-1 text-center">
                                                     <h4 className="mb-0 ">
                                                         <i className="far fa-clone pr-1"></i> Discount Fee Type Master
@@ -235,7 +239,7 @@ const Discountfee = () => {
                                                         )}
                                                     </div>
                                                 </div>
-                                            </a>
+                                            </div>
                                             {!statusDiscountfeeAdd ? (
                                                 <div className="card-body">
                                                     <div>
@@ -343,7 +347,7 @@ const Discountfee = () => {
                                                                                                 textAlign: "center",
                                                                                             }}
                                                                                         >
-                                                                                           No Data Found
+                                                                                            No Data Found
                                                                                         </td>
                                                                                     </tr>
                                                                                 </>

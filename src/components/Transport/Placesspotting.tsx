@@ -10,21 +10,22 @@ import "react-toastify/dist/ReactToastify.css";
 
 const Placesspotting = () => {
     //Academic Year
-    const [statusAcademicYearEdit, setStatusAcademicYearEdit] = useState(false);
     const [statusAcademicYearAdd, setStatusAcademicYearAdd] = useState(false);
     const [FromAcdYear, setFromAcdYear] = useState<any[]>([]);
     const [acdYear, setAcdYear] = useState<any>({ fromYear: "", toYear: 0 });
     const [allAcademicYear, setAllAcademicYear] = useState<any[]>([]);
     const [datatoDelete, setdatatoDelete] = useState<any>({});
 
+    console.log(FromAcdYear)
+
     // Transport places
     const placesList = [
-        { place: "namakkal", stopping:'4 road - namakkal' ,price: "4500" },
-        { place: "namakkal", stopping:'bustand - namakkal' ,price: "4500" },
-        { place: "paramathi-velur", stopping:'bustand - paramathi-velur' ,price: "4500" },
-        { place: "paramathi-velur", stopping:'pipe pass road' ,price: "4500" },
-        { place: "velur",  stopping:'Super Market' , price: "2500" },
-        { place: "velur",  stopping:'Sps press' ,price: "3500" },
+        {year:'2021-2022',place: "namakkal", stopping:'4 road - namakkal' ,price: "4500" },
+        {year:'2021-2022', place: "namakkal", stopping:'bustand - namakkal' ,price: "4500" },
+        {year:'2021-2022', place: "paramathi-velur", stopping:'bustand - paramathi-velur' ,price: "4500" },
+        {year:'2021-2022', place: "paramathi-velur", stopping:'pipe pass road' ,price: "4500" },
+        {year:'2021-2022', place: "velur",  stopping:'Super Market' , price: "2500" },
+        {year:'2021-2022', place: "velur",  stopping:'Sps press' ,price: "3500" },
     ];
 
     //Modal Popup
@@ -37,9 +38,9 @@ const Placesspotting = () => {
         setShow(false);
         setdatatoDelete({});
     };
-    const handleShow = () => {
-        setShow(true);
-    };
+    // const handleShow = () => {
+    //     setShow(true);
+    // };
 
     const callTheYearUpdater = () => {
         console.log(new Date().getFullYear());
@@ -105,7 +106,7 @@ const Placesspotting = () => {
         e.preventDefault();
         try {
             getAccessToken();
-            const res: any = await axios.post(`${baseUrl}academic_year/new_academic_year`, { academic_year: `${acdYear.fromYear}-${acdYear.toYear}` }).then((res: any) => {
+            await axios.post(`${baseUrl}academic_year/new_academic_year`, { academic_year: `${acdYear.fromYear}-${acdYear.toYear}` }).then((res: any) => {
                 console.log(res.data);
                 if (res.data.year_id) {
                     toast.success("Year Added Successfully", {
@@ -149,7 +150,7 @@ const Placesspotting = () => {
                                 <div className="col-xl-11 m-auto">
                                     <div className="col-lg-10" style={{ marginLeft: "10%", width: "90%" }}>
                                         <div className="card mb-3">
-                                            <a style={{ color: "rgb(230, 39, 39)" }}>
+                                            <div style={{ color: "rgb(230, 39, 39)" }}>
                                                 <div className="card-header mb-4 bg-transparent border-1 text-center">
                                                     <h4 className="mb-0 ">
                                                         <i className="far fa-clone pr-1"></i>Places & Spottings
@@ -164,7 +165,7 @@ const Placesspotting = () => {
                                                         )}
                                                     </div>
                                                 </div>
-                                            </a>
+                                            </div>
                                             {!statusAcademicYearAdd ? (
                                                 <div className="card-body">
                                                     <div className="table-responsive">
@@ -186,13 +187,16 @@ const Placesspotting = () => {
                                                                             S.No.
                                                                         </th>
                                                                         <th className="sorting" style={{ width: "114px" }}>
+                                                                            Year
+                                                                        </th>
+                                                                        <th className="sorting" style={{ width: "114px" }}>
                                                                             Places
                                                                         </th>
                                                                         <th className="sorting" style={{ width: "114px" }}>
                                                                             Stoppings
                                                                         </th>
                                                                         <th className="sorting" style={{ width: "114px" }}>
-                                                                            Price
+                                                                            Term Fees
                                                                         </th>
                                                                         <th className="sorting" style={{ width: "63px" }}>
                                                                             Actions
@@ -205,6 +209,7 @@ const Placesspotting = () => {
                                                                             return (
                                                                                 <tr key={index}>
                                                                                     <td>{index + 1}</td>
+                                                                                    <td>{values.year}</td>
                                                                                     <td>{values.place}</td>
                                                                                     <td>{values.stopping}</td>
                                                                                     <td>{values.price}</td>
@@ -280,7 +285,17 @@ const Placesspotting = () => {
                                                 <div>
                                                     <Container>
                                                         <Row className="justify-content-md-center">
-                                                            <Col md="4">
+                                                        <Col md="3">
+                                                                <Form.Group className="mb-3" controlId="formBasicEmail">
+                                                                    <Form.Label>Academic year</Form.Label>
+                                                                    <Form.Select>
+                                                                        <option value="25">2021-2022</option>
+                                                                        <option value="30">2022-2023</option>
+                                                                        <option value="35">2023-2024</option>
+                                                                    </Form.Select>
+                                                                </Form.Group>
+                                                            </Col>
+                                                            <Col md="3">
                                                                 <Form.Group className="mb-3" controlId="formBasicEmail">
                                                                     <Form.Label>Place</Form.Label>
                                                                     <Form.Select>
@@ -290,13 +305,13 @@ const Placesspotting = () => {
                                                                     </Form.Select>
                                                                 </Form.Group>
                                                             </Col>
-                                                            <Col md="4">
+                                                            <Col md="3">
                                                                 <Form.Group className="mb-3" controlId="formBasicEmail">
-                                                                    <Form.Label>Price</Form.Label>
+                                                                    <Form.Label>Term Fees</Form.Label>
                                                                     <Form.Control type="text" placeholder="" value="4500" disabled />
                                                                 </Form.Group>
                                                             </Col>
-                                                            <Col md="4">
+                                                            <Col md="3">
                                                                 <Form.Group className="mb-3" controlId="formBasicEmail">
                                                                     <Form.Label>Place Stoppings</Form.Label>
                                                                     <Form.Control type="number" placeholder="" value="" />
