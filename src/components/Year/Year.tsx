@@ -44,7 +44,7 @@ const Year = () => {
 	const getAllAcademicYear = () => {
 		getAccessToken();
 		axios
-			.get(`${baseUrl}academic_year/show`)
+			.get(`${baseUrl}year`)
 			.then((res: any) => {
 				console.log(res.data.academic_years);
 				setAllAcademicYear(res.data.academic_years);

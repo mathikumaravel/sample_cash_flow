@@ -16,6 +16,10 @@ const Login = (props: any) => {
 	const notify = () => toast("Wow so easy!");
 
 	useEffect(() => {
+		if(sessionStorage.getItem("AccessToken")){
+			history.push("/studentrecord");
+		}
+
 		const unloadCallback = (event: any) => {
 			event.preventDefault();
 			event.returnValue = "";
@@ -23,6 +27,7 @@ const Login = (props: any) => {
 		};
 		window.addEventListener("beforeunload", unloadCallback);
 		return () => window.removeEventListener("beforeunload", unloadCallback);
+	
 	}, []);
 
 	const handleSubmit = async (e: any) => {
@@ -51,7 +56,7 @@ const Login = (props: any) => {
 			}
 		} else {
 			try {
-				const res: any = await axios.post(`${baseUrl}sessions/login`, { email: username, password: password }).then((res: any) => {
+				const res: any = await axios.post(`${baseUrl}login`, { email: username, password: password }).then((res: any) => {
 					console.log(res);
                     toast.success('Welcome', {
                         position: "top-right",
@@ -62,7 +67,7 @@ const Login = (props: any) => {
                         draggable: true,
                         progress: undefined,
                         });
-					localStorage.setItem("AccessToken", res.data.auth_token);
+					sessionStorage.setItem("AccessToken", res.data.token);
 					history.push("/studentrecord");
 				});
 			} catch (err: any) {
