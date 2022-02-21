@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Sidebar from "../Layouts/Sidebar";
 import Navbar from "../Layouts/Navbar";
-import { Button, Table, Pagination, Form, Spinner, Modal, Col, Row } from "react-bootstrap";
+import { Button, Table, Form, Spinner, Modal, Col, Row } from "react-bootstrap";
 import { getAccessToken } from "../../config/getAccessToken";
 import axios from "axios";
 import { baseUrl } from "../../index";
@@ -10,7 +10,6 @@ import "react-toastify/dist/ReactToastify.css";
 import _ from "lodash";
 
 const Feemaster = () => {
-	const [statusFeeMasterEdit, setStatusFeeMasterEdit] = useState<any>(false);
 	const [statusFeeMasterAdd, setStatusFeeMasterAdd] = useState<any>(false);
 
 	const [feeTypeName, setFeeTypeName] = useState<any>("");
@@ -128,7 +127,7 @@ const Feemaster = () => {
 		} else {
 			try {
 				getAccessToken();
-				const res: any = await axios
+				await axios
 					.post(`${baseUrl}fee_master/create`, {
 						academic_year: null,
 						fee_type_name: feeTypeName,
@@ -164,7 +163,7 @@ const Feemaster = () => {
 			<ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
 			<div id="page-top">
 				<div id="wrapper">
-					<Sidebar></Sidebar>
+					<Sidebar data={"Fee_master"}></Sidebar>
 					<div id="content-wrapper" className="d-flex flex-column">
 						<div id="content">
 							<Navbar></Navbar>
@@ -173,7 +172,7 @@ const Feemaster = () => {
 									<div>
 										<div className="col-lg-10" style={{ marginLeft: "10%", width: "90%" }}>
 											<div className="card mb-3">
-												<a style={{ color: "rgb(230, 39, 39)" }}>
+												<div style={{ color: "rgb(230, 39, 39)" }}>
 													<div className="card-header mb-4 bg-transparent border-1 text-center">
 														<h4 className="mb-0 ">
 															<i className="far fa-clone pr-1"></i> Fee Master
@@ -186,7 +185,7 @@ const Feemaster = () => {
 															) : null}
 														</div>
 													</div>
-												</a>
+												</div>
 												{!statusFeeMasterAdd ? (
 													<div className="card-body">
 														<div className="table-responsive">
@@ -259,7 +258,7 @@ const Feemaster = () => {
 															</div>
 														</div>
 														<div style={{ marginLeft: "10%" }}>
-															<Pagination>
+															{/* <Pagination>
 																<Pagination.First />
 																<Pagination.Prev />
 																<Pagination.Item>{1}</Pagination.Item>
@@ -275,7 +274,7 @@ const Feemaster = () => {
 																<Pagination.Item>{20}</Pagination.Item>
 																<Pagination.Next />
 																<Pagination.Last />
-															</Pagination>
+															</Pagination> */}
 														</div>
 
 														<Modal show={show} onHide={SuddenhandleClose}>

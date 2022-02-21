@@ -34,7 +34,7 @@ const StudentprofileSearch = () => {
 		setIsComponentVisible(true);
 		setSearch({ suggestions, text: value });
 	};
-
+	
 	const suggestionSelected = (value: any) => {
 		setIsComponentVisible(false);
 
@@ -56,6 +56,7 @@ const StudentprofileSearch = () => {
     useEffect(()=>{
         searchData();
     },[])
+	
   
 	const searchedit = () => {
 		axios
@@ -136,18 +137,24 @@ const StudentprofileSearch = () => {
 																			    	float:'right',
 																					alignItems:'center'
 																				}}></i>
-
-																			<i
-																				className="fa fa- btn" 
+																				<Button variant="white" style={{
+																			    	float:'right',
+																					alignItems:'center',	
+																					marginTop:'1%'
+																				}}><i
+																				className="fa fa-times" 
 																				onClick={() => setStatusStudentEdit(false)}
 																				style={{
+																					height:'100%',
 																					fontSize: "25px",
 																					color: "red",
 																					cursor: "pointer",
 																					display:'grid',
 																			    	float:'right',
 																					alignItems:'center'
-																				}}>X</i>
+																				}}></i></Button>
+
+																		
 																		</>
 																	)}
 																</h4>

@@ -7,6 +7,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Button } from "react-bootstrap";
 
+
 const Login = (props: any) => {
 	let history = useHistory<any>();
 
@@ -69,6 +70,7 @@ const Login = (props: any) => {
                         });
 					sessionStorage.setItem("AccessToken", res.data.token);
 					history.push("/studentrecord");
+
 				});
 			} catch (err: any) {
 				console.log(err.response.data.error_message);
@@ -84,6 +86,8 @@ const Login = (props: any) => {
 			}
 		}
 	};
+
+
 
 	return (
 		<div className="container">
