@@ -1,14 +1,13 @@
-import { useState } from "react";
 import Sidebar from "../Layouts/Sidebar";
 import Navbar from "../Layouts/Navbar";
-import { Button, Table, Pagination, Form, Col, Row } from "react-bootstrap";
+import { Button, Table, Pagination, Form} from "react-bootstrap";
 
 const Promotion = () => {
 
   return (
     <div id="page-top">
       <div id="wrapper">
-        <Sidebar></Sidebar>
+        <Sidebar data={"Stupro"}></Sidebar>
         <div className="d-flex flex-column">
           <div id="content">
             <Navbar></Navbar>
