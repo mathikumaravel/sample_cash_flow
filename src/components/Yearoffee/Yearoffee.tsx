@@ -23,7 +23,6 @@ const Yearoffee = () => {
     const [feeTypeName, setFeeTypeName] = useState("");
     const [addGrade, setAddGrade] = useState("");
     const [amount, setFinalAmount] = useState("");
-
     const [searchAcademicYear, setSearchAcademicYear] = useState("");
     const [searchGrade, setSearchGrade] = useState("");
 
@@ -31,6 +30,8 @@ const Yearoffee = () => {
     const [updateYearOfFee, setUpdateYearOfFee] = useState<any>("");
     const [datatoDelete, setdatatoDelete] = useState<any>({});
     const [duplication, setDuplication] = useState(false);
+    const [finalAcademicYr, setFinalAcademicYr] = useState<any[]>([]);
+
 
     console.log(editingYearOfFee);
 
@@ -53,20 +54,39 @@ const Yearoffee = () => {
 
     const getAllGradeSectionData = () => {
         getAccessToken();
-        axios.get(`${baseUrl}grade_section/show_all?page=1&per_page=100`).then((response: AxiosResponse) => {
-            setGradeSectionList(response.data.grade_sections);
+        axios.get(`${baseUrl}gradeSection`).then((response: AxiosResponse) => {
+
+            setGradeSectionList(response.data);
         });
     };
 
+    console.log(gradeSectionList)
     const getAllFeeMasterData = () => {
         getAccessToken();
-        axios.get(`${baseUrl}fee_master/show_all?page=1&per_page=100`).then((response: AxiosResponse) => {
-            setAllFeeMaster(response.data.fee_masters);
+        axios.get(`${baseUrl}year`).then((response: AxiosResponse) => {
+            setAllFeeMaster(response.data);
         });
     };
 
-    //console.log(feeMaster)
+    // console.log(feeMaster)
 
+
+    function YearId( gradedata:any ) {
+        var matchedyearid:any = feeMaster && feeMaster.length && feeMaster.filter(  
+          (data) => data.year_id === gradedata.academic_year_id
+        );
+        let combindobject = {...gradedata,...matchedyearid[0]};
+       
+       finalAcademicYr.push(combindobject);
+      console.log(finalAcademicYr);
+       setFinalAcademicYr(finalAcademicYr)
+       console.log(matchedyearid); 
+      }
+
+      gradeSectionList && gradeSectionList.length && gradeSectionList.map((data:any) => {
+        YearId(data);
+    });
+   
     useEffect(() => {
         getAllGradeSectionData();
         getAllFeeMasterData();
@@ -76,13 +96,13 @@ const Yearoffee = () => {
         if (gradeSectionList && gradeSectionList.length) {
             let mySet1 = new Set();
             gradeSectionList.forEach((element: any) => {
-                mySet1.add(element.academic_year);
+                mySet1.add(element.academic_year_id);
             });
             setFeeMasterFinal([...mySet1]);
-            handleSearch(gradeSectionList, gradeSectionList[0].academic_year);
-            handleHomeSearch(gradeSectionList, gradeSectionList[0].academic_year);
+            handleSearch(gradeSectionList, gradeSectionList[0].academic_year_id);
+            handleHomeSearch(gradeSectionList, gradeSectionList[0].academic_year_id);
         }
-        console.log(gradeSectionList);
+        // console.log(gradeSectionList);  
     }, [gradeSectionList]);
 
     //	console.log(feeMasterFinal);
@@ -113,7 +133,7 @@ const Yearoffee = () => {
         console.log(feeMaster);
         setFeeTypeName("");
         let mySet1 = new Set();
-        let resultData = gradeSectionList.filter((obj: any) =>
+        let resultData = gradeSectionList.filter((obj: any) => 
             Object.values(obj)
                 .flat()
                 .some((v) => `${v}`.toLowerCase().includes(`${searchInput}`.toLowerCase()))
@@ -134,7 +154,7 @@ const Yearoffee = () => {
         setSearchGrade("");
         setSearchAcademicYear(searchInput);
         let mySet1 = new Set();
-        let resultData = gradeSectionList.filter((obj: any) =>
+        let resultData = gradeSectionList.filter((obj: any) => 
             Object.values(obj)
                 .flat()
                 .some((v) => `${v}`.toLowerCase().includes(`${searchInput}`.toLowerCase()))

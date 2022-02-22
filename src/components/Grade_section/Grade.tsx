@@ -21,6 +21,7 @@ const Grade = () => {
     const [datatoDelete, setdatatoDelete] = useState<any>({});
     const [spinnerLoad, setSpinnerLoad] = useState<any>(true);
     const [duplication, setDuplication] = useState(false);
+    let [finalAcademicYr, setFinalAcademicYr] = useState<any[]>([]);
 
     //Pagination
     const [currentPage, setCurrentPage] = useState(1);
@@ -29,8 +30,7 @@ const Grade = () => {
     const [createButtons, setCreateButtons] = useState<any[]>([]);
     const [pageToMove, setPageToMove] = useState(currentPage);
 
-    console.log(createButtons);
-
+ 
     //Modal Popup
     const [show, setShow] = useState(false);
     const handleClose = () => {
@@ -46,22 +46,23 @@ const Grade = () => {
     };
 
     const getAllGradeSectionData = () => {
-        axios.get(`${baseUrl}grade_section/show_all?page=${currentPage}&per_page=${perPage}`).then((response: AxiosResponse) => {
+
+        axios.get(`${baseUrl}gradeSection?page=${currentPage}&per_page=${perPage}`).then((response: AxiosResponse) => {
             setSpinnerLoad(false);
-            setStatusList(response.data.grade_sections);
+            setStatusList(response.data.data);
             setCurrentPage(response.data.page);
             setTotalButtons(response.data.total_page);
         });
     };
-
     useEffect(() => {
         getAccessToken();
         getAllGradeSectionData();
         getAllAcademicYear()
             .then((res: any) => {
-                setAllAcademicYear(res.data.academic_years);
-                setAcademic_year_data(res.data.academic_years[0].academic_year);
-                console.log(res.data);
+                setAllAcademicYear(res.data.data);
+                // console.log(res.data.data);
+                setAcademic_year_data(res.data.data[0].year_id);
+                // console.log(res.data);
             })
             .catch((e: any) => {
                 console.log(e);
@@ -107,20 +108,34 @@ const Grade = () => {
             setDuplication(false);
         } else {
             clickedGrade.forEach((element: any) => {
-                let sendData = { academic_year: academic_year_data, grade: element, section: academic_section };
+                let sendData = { academic_year_id: academic_year_data, grade: element, section: academic_section };
                 getAccessToken();
-                axios.post(`${baseUrl}grade_section/create`, sendData).then((res: any) => {
-                    toast.success(`${res.data.academic_year}-${res.data.grade}-${res.data.section} Added`, {
+                axios.post(`${baseUrl}gradeSection`, sendData).then((res: any) => {
+                    console.log(res.data.data)
+                    if(res.data.data.IsExsist === false){
+                        toast.success(`${res.data.academic_year}-${res.data.data.data.grade}-${res.data.data.data.section} Added`, {
+                            position: "top-right",
+                            autoClose: 3000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        });
+                    }
+                    
+                 else if (res.data.data.IsExsist === true){
+                    toast.warning(`Data Already Added`, {
                         position: "top-right",
-                        autoClose: 3000,
+                        autoClose: 5000,
                         hideProgressBar: false,
                         closeOnClick: true,
                         pauseOnHover: true,
                         draggable: true,
                         progress: undefined,
                     });
-                    console.log(res.data.section)
-                    setStatusList([]);
+                 }
+                     setStatusList([]);
                     getAllGradeSectionData();
                     setDuplication(false)
                 }).catch((err:any)=>{
@@ -129,30 +144,41 @@ const Grade = () => {
             });
             setStatusGradeAdd(false);
             setClickedGrade([]);
-            setAcademic_year_data(allAcademicYear[0].academic_year);
+            setAcademic_year_data(allAcademicYear[0].year_id);
             setAcademic_section("");
         }
     };
-
     const deleteSection = (gradeid: any, index: any) => {
         setSpinnerLoad(true);
         getAccessToken();
         axios
-            .delete(`${baseUrl}grade_section/delete?`, { data: { id: gradeid } })
+            .delete(`${baseUrl}gradeSection?`, { data: { grade_section_id: gradeid } })
             .then((res: any) => {
-                toast.success("Grade & Section Deleted Successfully", {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
+                if(res.data.data.isDeletable === true){
+                    toast.success("Grade & Section Deleted Successfully", {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                }
+                else if (res.data.data.isDeletable === false){
+                    toast.warning(`Data Exist in Year of Fee Master`, {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+              }
                 setStatusList([]);
                 getAllGradeSectionData();
-                console.log(res.data);
-            })
+             })
             .catch((e) => {
                 toast.error("Grade & Section Deletion Error", {
                     position: "top-right",
@@ -165,7 +191,6 @@ const Grade = () => {
                 });
             });
     };
-
     const callTheAddGrade = (value: any) => {
         let newArr = clickedGrade;
         if (clickedGrade.includes(value)) {
@@ -179,8 +204,7 @@ const Grade = () => {
         }
         setClickedGrade(newArr);
     };
-    console.log(clickedGrade);
-
+ 
     const timeToCreateButtons = () => {
         let items: any[] = [];
         for (let number = 1; number <= totalButtons; number++) {
@@ -200,8 +224,7 @@ const Grade = () => {
         setCreateButtons(items);
     };
 
-    console.log(pageToMove);
-
+ 
     useEffect(() => {
         timeToCreateButtons();
     }, [totalButtons]);
@@ -209,6 +232,33 @@ const Grade = () => {
     useEffect(() => {
         getAllGradeSectionData();
     }, [perPage, pageToMove]);
+
+   
+
+    // console.log(allAcademicYear);
+    // console.log(statusList);
+    // console.log();
+    function YearId( gradedata:any ) {
+        var matchedyearid:any = allAcademicYear && allAcademicYear.length && allAcademicYear.filter(  
+          (data) => data.year_id === gradedata.academic_year_id
+        );
+        let combindobject = {...gradedata,...matchedyearid[0]};
+       console.log(combindobject); 
+       finalAcademicYr.push(combindobject);
+      // console.log(finalAcademicYr);
+       setFinalAcademicYr(finalAcademicYr)
+      }
+    
+    //setFinalAcademicYr(tempArr)
+    
+    useEffect(()=>{
+        finalAcademicYr =[]
+        statusList && statusList.length && statusList.map((data:any) => {
+            YearId(data);
+        });
+    },[statusList])
+  
+    
 
     return (
         <div>
@@ -272,14 +322,17 @@ const Grade = () => {
                                                                         >
                                                                             <Spinner animation="border" variant="danger" />
                                                                         </td>
-                                                                    ) : statusList && statusList.length ? (
-                                                                        statusList.map((data: any, index: any) => {
+                                                                         
+                                                                    ) : finalAcademicYr && finalAcademicYr.length ? (
+                                                                        finalAcademicYr.map((data: any, index: any) => {
                                                                             return (
                                                                                 <tr>
                                                                                     <td className="sorting_1" key={index}>
                                                                                         {index + 1}
                                                                                     </td>
-                                                                                    <td>{data.academic_year}</td>
+                                                                                    <td>{
+                                                                                        
+                                                                                    data.academic_year}</td>
                                                                                     <td>{data.grade}</td>
                                                                                     <td>{data.section}</td>
                                                                                     <td>
@@ -292,7 +345,7 @@ const Grade = () => {
                                                                                                 // );
                                                                                                 setdatatoDelete({
                                                                                                     index: index,
-                                                                                                    year: `${data.academic_year} - ${data.grade} - ${data.section}`,
+                                                                                                    year: `${data.academic_year_id} - ${data.grade} - ${data.section}`,
                                                                                                     id: data.grade_section_id,
                                                                                                 });
                                                                                                 handleShow();
@@ -416,8 +469,9 @@ const Grade = () => {
                                                                         {allAcademicYear &&
                                                                             allAcademicYear.length &&
                                                                             allAcademicYear.map((values: any, index: any) => {
-                                                                                return <option value={values.academic_year}>{values.academic_year}</option>;
+                                                                                return <option value={values.year_id}>{values.academic_year}</option>;
                                                                             })}
+                                                                             
                                                                     </Form.Select>
                                                                 </Col>
                                                             </Form.Group>
@@ -444,7 +498,7 @@ const Grade = () => {
                                                                                 key={index}
                                                                                 value={romanvalues}
                                                                                 onChange={(e: any) => {
-                                                                                    console.log(e.target.value);
+                                                                                    
                                                                                     callTheAddGrade(e.target.value);
                                                                                 }}
                                                                                 id={`inline-checkbox-${index}`}
@@ -485,7 +539,7 @@ const Grade = () => {
                                                                     setStatusGradeAdd(false);
                                                                     setClickedGrade([]);
                                                                     setAcademic_section("");
-                                                                    setAcademic_year_data(allAcademicYear[0].academic_year);
+                                                                    setAcademic_year_data(allAcademicYear[0].year_id);
                                                                 }}
                                                             >
                                                                 Cancel
