@@ -9,6 +9,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useHistory, useLocation } from "react-router-dom";
 
+
 const Year = () => {
 	//Academic Year
 	const [statusAcademicYearEdit, setStatusAcademicYearEdit] = useState(false);
@@ -61,7 +62,7 @@ const Year = () => {
 	const handleShow = () => {
 		setShow(true);
 	};
-	const dataSearch: any =
+	const dataSearch:any =
 		allAcademicYear &&
 		allAcademicYear.length &&
 		allAcademicYear.sort().filter((data: any) => {
@@ -143,43 +144,61 @@ else if(res.data.data.isDeletable === false){
 
 	const handleSubmit = async (e: any) => {
 		e.preventDefault();
-		try {
-			getAccessToken();
-			const res: any = await axios
-				.post(`${baseUrl}year`, {
-					academic_year: `${acdYear.fromYear}-${acdYear.toYear}`,
-				})
-				.then((res: any) => {
-					console.log(res.data);
-					if (res.data.data.insertId) {
-						toast.success("Year Added Successfully", {
-							position: "top-right",
-							autoClose: 5000,
-							hideProgressBar: false,
-							closeOnClick: true,
-							pauseOnHover: true,
-							draggable: true,
-							progress: undefined,
-						});
-					} else {
-						toast.warning("Year Already Added", {
-							position: "top-right",
-							autoClose: 5000,
-							hideProgressBar: false,
-							closeOnClick: true,
-							pauseOnHover: true,
-							draggable: true,
-							progress: undefined,
-						});
-					}
-					getAllAcademicYear();
-					setStatusAcademicYearAdd(false);
-					setDuplication(false);
-				});
-		} catch (err) {
-			setDuplication(false);
-			alert("Error");
+		alert(acdYear.fromYear.length)
+		if(acdYear.fromYear && acdYear.fromYear.length == 0){
+		
 		}
+		else if(acdYear.fromYear && acdYear.fromYear.length >3){
+			try {
+				getAccessToken();
+				const res: any = await axios
+					.post(`${baseUrl}year`, {
+						academic_year: `${acdYear.fromYear}-${acdYear.toYear}`,
+					})
+					.then((res: any) => {
+						console.log(res.data);
+						if (res.data.data.insertId) {
+							toast.success("Year Added Successfully", {
+								position: "top-right",
+								autoClose: 5000,
+								hideProgressBar: false,
+								closeOnClick: true,
+								pauseOnHover: true,
+								draggable: true,
+								progress: undefined,
+							});
+						} else {
+							toast.warning("Year Already Added", {
+								position: "top-right",
+								autoClose: 5000,
+								hideProgressBar: false,
+								closeOnClick: true,
+								pauseOnHover: true,
+								draggable: true,
+								progress: undefined,
+							});
+						}
+						getAllAcademicYear();
+						setStatusAcademicYearAdd(false);
+						setDuplication(false);
+					});
+			} catch (err) {
+				setDuplication(false);
+				alert("Error");
+			}
+		}
+	  else {
+		toast.warning("From Year Not Found", {
+			position: "top-right",
+			autoClose: 5000,
+			hideProgressBar: false,
+			closeOnClick: true,
+			pauseOnHover: true,
+			draggable: true,
+			progress: undefined,
+		});
+		setDuplication(false);
+	}
 	};
 
 	return (
@@ -403,6 +422,7 @@ else if(res.data.data.isDeletable === false){
 																		value={acdYear.fromYear}
 																		type="number"
 																		placeholder="Academic_Year"
+																		
 																	/>
 
 																	{/* {FromAcdYear &&

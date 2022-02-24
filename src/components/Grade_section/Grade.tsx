@@ -245,13 +245,14 @@ const Grade = () => {
         let combindobject = {...gradedata,...matchedyearid[0]};
        console.log(combindobject); 
        finalAcademicYr.push(combindobject);
-      // console.log(finalAcademicYr);
+      console.log(finalAcademicYr);
        setFinalAcademicYr(finalAcademicYr)
       }
     
     //setFinalAcademicYr(tempArr)
     
     useEffect(()=>{
+        
         finalAcademicYr =[]
         statusList && statusList.length && statusList.map((data:any) => {
             YearId(data);
@@ -330,9 +331,7 @@ const Grade = () => {
                                                                                     <td className="sorting_1" key={index}>
                                                                                         {index + 1}
                                                                                     </td>
-                                                                                    <td>{
-                                                                                        
-                                                                                    data.academic_year}</td>
+                                                                                    <td>{data.academic_year}</td>
                                                                                     <td>{data.grade}</td>
                                                                                     <td>{data.section}</td>
                                                                                     <td>

@@ -147,7 +147,7 @@ const Feemaster = () => {
 				getAccessToken();
 				await axios
 					.post(`${baseUrl}feeMaster`, {
-						academic_year: null,
+						 
 						fee_type_name: feeTypeName,
 						order_id: orderId,
 					})

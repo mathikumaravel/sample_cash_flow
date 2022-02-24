@@ -57,18 +57,37 @@ const Discountfee = () => {
         axios
             .delete(`${baseUrl}discountfee?`, { data: { dis_feetype_id: id } })
             .then((res: any) => {
-                toast.success("Deleted Successfully", {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
+                if(res.data.data.isDeletable == true){
+                    toast.success("Deleted Successfully", {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                }
+                else if(res.data.data.isDeletable === false){
+                    toast.warning("Fee Discount Type already Existing", {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                
+                    });
+                    setSpinnerLoad(false);
+                    setdatatoDelete({});
+                
+                }
+              
                 DiscountFeeTypeName(newArrVal);
                 setdatatoDelete({});
             })
+            
             .catch((e: any) => {
                 console.log(e);
             });
