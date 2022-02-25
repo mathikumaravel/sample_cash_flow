@@ -22,7 +22,7 @@ const Studentadd = () => {
     const [academicYear, setAcademicYear] = useState<any>("");
     const [toGrade, setToGrade] = useState<any>("");
     const [admissionDate, setAdmissiondate] = useState<any>(new Date());
-    const [toSection, setToSection] = useState<any>("");
+    const [toSection, setToSection] = useState<any>({});
     const [previousSchoolInfo, setPreviousSchoolInfo] = useState<any>("");
     const [fatherName, setFatherName] = useState<any>("");
     const [fatherOccupation, setFatherOccupation] = useState<any>("");
@@ -73,23 +73,37 @@ const Studentadd = () => {
             e.stopPropagation();
         }
         setValidated(true);
-
+          // student_name: studentName,
+            // DOB: dateofBirth,
+            // gender: gender,
+            // email: email,
+            // admission_date: moment(admissionDate).format("L"),
+            // grade_id:45,
+            // previous_school_info: previousSchoolInfo,
+            // father_name: fatherName,
+            // father_occupation: fatherOccupation,
+            // address: address,
+            // phone_number: phoneNo,
+            // alt_phone_number: alterPhoneno,
+            // admission_no: admissionNo,
+            // from_grade_id: fromGrade,
+            // student_type: "DaysScholer",
         Axios.post(`${baseUrl}newAdmission`, {
-            student_name: studentName,
-            DOB: dateofBirth,
-            gender: gender,
-            email: email,
-            admission_date: moment(admissionDate).format("DD-MM-YYYY"),
-            grade_id: toSection,
-            previous_school_info: previousSchoolInfo,
-            father_name: fatherName,
-            father_occupation: fatherOccupation,
-            address: address,
-            phone_number: phoneNo,
-            alt_phone_number: alterPhoneno,
-            admission_no: admissionNo,
-            from_grade_id: fromGrade,
-            student_type: "DaysScholer",
+    "student_name":studentName,
+    "DOB":dateofBirth,
+    "gender":gender,
+    "email":email,
+    "admission_date":moment(admissionDate).format("L"),
+    "grade_id":1,
+    "previous_school_info":"asas",
+    "father_name":"Mohan",
+    "father_occupation":"daily wages",
+    "address":"kamachi street",
+    "phone_number":"7856706078",
+    "alt_phone_number":"7856706078",
+    "admission_no":17,
+    "from_grade_id":"IV",
+    "student_type":"Hostal"
         })
             .then((response: any) => {
                 console.log(response);
@@ -111,9 +125,7 @@ const Studentadd = () => {
     //         setAlterPhoneno(e.target.value);
     //     }
     // };
-    const grade = (newArrval: any) => {
-        setYear([...newArrval]);
-    };
+  
     useEffect(() => {
         getAccessToken();
         Axios.get(`${baseUrl}gradeSection`)
