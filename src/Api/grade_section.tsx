@@ -5,10 +5,10 @@ import {baseUrl} from "../index"
 
 export const getAllGradeSectionShow = () => {
         getAccessToken();
-      return  axios.get(`${baseUrl}academic_year/show`)  
+      return  axios.get(`${baseUrl}gradeSection`)  
 };
 
 export const getAllGradeSectionAdd = () => {
         //getAccessToken();
-      return  axios.post(`${baseUrl}grade_section/create`)  
+      return  axios.post(`${baseUrl}gradeSection`)  
 };

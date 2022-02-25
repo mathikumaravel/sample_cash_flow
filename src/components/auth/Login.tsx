@@ -16,6 +16,21 @@ const Login = (props: any) => {
 
 	const notify = () => toast("Wow so easy!");
 
+	useEffect(() => {
+		if(sessionStorage.getItem("AccessToken")){
+			history.push("/studentrecord");
+		}
+
+		const unloadCallback = (event: any) => {
+			event.preventDefault();
+			event.returnValue = "";
+			return "";
+		};
+		window.addEventListener("beforeunload", unloadCallback);
+		return () => window.removeEventListener("beforeunload", unloadCallback);
+	
+	}, []);
+
 	const handleSubmit = async (e: any) => {
 		e.preventDefault();
 		if (username.length <= 0 || password <= 0) {
@@ -54,8 +69,11 @@ const Login = (props: any) => {
                         progress: undefined,
                         });
 					sessionStorage.setItem("AccessToken", res.data.token);
-					callToPush();
-				});
+
+					history.push("/studentrecord");
+
+				callToPush(); 
+        });
 			} catch (err: any) {
 				console.log(err.response.data.error_message);
                 toast.error('Incorrect Username and Password', {
@@ -71,6 +89,7 @@ const Login = (props: any) => {
 		}
 	};
 
+
 	const callToPush = () =>{
 		setTimeout(() => {
 			history.push("/studentrecord");
@@ -85,6 +104,7 @@ const Login = (props: any) => {
 			history.push("/studentrecord");
 		}
 	},[])
+
 
 	return (
 		<div className="container">

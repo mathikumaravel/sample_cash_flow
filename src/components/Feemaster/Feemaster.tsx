@@ -38,10 +38,22 @@ const Feemaster = () => {
 		newArrVal.splice(index, 1);
 		getAccessToken();
 		axios
-			.delete(`${baseUrl}fee_master/delete?`, { data: { id: id } })
+			.delete(`${baseUrl}feeMaster?`, { data: { fee_master_id: id } })
 			.then((res: any) => {
 				console.log(res);
-				toast.success("Fee Type Name Deleted", {
+				if(res.data.data.isDeletable === true){
+					toast.success("Fee Type Name Deleted", {
+						position: "top-right",
+						autoClose: 5000,
+						hideProgressBar: false,
+						closeOnClick: true,
+						pauseOnHover: true,
+						draggable: true,
+						progress: undefined,
+					});
+				}
+			else if (res.data.data.isDeletable === false){
+				toast.warning(`Data Exist in Year of Fee Master`, {
 					position: "top-right",
 					autoClose: 5000,
 					hideProgressBar: false,
@@ -50,6 +62,7 @@ const Feemaster = () => {
 					draggable: true,
 					progress: undefined,
 				});
+			}
 				feemastertype(newArrVal);
 				setdatatoDelete({});
 			})
@@ -68,20 +81,25 @@ const Feemaster = () => {
 	};
 
 	const dataSearch: any =
-		getFeeMaster.length &&
+	getFeeMaster && getFeeMaster.length &&
 		getFeeMaster.sort().filter((data: any) => {
 			return Object.keys(data).some((key) => data[key].toString().toLowerCase().includes(filter.toString().toLowerCase()));
 		});
+		// console.log(getFeeMaster);
+
+// console.log(dataSearch);
 
 	const getfee = () => {
 		getAccessToken();
 		axios
-			.get(`${baseUrl}fee_master/show_all`)
+			.get(`${baseUrl}feeMaster`)
 			.then((res: any) => {
-				console.log(res.data);
-				var sortedObjs = _.sortBy(res.data.fee_masters, "order_id");
+				console.log(res.data.data);
+				var sortedObjs = _.sortBy(res.data.data, "order_id");
 				setGetFeeMaster(sortedObjs);
 				setloading(false);
+				console.log(sortedObjs);
+				
 			})
 			.catch((e: any) => {
 				console.log(e);
@@ -96,7 +114,7 @@ const Feemaster = () => {
 		setGetFeeMaster([...newArrVal]);
 	};
 
-	console.log(getFeeMaster);
+	// console.log(getFeeMaster);
 
 	const handleSubmit = async (e: any) => {
 		setDuplication(true);
@@ -128,22 +146,36 @@ const Feemaster = () => {
 			try {
 				getAccessToken();
 				await axios
-					.post(`${baseUrl}fee_master/create`, {
-						academic_year: null,
+					.post(`${baseUrl}feeMaster`, {
+						 
 						fee_type_name: feeTypeName,
 						order_id: orderId,
 					})
 					.then((res: any) => {
 						console.log(res.data);
-						toast.success("Fee Type Name Added", {
-							position: "top-right",
-							autoClose: 5000,
-							hideProgressBar: false,
-							closeOnClick: true,
-							pauseOnHover: true,
-							draggable: true,
-							progress: undefined,
-						});
+						if (res.data.data.IsExsist === false){
+							toast.success("Fee Type Name Added", {
+								position: "top-right",
+								autoClose: 5000,
+								hideProgressBar: false,
+								closeOnClick: true,
+								pauseOnHover: true,
+								draggable: true,
+								progress: undefined,
+							});
+						}
+						else if (res.data.data.IsExsist === true){
+							toast.warning(`Data Already Added`, {
+								position: "top-right",
+								autoClose: 5000,
+								hideProgressBar: false,
+								closeOnClick: true,
+								pauseOnHover: true,
+								draggable: true,
+								progress: undefined,
+							});
+						}
+						
 						getfee();
 						setStatusFeeMasterAdd(false);
 						setDuplication(false);

@@ -21,7 +21,7 @@ const Discountfee = () => {
     const [filter, setfilter] = useState<any>([]);
     const [spinnerLoad, setSpinnerLoad] = useState<any>(true);
 
-    console.log(editingDiscountFeeYear);
+    // console.log(editingDiscountFeeYear);
 
     //Modal Popup
     const [show, setShow] = useState(false);
@@ -37,47 +37,65 @@ const Discountfee = () => {
         setShow(true);
     };
 
-    const callToUpdate = () =>{
+
+    useEffect(() => {
+        // console.log(updateDiscountData);
+        
         setUpdateDiscountFeeYear({
-            name: updateDiscountData,
+            name: updateDiscountData.trim(),
             id: editingDiscountFeeYear.id,
             dis_id: editingDiscountFeeYear.dis_id,
         });
-    }
-    
-    useEffect(() => {
-        callToUpdate();
     }, [updateDiscountData]);
 
+ 
     const deleteParticularDiscount = (id: any, index: any) => {
         setSpinnerLoad(true);
         let newArrVal = getDiscountFeeTypeName;
         newArrVal.splice(index, 1);
         getAccessToken();
         axios
-            .delete(`${baseUrl}discount_type_masters/delete?`, { data: { dis_feetype_id: id } })
+            .delete(`${baseUrl}discountfee?`, { data: { dis_feetype_id: id } })
             .then((res: any) => {
-                toast.success("Deleted Successfully", {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
+                if(res.data.data.isDeletable == true){
+                    toast.success("Deleted Successfully", {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                }
+                else if(res.data.data.isDeletable === false){
+                    toast.warning("Fee Discount Type already Existing", {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                
+                    });
+                    setSpinnerLoad(false);
+                    setdatatoDelete({});
+                
+                }
+              
                 DiscountFeeTypeName(newArrVal);
                 setdatatoDelete({});
             })
+            
             .catch((e: any) => {
                 console.log(e);
             });
     };
 
     const updateDiscountFeeTypeName = () => {
-        delete editingDiscountFeeYear.id;
         getAccessToken();
-        if (editingDiscountFeeYear.name.length <= 0) {
+        if (updateDiscountFeeYear.name.length <= 0) {
             toast.warning("Please Enter A Value", {
                 position: "top-right",
                 autoClose: 5000,
@@ -87,7 +105,9 @@ const Discountfee = () => {
                 draggable: true,
                 progress: undefined,
             });
+            setUpdateDiscountData("");
         } else {
+            delete editingDiscountFeeYear.id;
             axios
                 .put(`${baseUrl}discount_type_masters/update`, { dis_feetype_id: updateDiscountFeeYear.dis_id, dis_feetype_name: updateDiscountFeeYear.name })
                 .then((res: any) => {
@@ -131,15 +151,14 @@ const Discountfee = () => {
         }
     }, [editingDiscountFeeYear]);
 
-    console.log(getDiscountFeeTypeName);
-
+ 
     const getgetDiscountFeeTypeName = () => {
         getAccessToken();
         axios
-            .get(`${baseUrl}discount_type_masters/show_all?page=1&per_page=100`)
+            .get(`${baseUrl}discountfee`)
             .then((res: any) => {
                 console.log(res.data);
-                setGetDiscountFeeTypeName(res.data.discount_type_masters);
+                setGetDiscountFeeTypeName(res.data.data);
                 setSpinnerLoad(false);
             })
             .catch((e: any) => {
@@ -157,7 +176,7 @@ const Discountfee = () => {
     }, []);
 
     const dataSearch: any =
-        getDiscountFeeTypeName.length &&
+    getDiscountFeeTypeName && getDiscountFeeTypeName.length &&
         getDiscountFeeTypeName.sort().filter((data: any) => {
             return Object.keys(data).some((key) => data[key].toString().toLowerCase().includes(filter.toString().toLowerCase()));
         });
@@ -179,17 +198,31 @@ const Discountfee = () => {
         } else {
             try {
                 getAccessToken();
-                await axios.post(`${baseUrl}discount_type_masters/create`, { dis_feetype_name: discountFeeTypeName }).then((res: any) => {
+                await axios.post(`${baseUrl}discountfee`, { dis_feetype_name: discountFeeTypeName }).then((res: any) => {
                     console.log(res.data);
-                    toast.success("Discount Fee Type Master Added", {
-                        position: "top-right",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                    });
+                    if(res.data.data.IsExsist === false){
+                        toast.success("Discount Fee Type Master Added", {
+                            position: "top-right",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        });
+                    }
+                    else if (res.data.data.IsExsist === true){
+                        toast.warning(`Data Already Added`, {
+                            position: "top-right",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        });
+                    }
+                    
                     getgetDiscountFeeTypeName();
                     setStatusDiscountfeeAdd(false);
                     setDuplication(false);
@@ -298,13 +331,22 @@ const Discountfee = () => {
                                                                                                             Update
                                                                                                         </Button>
                                                                                                         {"  "}
+                                                                                                        <Button
+                                                                                                            variant="secondary"
+                                                                                                            onClick={() => {
+                                                                                                                setEditingDiscountFeeYear({});
+                                                                                                                setUpdateDiscountData("");
+                                                                                                            }}
+                                                                                                        >
+                                                                                                            Cancel
+                                                                                                        </Button>
                                                                                                     </td>
                                                                                                 </>
                                                                                             ) : (
                                                                                                 <>
                                                                                                     <td>{values.dis_feetype_name}</td>
                                                                                                     <td>
-                                                                                                        <Button
+                                                                                                        {/* <Button
                                                                                                             variant="primary"
                                                                                                             onClick={() => {
                                                                                                                 setEditingDiscountFeeYear({
@@ -315,7 +357,7 @@ const Discountfee = () => {
                                                                                                             }}
                                                                                                         >
                                                                                                             Edit
-                                                                                                        </Button>
+                                                                                                        </Button> */}
                                                                                                         {"  "}
                                                                                                         <Button
                                                                                                             variant="danger"
