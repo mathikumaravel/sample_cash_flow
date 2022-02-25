@@ -22,7 +22,7 @@ const Studentadd = () => {
     const [academicYear, setAcademicYear] = useState<any>("");
     const [toGrade, setToGrade] = useState<any>("");
     const [admissionDate, setAdmissiondate] = useState<any>(new Date());
-    const [toSection, setToSection] = useState<any>({});
+    const [toSection, setToSection] = useState<any>("");
     const [previousSchoolInfo, setPreviousSchoolInfo] = useState<any>("");
     const [fatherName, setFatherName] = useState<any>("");
     const [fatherOccupation, setFatherOccupation] = useState<any>("");
@@ -89,19 +89,19 @@ const Studentadd = () => {
             // from_grade_id: fromGrade,
             // student_type: "DaysScholer",
         Axios.post(`${baseUrl}newAdmission`, {
-    "student_name":studentName,
-    "DOB":dateofBirth,
-    "gender":gender,
-    "email":email,
-    "admission_date":moment(admissionDate).format("L"),
+    "student_name":"mohan",
+    "DOB":"2021-11-30",
+    "gender":"male",
+    "email":"asain@gmail.com",
+    "admission_date":"2021-9-24",
     "grade_id":1,
-    "previous_school_info":"asas",
+    "previous_school_info":"KKH",
     "father_name":"Mohan",
     "father_occupation":"daily wages",
     "address":"kamachi street",
     "phone_number":"7856706078",
     "alt_phone_number":"7856706078",
-    "admission_no":17,
+    "admission_no":24,
     "from_grade_id":"IV",
     "student_type":"Hostal"
         })
