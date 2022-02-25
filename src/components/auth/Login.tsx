@@ -42,7 +42,7 @@ const Login = (props: any) => {
 			}
 		} else {
 			try {
-				const res: any = await axios.post(`${baseUrl}sessions/login`, { email: username, password: password }).then((res: any) => {
+				const res: any = await axios.post(`${baseUrl}login`, { email: username, password: password }).then((res: any) => {
 					console.log(res);
                     toast.success('Welcome', {
                         position: "top-right",
@@ -53,7 +53,7 @@ const Login = (props: any) => {
                         draggable: true,
                         progress: undefined,
                         });
-					localStorage.setItem("AccessToken", res.data.auth_token);
+					sessionStorage.setItem("AccessToken", res.data.token);
 					callToPush();
 				});
 			} catch (err: any) {
@@ -73,17 +73,14 @@ const Login = (props: any) => {
 
 	const callToPush = () =>{
 		setTimeout(() => {
-			browser()
-			//history.push("/studentrecord");
+			history.push("/studentrecord");
 		  }, 1000);
 	}
 
-	const browser = () =>{
-		window.location.href = "/studentrecord"
-	}
+
 
 	useEffect(()=>{
-		const token = localStorage.getItem("AccessToken");
+		const token = sessionStorage.getItem("AccessToken");
 		if(token?.length){
 			history.push("/studentrecord");
 		}

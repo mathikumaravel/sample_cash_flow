@@ -31,7 +31,7 @@ import Placesspotting from "../components/Transport/Placesspotting";
 
 const PrivateRoute = (props: any) => {
 	let history = useHistory<any>();
-	const token = localStorage.getItem("AccessToken");
+	const token = sessionStorage.getItem("AccessToken");
 	if (token) {
 		return <Route exact={true} path={props.path} component={props.component} />;
 	} else {
@@ -40,8 +40,8 @@ const PrivateRoute = (props: any) => {
 	}
 };
 const Routers = (props: any) => {
-	if (localStorage.getItem("AccessToken")) {
-		console.log(localStorage.getItem("AccessToken"));
+	if (sessionStorage.getItem("AccessToken")) {
+		console.log(sessionStorage.getItem("AccessToken"));
 	}
 
 	return (

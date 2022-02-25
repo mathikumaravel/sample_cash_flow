@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 const Navbar = () => {
     let history = useHistory();
     const callLogout= ()=>{
-        localStorage.clear();
+        sessionStorage.clear();
         history.push('/')
     }
 
