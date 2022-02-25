@@ -29,29 +29,30 @@ const Studentadd = () => {
     const [address, setAddress] = useState<any>("");
     const [phoneNo, setPhoneno] = useState<any>("");
     const [alterPhoneno, setAlterPhoneno] = useState<any>("");
-    const [addGrade, setAddGrade] = useState("");
+    const [addGrade, setAddGrade] = useState<any>("");
     const [gradeBasedOnYearFinal, setGradeBasedOnYearFinal] = useState<any>([]);
     const [gradeSectionList, setGradeSectionList] = useState<any>([]);
     const [academicYearFinal, setAcademicYearFinal] = useState<any>([]);
     const [sectionList, setSectionList] = useState<any>([]);
     const [sectionBasedOnGrade, SetsectionBasedOnGrade] = useState<any>([]);
-    const [addSection, setAddSection] = useState("");
+    const [addSection, setAddSection] = useState<any>("");
     const [filterParticularYear, setFilterParticularYear] = useState<any>([]);
- 
-  
-        
-    useEffect(() => {
-        if (gradeSectionList && gradeSectionList.length) {
-            let mySet1 = new Set();
-            gradeSectionList.forEach((element: any) => {
-                mySet1.add(element.academic_year);
-            });
-            console.log(mySet1);
-            setAcademicYearFinal([...mySet1]);
-            handleSearch(gradeSectionList, gradeSectionList[0].academic_year);
-        }
-    }, [gradeSectionList]);
+    const [searchGradeId, setSearchGradeId] = useState<any>("");
 
+    const [actualGrade, setActualGrade] = useState<any>([])
+
+    console.log(toSection);
+    // useEffect(() => {
+    //     if (gradeSectionList && gradeSectionList.length) {
+    //         let mySet1 = new Set();
+    //         gradeSectionList.forEach((element: any) => {
+    //             mySet1.add(element.academic_year);
+    //         });
+    //         console.log(mySet1);
+    //         setAcademicYearFinal([...mySet1]);
+    //         handleSearch(gradeSectionList, gradeSectionList[0].academic_year);
+    //     }
+    // }, [gradeSectionList]);
 
     // useEffect(() => {
     //     if (filterParticularYear && filterParticularYear.length) {
@@ -64,8 +65,6 @@ const Studentadd = () => {
     //     }
     // }, [filterParticularYear]);
 
-
-
     const handleSubmit = (e: any) => {
         const form = e.currentTarget;
         getAccessToken();
@@ -75,23 +74,23 @@ const Studentadd = () => {
         }
         setValidated(true);
 
-        Axios.post(`${baseUrl}newAdmission`,{
-          "student_name":studentName,
-          "DOB":dateofBirth,
-          "gender":gender,
-          "email":email,
-          "admission_date":moment(admissionDate).format('DD-MM-YYYY'),
-          "grade_id":45,
-          "previous_school_info":previousSchoolInfo,
-          "father_name":fatherName,
-          "father_occupation":fatherOccupation,
-          "address":address,
-          "phone_number":phoneNo,
-          "alt_phone_number":alterPhoneno,
-          "admission_no":admissionNo,
-          "from_grade_id":fromGrade,
-          "student_type":"DaysScholer"
-      })
+        Axios.post(`${baseUrl}newAdmission`, {
+            student_name: studentName,
+            DOB: dateofBirth,
+            gender: gender,
+            email: email,
+            admission_date: moment(admissionDate).format("DD-MM-YYYY"),
+            grade_id: toSection,
+            previous_school_info: previousSchoolInfo,
+            father_name: fatherName,
+            father_occupation: fatherOccupation,
+            address: address,
+            phone_number: phoneNo,
+            alt_phone_number: alterPhoneno,
+            admission_no: admissionNo,
+            from_grade_id: fromGrade,
+            student_type: "DaysScholer",
+        })
             .then((response: any) => {
                 console.log(response);
                 return response;
@@ -120,65 +119,94 @@ const Studentadd = () => {
         Axios.get(`${baseUrl}gradeSection`)
             .then((res: any) => {
                 console.log(res.data.data);
-                setGradeSectionList(res.data);
+                setGradeSectionList(res.data.data);
             })
             .catch((error) => console.log(error));
     }, []);
 
     useEffect(() => {
-      getAccessToken();
-      Axios.get(`${baseUrl}year`)
-          .then((res: any) => {
-            setAcademicYearFinal(res.data.data);
-          })
-          .catch((error) => console.log(error));
-  }, []);
+        getAccessToken();
+        Axios.get(`${baseUrl}year`)
+            .then((res: any) => {
+                setAcademicYearFinal(res.data.data);
+            })
+            .catch((error) => console.log(error));
+    }, []);
 
-
-    const handleSearch = (gradeSectionList: any, searchInput: any) => {
-        console.log(gradeSectionList, "++", searchInput);
-        setAddGrade("");
+    const handleGradeFilter = (gradeSectionList: any, searchInput: any) => {
+        console.log(gradeSectionList, searchInput);
+        setSearchGradeId("");
         setAcademicYear(searchInput);
-        let mySet1 = new Set();
+        let resultData:any = [];
+        gradeSectionList.forEach((element: any) => {
+          if(searchInput == element.academic_year_id){
+            resultData.push(element);
+          }
+        })
+        console.log(resultData,"grade")
+        const ids = resultData.map((data: any) => data.grade);
+        const filtered = resultData.filter(({ grade }: any, index: any) => !ids.includes(grade, index + 1));
+        setAddGrade(filtered);
+        setSearchGradeId(filtered[0].grade_section_id);
+        handleSectionSearch(resultData,filtered[0].grade)
+        setActualGrade(resultData)
+    };
+
+    console.log(gradeSectionList)
+    const handleSectionSearch = (gradeSectionList: any, searchInput: any) => {
+        console.log(gradeSectionList, "++", searchInput);
+        setAddSection("");
+        setAcademicYear(searchInput);
         let resultData = gradeSectionList.filter((obj: any) =>
             Object.values(obj)
                 .flat()
                 .some((v) => `${v}`.toLowerCase().includes(`${searchInput}`.toLowerCase()))
         );
-
-        let selectedYearArr: any = [];
+        let tempArr:any[] = [];
+        
         resultData.forEach((element: any) => {
-            selectedYearArr.push(element);
-            mySet1.add(element.grade);
-        });
-        setGradeBasedOnYearFinal([...mySet1]);
-        setFilterParticularYear(selectedYearArr);
-        setAddGrade(resultData[0].grade);
-    };
-    const handleSectionSearch = (sectionList: any, searchInput: any) => {
-        console.log(sectionList, "++", searchInput);
-        setAddSection("");
-        setAcademicYear(searchInput);
-        let mySet1 = new Set();
-
-        let resultData = sectionList.filter((obj: any) =>
-            Object.values(obj)
-                .flat()
-                .some((v) => `${v}`.toLowerCase().includes(`${searchInput}`.toLowerCase()))
-        );
-        resultData.forEach((element: any) => {
-            mySet1.add(element.section);
-        });
-        SetsectionBasedOnGrade([...mySet1]);
-        setAddSection(resultData[0].section);
+         // console.log(element.grade);
+          if(searchInput == element.grade)
+          {
+            tempArr.push(element);
+          }
+        })
+        // const ids = resultData.map((data: any) => data.section);
+        // const filtered = resultData.filter(({ section }: any, index: any) => !ids.includes(section, index + 1));
+        // console.log(filtered);
+        console.log(tempArr)
+        SetsectionBasedOnGrade(tempArr);
+        //setAddSection(tempArr[0].section);
     };
 
-  
+    console.log(addGrade);
+
+    // const handleSearch = (gradeSectionList: any, searchInput: any) => {
+    //     console.log(gradeSectionList, "++", searchInput);
+    //     setAddGrade("");
+    //     setAcademicYear(searchInput);
+    //     let mySet1 = new Set();
+    //     let resultData = gradeSectionList.filter((obj: any) =>
+    //         Object.values(obj)
+    //             .flat()
+    //             .some((v) => `${v}`.toLowerCase().includes(`${searchInput}`.toLowerCase()))
+    //     );
+
+    //     let selectedYearArr: any = [];
+    //     resultData.forEach((element: any) => {
+    //         selectedYearArr.push(element);
+    //         mySet1.add(element.grade);
+    //     });
+    //     setGradeBasedOnYearFinal([...mySet1]);
+    //     setFilterParticularYear(selectedYearArr);
+    //     setAddGrade(resultData[0].grade);
+    // };
+
     var date = new Date();
     var formatedDate = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
 
-    console.log(academicYear)
-    console.log(academicYearFinal)
+    // console.log(academicYear);
+    console.log(academicYearFinal);
 
     return (
         <div>
@@ -240,18 +268,18 @@ const Studentadd = () => {
                                                         <div className="col-md-6">
                                                             <InputGroup hasValidation>
                                                                 <Form.Select onChange={(e) => setFromgrade(e.target.value)} required>
-                                                                            <option>I</option>
-                                                                            <option>II</option>
-                                                                            <option>III</option>
-                                                                            <option>IV</option>
-                                                                            <option>V</option>
-                                                                            <option>VI</option>
-                                                                            <option>VII</option>
-                                                                            <option>VIII</option>
-                                                                            <option>IX</option>
-                                                                            <option>X</option>
-                                                                            <option>XI</option>
-                                                                            <option>XII</option>
+                                                                    <option>I</option>
+                                                                    <option>II</option>
+                                                                    <option>III</option>
+                                                                    <option>IV</option>
+                                                                    <option>V</option>
+                                                                    <option>VI</option>
+                                                                    <option>VII</option>
+                                                                    <option>VIII</option>
+                                                                    <option>IX</option>
+                                                                    <option>X</option>
+                                                                    <option>XI</option>
+                                                                    <option>XII</option>
                                                                 </Form.Select>
                                                                 <Form.Control.Feedback type="invalid">Please Enter Grede</Form.Control.Feedback>
                                                             </InputGroup>
@@ -340,17 +368,16 @@ const Studentadd = () => {
                                                         <div className="col-md-6">
                                                             <InputGroup hasValidation>
                                                                 <Form.Select
-                                                                    onChange={(e) => {
-                                                                        setAcademicYear(e.target.value);
-                                                                        handleSearch(gradeSectionList, e.target.value);
+                                                                    onChange={(e: any) => {
+                                                                        handleGradeFilter(gradeSectionList, e.target.value);
                                                                     }}
                                                                     required
                                                                 >
+                                                                    <option hidden>--Academic Year--</option>
                                                                     {academicYearFinal &&
                                                                         academicYearFinal.length &&
                                                                         academicYearFinal.map((values: any) => {
-                                                                            // console.log(academicYear)
-                                                                            return <option>{values.academic_year}</option>;
+                                                                            return <option value={values.year_id}>{values.academic_year}</option>;
                                                                         })}
                                                                 </Form.Select>
                                                                 <Form.Control.Feedback type="invalid">Please Enter Academic Year</Form.Control.Feedback>
@@ -369,17 +396,15 @@ const Studentadd = () => {
                                                         <div className="col-md-6">
                                                             <InputGroup hasValidation>
                                                                 <Form.Select
-                                                                    onChange={(e) => {
-                                                                        setToGrade(e.target.value);
-                                                                        handleSectionSearch(filterParticularYear, e.target.value);
+                                                                    //value={searchGradeId}
+                                                                    onChange={(e: any) => {
+                                                                        handleSectionSearch(actualGrade, e.target.value);
                                                                     }}
-                                                                    required
                                                                 >
-                                                                    {gradeBasedOnYearFinal &&
-                                                                        gradeBasedOnYearFinal.length &&
-                                                                        gradeBasedOnYearFinal.map((grade: any) => {
-                                                                            // console.log(academicYear)
-                                                                            return <option>{grade}</option>;
+                                                                    {addGrade &&
+                                                                        addGrade.length &&
+                                                                        addGrade.map((values: any, index: any) => {
+                                                                            return <option value={values.grade}>{values.grade}</option>;
                                                                         })}
                                                                 </Form.Select>
                                                                 <Form.Control.Feedback type="invalid">Please Enter Grade</Form.Control.Feedback>
@@ -401,8 +426,8 @@ const Studentadd = () => {
                                                                 >
                                                                     {sectionBasedOnGrade &&
                                                                         sectionBasedOnGrade.length &&
-                                                                        sectionBasedOnGrade.map((value: any) => {
-                                                                            return <option> {value}</option>;
+                                                                        sectionBasedOnGrade.map((values: any) => {
+                                                                            return <option value={values.grade_section_id}> {values.section}</option>;
                                                                         })}
                                                                 </Form.Select>
                                                                 <Form.Control.Feedback type="invalid">Please Enter Section</Form.Control.Feedback>
@@ -495,7 +520,6 @@ const Studentadd = () => {
                                                         <div className="col-md-6">
                                                             <Form.Control
                                                                 onChange={(e) => setAlterPhoneno(e.target.value)}
-                                                    
                                                                 type="text"
                                                                 pattern="[0-9]*"
                                                                 placeholder="Alt. Phone No"

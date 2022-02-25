@@ -5,7 +5,7 @@ import reportWebVitals from './reportWebVitals';
 import Routers from './config/Routers';
 
 
-export const baseUrl= "http://localhost:5000/api/v1/"
+export const baseUrl= "http://13.233.110.75:5000/api/v1/"
 
 ReactDOM.render(
   <React.StrictMode>

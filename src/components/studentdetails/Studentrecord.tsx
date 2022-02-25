@@ -47,14 +47,14 @@ const Studentrecord = () => {
   const [addSection, setAddSection] = useState<any>("");
   const [section, setsection] = useState<any>("");
   const [acas, setacas] = useState<any>("");
-//   const [mainsearchh, setMainSearch] = useState<any>([]);
+ const [mainsearchh, setMainSearch] = useState<any>([]);
   const [gradea, setGradea] = useState<any>("");
 
   //manage state  Autosearch
   //manage state  academicYear
   //manage state  gradea
   //manage state  section
-  console.log(mainsearchh);
+
 
   useEffect(() => {
     if (gradeSectionList && gradeSectionList.length) {
@@ -99,17 +99,17 @@ const Studentrecord = () => {
     }
   };
 
-//   const mainsearch = () => {
-//     getAccessToken();
-//     axios
-//       .get(
-//         `${baseUrl}student_admissions_search/search_student?academic_year=${acas}&grade_id=${gradea}&section=${section}`
-//       )
-//       .then((response: AxiosResponse) => {
-//         setMainSearch(response.data);
-//         console.log(response.data);
-//       });
-//   };
+  const mainsearch = () => {
+    getAccessToken();
+    axios
+      .get(
+        `${baseUrl}student_admissions_search/search_student?academic_year=${acas}&grade_id=${gradea}&section=${section}`
+      )
+      .then((response: AxiosResponse) => {
+        setMainSearch(response.data);
+        console.log(response.data);
+      });
+  };
 
   useEffect(() => {
     getAccessToken();
