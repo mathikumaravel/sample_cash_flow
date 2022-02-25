@@ -35,9 +35,9 @@ const Yearoffee = () => {
 	const [FeeDetailsFinal, setFeeDetailsFinal] = useState<any[]>([]);
 	const [GetFinalYearData, setGetFinalYearData] = useState<any[]>([]);
 
+	const [displayFinalData, setDisplayFinalData] = useState<any[]>([]);
 
 	console.log(searchGradeId);
-
 
 	// console.log(feeTypeName);
 
@@ -62,13 +62,10 @@ const Yearoffee = () => {
 			setGradeSectionList(response.data.data);
 		});
 		getAccessToken();
-		axios
-			.get(`${baseUrl}feeMaster`)
-			.then((res: any) => {
-				console.log(res.data.data);
-				setFeeDetailsFinal(res.data.data);
-
-			});
+		axios.get(`${baseUrl}feeMaster`).then((res: any) => {
+			console.log(res.data.data);
+			setFeeDetailsFinal(res.data.data);
+		});
 	};
 
 	console.log(FeeDetailsFinal);
@@ -91,8 +88,9 @@ const Yearoffee = () => {
 		var matchedyearid: any = FeeDetailsFinal && FeeDetailsFinal.length && FeeDetailsFinal.filter((data: any) => data.fee_master_id === gradedata.fee_master_id);
 		let combindobject = { ...gradedata, ...matchedyearid[0] };
 		GetFinalYearData.push(combindobject);
-			console.log(GetFinalYearData);
-		setFinalAcademicYr(GetFinalYearData);
+		console.log(GetFinalYearData);
+		setDisplayFinalData(GetFinalYearData);
+		//setFinalAcademicYr(GetFinalYearData);
 		// console.log(matchedyearid);
 	}
 
@@ -103,17 +101,17 @@ const Yearoffee = () => {
 	// console.log(filtered)
 
 	useEffect(() => {
-		setGetFinalYearData([]);	
+		setGetFinalYearData([]);
 		tableFeeAmount &&
-		tableFeeAmount.length &&
-		tableFeeAmount.map((data: any) => {
+			tableFeeAmount.length &&
+			tableFeeAmount.map((data: any) => {
 				YearId(data);
 			});
 	}, [tableFeeAmount]);
 
-	console.log(tableFeeAmount)
+	console.log(tableFeeAmount);
 
-	const filterid = useEffect(() => {
+	useEffect(() => {
 		getAllGradeSectionData();
 		getAllFeeMasterData();
 	}, []);
@@ -134,36 +132,32 @@ const Yearoffee = () => {
 	// }, [gradeSectionList]);
 
 	useEffect(() => {
-		if (feeMaster && feeMaster.length>0 && gradeSectionList && gradeSectionList.length>0) {
+		if (feeMaster && feeMaster.length > 0 && gradeSectionList && gradeSectionList.length > 0) {
 			handleFeeTypeNameSearch(feeMaster, feeMaster[0].year_id);
-			handleGradeFilter(gradeSectionList,feeMaster[0].year_id)
+			handleGradeFilter(gradeSectionList, feeMaster[0].year_id);
 		}
 	}, [feeMaster, gradeSectionList]);
 
-
 	console.log(feeMaster);
-	
- 
-	const handleGradeFilter = (gradeSectionList: any, searchInput: any) => {
 
+	const handleGradeFilter = (gradeSectionList: any, searchInput: any) => {
 		console.log(gradeSectionList, searchInput);
- 		setSearchGradeId("");
+		setSearchGradeId("");
 		setAcademicYear(searchInput);
 		let resultData = gradeSectionList.filter((obj: any) =>
 			Object.values(obj)
 				.flat()
 				.some((v) => `${v}`.toLowerCase().includes(`${searchInput}`.toLowerCase()))
 		);
-	
-		const ids = resultData.map((data:any) => data.grade);
-		const filtered = resultData.filter(({ grade }:any, index:any) => !ids.includes(grade, index + 1));
+
+		const ids = resultData.map((data: any) => data.grade);
+		const filtered = resultData.filter(({ grade }: any, index: any) => !ids.includes(grade, index + 1));
 		setAddGrade(filtered);
 		console.log(filtered);
- 		setSearchGradeId(filtered[0].grade_section_id);
- 	};
+		setSearchGradeId(filtered[0].grade_section_id);
+	};
 
 	const handleFeeTypeNameSearch = (gradeSectionList: any, searchInput: any) => {
-		
 		// console.log(feeMaster);
 		setFeeTypeName("");
 		let mySet1 = new Set();
@@ -202,7 +196,7 @@ const Yearoffee = () => {
 	// };
 	const handleSubmit = () => {
 		let newfeeTypeName = feeTypeName.toString();
-		if (amount.length <= 0 || addGrade.length <= 0 || academicYear.length <= 0 || newfeeTypeName.length <= 0) {
+		if (amount.length <= 0 || searchGradeId.length <= 0 || newfeeTypeName.length <= 0) {
 			if (amount.length <= 0) {
 				toast.warning("Enter Amount", {
 					position: "top-right",
@@ -214,7 +208,7 @@ const Yearoffee = () => {
 					progress: undefined,
 				});
 				setDuplication(false);
-			} else if (addGrade.length <= 0) {
+			} else if (searchGradeId.length <= 0) {
 				toast.warning("Enter Grade", {
 					position: "top-right",
 					autoClose: 5000,
@@ -225,18 +219,8 @@ const Yearoffee = () => {
 					progress: undefined,
 				});
 				setDuplication(false);
-			} else if (academicYear.length <= 0) {
-				toast.warning("Enter Academic Year", {
-					position: "top-right",
-					autoClose: 5000,
-					hideProgressBar: false,
-					closeOnClick: true,
-					pauseOnHover: true,
-					draggable: true,
-					progress: undefined,
-				});
-				setDuplication(false);
-			} else if (newfeeTypeName.length <= 0) {
+			}
+			 else if (newfeeTypeName.length <= 0) {
 				toast.warning("Enter Fee Type Name", {
 					position: "top-right",
 					autoClose: 5000,
@@ -251,9 +235,8 @@ const Yearoffee = () => {
 		} else {
 			getAccessToken();
 			axios
-				.post(`${baseUrl}year_of_fee/create`, {
-					academic_year: academicYear,
-					grade: addGrade,
+				.post(`${baseUrl}yearOffee/create_new_yearfee`, {
+					"grade_id":searchGradeId,
 					fee_amount: amount,
 					fee_master_id: newfeeTypeName,
 				})
@@ -278,7 +261,7 @@ const Yearoffee = () => {
 	};
 
 	useEffect(() => {
-		if (searchGradeId && searchGradeId!=null) {
+		if (searchGradeId && searchGradeId != null) {
 			list_fee_details();
 		}
 	}, [searchGradeId]);
@@ -287,21 +270,16 @@ const Yearoffee = () => {
 	const list_fee_details = () => {
 		getAccessToken();
 		axios
-			.post(`${baseUrl}yearOffee`,{
-
-	            grade_id:searchGradeId,
-
-	        })
+			.post(`${baseUrl}yearOffee`, {
+				grade_id: searchGradeId,
+			})
 			.then((res: any) => {
 				console.log(res.data.data);
 				setTableFeeAmount(res.data.data);
 				setSpinnerLoad(false);
 			});
 	};
-	const FeeMasterId = () => {
-	
-	};
-
+	const FeeMasterId = () => {};
 
 	const updatingYearOfFee = () => {
 		if (updateYearOfFee.length <= 0) {
@@ -317,16 +295,12 @@ const Yearoffee = () => {
 		} else {
 			getAccessToken();
 			axios
-				.put(`${baseUrl}year_of_fee/update`, {
-					year_of_fees_id: editingYearOfFee.yearoffeesid,
-					academic_year: editingYearOfFee.acdyr,
-					grade: editingYearOfFee.grade,
+				.put(`${baseUrl}yearOffee/${editingYearOfFee.yearoffeesid}`, {
 					fee_amount: updateYearOfFee,
-					fee_master_id: editingYearOfFee.fee_id,
 				})
 				.then((res: any) => {
-					//	console.log(res.data);
-					if (res.data === true) {
+					console.log(res.data);
+					if (res.data.data === "Updated Succesfully") {
 						toast.success("Year oF Fee Updated Successsfully", {
 							position: "top-right",
 							autoClose: 5000,
@@ -347,7 +321,7 @@ const Yearoffee = () => {
 	const deleteParticularDiscount = (fee_master_id: any) => {
 		getAccessToken();
 		axios
-			.delete(`${baseUrl}year_of_fee/delete?id=${fee_master_id}`)
+			.delete(`${baseUrl}yearOffee/`, { data: { year_of_fees_id: fee_master_id } })
 			.then((res: any) => {
 				toast.success("Year oF Fee Deleted Successsfully", {
 					position: "top-right",
@@ -373,17 +347,7 @@ const Yearoffee = () => {
 	// console.log(academicYear, feeTypeName, addGrade, amount);
 	return (
 		<div>
-			<ToastContainer
-				position="top-right"
-				autoClose={5000}
-				hideProgressBar={false}
-				newestOnTop={false}
-				closeOnClick
-				rtl={false}
-				pauseOnFocusLoss
-				draggable
-				pauseOnHover
-			/>
+			<ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
 			<div id="page-top">
 				<div id="wrapper">
 					<Sidebar data={"Stu_fees"}></Sidebar>
@@ -402,10 +366,8 @@ const Yearoffee = () => {
 														</h4>
 														<div style={{ textAlign: "right" }}>
 															{!statusFeeDetailsAdd ? (
-																<Button
-																	type="submit"
-																	className="btn btn-primary btn-sm btn-save"
-																	onClick={() => setStatusFeeDetailsAdd(true)}>
+																<Button type="submit" className="btn btn-primary btn-sm btn-save" onClick={() => {setStatusFeeDetailsAdd(true);FeeDetailsFinal &&
+																	FeeDetailsFinal.length && setFeeTypeName(FeeDetailsFinal[0].fee_master_id)}}>
 																	Add
 																</Button>
 															) : (
@@ -452,8 +414,7 @@ const Yearoffee = () => {
 																					<Form.Select
 																						value={searchGradeId}
 																						onChange={(e: any) => {
-																							setSearchGradeId
-																							(e.target.value);
+																							setSearchGradeId(e.target.value);
 																						}}>
 																						{addGrade &&
 																							addGrade.length &&
@@ -475,7 +436,7 @@ const Yearoffee = () => {
 																			<thead>
 																				<tr role="row">
 																					<th>S.No</th>
-																					<th className="sorting_asc">To Academic Year</th>
+																					<th className="sorting_asc">Fee Type Name</th>
 																					<th className="sorting">Fee amount</th>
 																					<th className="sorting">Action</th>
 																				</tr>
@@ -489,12 +450,12 @@ const Yearoffee = () => {
 																						}}>
 																						<Spinner animation="border" variant="danger" />
 																					</td>
-																				) : tableFeeAmount && tableFeeAmount.length ? (
-																					tableFeeAmount.map((values: any, index: any) => {
+																				) : displayFinalData && displayFinalData.length ? (
+																					displayFinalData.map((values: any, index: any) => {
 																						return (
 																							<tr key={index}>
 																								<td>{index + 1}</td>
-																								<td>{values.fee_master_id}</td>
+																								<td>{values.fee_type_name}</td>
 																								{index == editingYearOfFee.id ? (
 																									<>
 																										<td>
@@ -537,7 +498,7 @@ const Yearoffee = () => {
 																													setEditingYearOfFee({
 																														yearoffeesid: values.year_of_fees_id,
 																														acdyr: values.academic_year,
-																														grade: values.grade,
+																														grade: values.grade_id,
 																														amt: Number(values.fee_amount),
 																														id: index,
 																														fee_id: values.fee_master_id,
@@ -646,27 +607,15 @@ const Yearoffee = () => {
 																</Col>
 																<Col sm="6">
 																	<Form.Select
-																	// value={academicYear}
-																	// onChange={(e: any) => {
-																	// 	handleSearch(
-																	// 		gradeSectionList,
-																	// 		e.target.value
-																	// 	);
-																	// 	//handleFeeTypeNameSearch(feeMaster, e.target.value);
-																	// }}
-																	>
-																		{/* {feeMasterFinal &&
-																			feeMasterFinal.length &&
-																			feeMasterFinal.map(
-																				(values: any, index: any) => { */}
-																		return (
-																		<option
-																		// value={values}
-																		>
-																			{/* {values} */}
-																		</option>
-																		{/* );
-																				} */}){/* } */}
+																		//value={searchAcademicYear}
+																		onChange={(e: any) => {
+																			handleGradeFilter(gradeSectionList, e.target.value);
+																		}}>
+																		{feeMaster &&
+																			feeMaster.length &&
+																			feeMaster.map((values: any, index: any) => {
+																				return <option value={values.year_id}>{values.academic_year}</option>;
+																			})}
 																	</Form.Select>
 																</Col>
 															</>
@@ -679,10 +628,10 @@ const Yearoffee = () => {
 																	onChange={(e: any) => {
 																		setFeeTypeName(e.target.value);
 																	}}>
-																	{feeTypeNameFinal &&
-																		feeTypeNameFinal.length &&
-																		feeTypeNameFinal.map((values: any, index: any) => {
-																			return <option value={values.id}>{values.name}</option>;
+																	{FeeDetailsFinal &&
+																		FeeDetailsFinal.length &&
+																		FeeDetailsFinal.map((values: any, index: any) => {
+																			return <option value={values.fee_master_id}>{values.fee_type_name}</option>;
 																		})}
 																</Form.Select>
 															</Col>{" "}
@@ -691,14 +640,14 @@ const Yearoffee = () => {
 															</Col>
 															<Col sm="6">
 																<Form.Select
-																	value={addGrade}
+																	value={searchGradeId}
 																	onChange={(e: any) => {
-																		setAddGrade(e.target.value);
+																		setSearchGradeId(e.target.value);
 																	}}>
-																	{gradeBasedOnYearFinal &&
-																		gradeBasedOnYearFinal.length &&
-																		gradeBasedOnYearFinal.map((values: any, index: any) => {
-																			return <option value={values}>{values}</option>;
+																	{addGrade &&
+																		addGrade.length &&
+																		addGrade.map((values: any, index: any) => {
+																			return <option value={values.grade_section_id}>{values.grade}</option>;
 																		})}
 																</Form.Select>
 															</Col>
