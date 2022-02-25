@@ -69,9 +69,11 @@ const Login = (props: any) => {
                         progress: undefined,
                         });
 					sessionStorage.setItem("AccessToken", res.data.token);
+
 					history.push("/studentrecord");
 
-				});
+				callToPush(); 
+        });
 			} catch (err: any) {
 				console.log(err.response.data.error_message);
                 toast.error('Incorrect Username and Password', {
@@ -87,6 +89,21 @@ const Login = (props: any) => {
 		}
 	};
 
+
+	const callToPush = () =>{
+		setTimeout(() => {
+			history.push("/studentrecord");
+		  }, 1000);
+	}
+
+
+
+	useEffect(()=>{
+		const token = sessionStorage.getItem("AccessToken");
+		if(token?.length){
+			history.push("/studentrecord");
+		}
+	},[])
 
 
 	return (
