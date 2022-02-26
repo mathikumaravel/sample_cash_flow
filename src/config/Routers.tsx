@@ -42,7 +42,7 @@ const PrivateRoute = (props: any) => {
 };
 const Routers = (props: any) => {
 	if (sessionStorage.getItem("AccessToken")) {
-		console.log(sessionStorage.getItem("AccessToken"));
+		
 	}
 
 	return (

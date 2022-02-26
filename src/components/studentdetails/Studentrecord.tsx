@@ -1,3 +1,62 @@
+
+import React, { useState, ChangeEvent, useEffect } from "react";
+import Sidebar from "../Layouts/Sidebar";
+import Navbar from "../Layouts/Navbar";
+import Feesdetails from "./Feesdetails";
+import Academicfees from "./Academicfees";
+import {
+  Row,
+  Col,
+  Form,
+  Button,
+  Container,
+  Table,
+  Card,
+  ListGroup,
+} from "react-bootstrap";
+import { Link } from "react-router-dom";
+import axios, { AxiosResponse } from "axios";
+import { baseUrl } from "../../index";
+import { getAccessToken } from "../../config/getAccessToken";
+const Studentrecord = () => {
+  //To Make Edit
+  const [search, setSearch] = useState<any>({
+    text: "",
+    studentid: "",
+    PhoneNumber: "",
+    GradeId: "",
+  });
+  const [statusStudentEdit, setStatusStudentEdit] = useState(false);
+  const [isComponentVisible, setIsComponentVisible] = useState(true);
+  const [statusStudentDetailsEdit, setStatusStudentDetailsEdit] = useState<any>(
+    {}
+  );
+  const [statusStudentSearch, setStatusStudentSearch] = useState<any>({});
+  const [statusStudentDetails, setStatusStudentDetails] = useState<any>({});
+  const [Autosearch, setAutoSearch] = useState<any>([]);
+  const [suggest, setSuggest] = useState<any>([]);
+  const [suggestions, setsuggestions] = useState<any>([]);
+  const [acdyear, setAcdYear] = useState<any>([]);
+  const [Grdsec, setGrdsec] = useState<any>([]);
+  const [academicYear, setAcademicYear] = useState<any>("");
+  const [gradeSectionList, setGradeSectionList] = useState<any>([]);
+  const [gradeBasedOnYearFinal, setGradeBasedOnYearFinal] = useState<any>([]);
+  const [addGrade, setAddGrade] = useState("");
+  const [filterParticularYear, setFilterParticularYear] = useState<any>([]);
+  const [academicYearFinal, setAcademicYearFinal] = useState<any>([]);
+  const [sectionBasedOnGrade, SetsectionBasedOnGrade] = useState<any>([]);
+  const [addSection, setAddSection] = useState<any>("");
+  const [section, setsection] = useState<any>("");
+  const [acas, setacas] = useState<any>("");
+ const [mainsearchh, setMainSearch] = useState<any>([]);
+  const [gradea, setGradea] = useState<any>("");
+
+  //manage state  Autosearch
+  //manage state  academicYear
+  //manage state  gradea
+  //manage state  section
+
+
 // import React, { useState, ChangeEvent, useEffect } from "react";
 // import Sidebar from "../Layouts/Sidebar";
 // import Navbar from "../Layouts/Navbar";
@@ -10,7 +69,7 @@
 // import { getAccessToken } from "../../config/getAccessToken";
 // import { arrayBuffer } from "stream/consumers";
 // const Studentrecord = () => {
-// <<<<<<< HEAD
+// 
 // 	//To Make Edit
 // 	const [search, setSearch] = useState<any>({
 // 		text: "",
@@ -89,7 +148,7 @@
 // 			});
 // 	};
 //   // console.log(mainsearchh[0][1]);
-  
+
 
 
 // 	useEffect(() => {
@@ -153,7 +212,7 @@
 			 
 // 			});
 // 	};
-// =======
+// 
 //   //To Make Edit
 //   const [search, setSearch] = useState<any>({
 //     text: "",
@@ -247,7 +306,7 @@
 // //       });
 // //   };
 
-// >>>>>>> cd393ab79dbc482b34159243874e04892ef6625f
+// 
 //   useEffect(() => {
 // 		getAllAcademicYears();
 	 
@@ -323,7 +382,7 @@
 // 		setFilterParticularYear(selectedYearArr);
 // 		setAddGrade(resultData[0].grade);
 //   };
-// <<<<<<< HEAD
+// 
 //   console.log(gradeSectionList);
   
 // 	const handlesection = (sectionList: any, searchInput: any) => {
@@ -343,6 +402,7 @@
 // 		SetsectionBasedOnGrade([...mySet1]);
 // 		setAddSection(resultData[0].section);
 // 	};
+
 
 
 //  	return (
@@ -462,7 +522,7 @@
 //                           onChange={(e) => {
 //                             setAcademicYear(e.target.value);
 //                             handleSearch(gradeSectionList, e.target.value);
-// >>>>>>> cd393ab79dbc482b34159243874e04892ef6625f
+// 
 //                             setacas(e.target.value);
                               
 // 													}}>

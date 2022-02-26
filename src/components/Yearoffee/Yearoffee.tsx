@@ -36,9 +36,9 @@ const Yearoffee = () => {
 	const [GetFinalYearData, setGetFinalYearData] = useState<any[]>([]);
 
 	const [displayFinalData, setDisplayFinalData] = useState<any[]>([]);
-
+console.log(addGrade);
 	console.log(searchGradeId);
-
+    // console.log(gradeSectionList);
 	// console.log(feeTypeName);
 
 	//Modal Popup
@@ -138,10 +138,11 @@ const Yearoffee = () => {
 		}
 	}, [feeMaster, gradeSectionList]);
 
-	console.log(feeMaster);
-
+	// console.log(feeMaster);
+ 
+	 
 	const handleGradeFilter = (gradeSectionList: any, searchInput: any) => {
-		console.log(gradeSectionList, searchInput);
+		console.log(gradeSectionList,searchInput);
 		setSearchGradeId("");
 		setAcademicYear(searchInput);
 		let resultData = gradeSectionList.filter((obj: any) =>

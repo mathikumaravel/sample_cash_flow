@@ -4,12 +4,8 @@
 // import reportWebVitals from './reportWebVitals';
 // import Routers from './config/Routers';
 
-// <<<<<<< HEAD
-// export const baseUrl= "http://13.233.110.75:5000/api/v1/"
-// =======
-
 // export const baseUrl= "http://localhost:5000/api/v1/"
-// >>>>>>> cd393ab79dbc482b34159243874e04892ef6625f
+
 
 // ReactDOM.render(
 //   <React.StrictMode>
