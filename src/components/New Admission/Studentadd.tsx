@@ -8,6 +8,8 @@ import Axios from "axios";
 import { baseUrl } from "../../index";
 import { getAccessToken } from "../../config/getAccessToken";
 import moment from "moment";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Studentadd = () => {
     const [validated, setValidated] = useState(false);
@@ -37,81 +39,113 @@ const Studentadd = () => {
     const [sectionBasedOnGrade, SetsectionBasedOnGrade] = useState<any>([]);
     const [addSection, setAddSection] = useState<any>("");
     const [filterParticularYear, setFilterParticularYear] = useState<any>([]);
+    const [filterGradeSectionList, setFilterGradeSectionList] = useState<any>([]);
     const [searchGradeId, setSearchGradeId] = useState<any>("");
 
-    const [actualGrade, setActualGrade] = useState<any>([])
+    const [actualGrade, setActualGrade] = useState<any>([]);
 
-    console.log(toSection);
-    // useEffect(() => {
-    //     if (gradeSectionList && gradeSectionList.length) {
-    //         let mySet1 = new Set();
-    //         gradeSectionList.forEach((element: any) => {
-    //             mySet1.add(element.academic_year);
-    //         });
-    //         console.log(mySet1);
-    //         setAcademicYearFinal([...mySet1]);
-    //         handleSearch(gradeSectionList, gradeSectionList[0].academic_year);
-    //     }
-    // }, [gradeSectionList]);
+    const [gradeMaster, setGradeMaster] = useState<any>([]);
+    const [gradeMasterParticular, setGradeMasterParticular] = useState<any>([]);
+    const [filterGradeByYear, setFilterGradeByYear] = useState<any>([]);
+    const [withDuplicatesGrade, setWithDuplicatesGrade] = useState<any>([]);
 
-    // useEffect(() => {
-    //     if (filterParticularYear && filterParticularYear.length) {
-    //         let mySet1 = new Set();
-    //         filterParticularYear.forEach((element: any) => {
-    //             mySet1.add(element.grade);
-    //         });
-    //         setGradeBasedOnYearFinal([...mySet1]);
-    //         handleSectionSearch(filterParticularYear, filterParticularYear[0].grade);
-    //     }
-    // }, [filterParticularYear]);
+    const [duplication, setDuplication] = useState(false);
+
+    console.log(dateofBirth);
 
     const handleSubmit = (e: any) => {
-        const form = e.currentTarget;
-        getAccessToken();
-        if (form.checkValidity() === false) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
-        setValidated(true);
-          // student_name: studentName,
-            // DOB: dateofBirth,
-            // gender: gender,
-            // email: email,
-            // admission_date: moment(admissionDate).format("L"),
-            // grade_id:45,
-            // previous_school_info: previousSchoolInfo,
-            // father_name: fatherName,
-            // father_occupation: fatherOccupation,
-            // address: address,
-            // phone_number: phoneNo,
-            // alt_phone_number: alterPhoneno,
-            // admission_no: admissionNo,
-            // from_grade_id: fromGrade,
-            // student_type: "DaysScholer",
-        Axios.post(`${baseUrl}newAdmission`, {
-    "student_name":studentName,
-    "DOB":dateofBirth,
-    "gender":gender,
-    "email":email,
-    "admission_date":moment(admissionDate).format("L"),
-    "grade_id":1,
-    "previous_school_info":"asas",
-    "father_name":"Mohan",
-    "father_occupation":"daily wages",
-    "address":"kamachi street",
-    "phone_number":"7856706078",
-    "alt_phone_number":"7856706078",
-    "admission_no":17,
-    "from_grade_id":"IV",
-    "student_type":"Hostal"
-        })
-            .then((response: any) => {
-                console.log(response);
-                return response;
-            })
-            .catch((error) => {
-                return error;
+        e.preventDefault();
+        if (
+            studentName.length <= 0 ||
+            dateofBirth.length <= 0 ||
+            gender.length <= 0 ||
+            email.length <= 0 ||
+            addSection.length <= 0 ||
+            previousSchoolInfo.length <= 0 ||
+            fatherName.length <= 0 ||
+            fatherOccupation.length <= 0 ||
+            address.length <= 0 ||
+            phoneNo.length <= 0 ||
+            alterPhoneno.length <= 0 ||
+            admissionNo.length <= 0 ||
+            fromGrade.length <= 0 ||
+            academicYear.length <= 0 ||
+            gradeMasterParticular.length <= 0
+        ) {
+            console.log(
+                studentName,"studentName",
+                dateofBirth,"dateofBirth",
+                gender,"gender",
+                email,"email",
+                addSection,"addSection",
+                previousSchoolInfo,"previousSchoolInfo",
+                fatherName,"fatherName",
+                fatherOccupation,"fatherOccupation",
+                address,"address",
+                phoneNo,"phoneNo",
+                alterPhoneno,"alterPhoneno",
+                admissionNo,"admissionNo",
+                fromGrade,"fromGrade",
+                academicYear,"academicYear",
+                gradeMasterParticular,"gradeMasterParticular"
+            );
+            toast.warning("please Fill All Details", {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
             });
+            setDuplication(false);
+        } else {
+            getAccessToken();
+            Axios.post(`${baseUrl}newAdmission`, {
+                student_name: studentName,
+                DOB: dateofBirth,
+                gender: gender,
+                email: email,
+                admission_date: moment(new Date()).format("L"),
+                grade_id: addSection,
+                previous_school_info: previousSchoolInfo,
+                father_name: fatherName,
+                father_occupation: fatherOccupation,
+                address: address,
+                phone_number: phoneNo,
+                alt_phone_number: alterPhoneno,
+                admission_no: admissionNo,
+                from_grade: fromGrade,
+                student_type: "Days Scholar",
+                year_id: academicYear,
+                grade_section_id: gradeMasterParticular,
+            })
+                .then((response: any) => {
+                    toast.success("Student Admission Success", {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                    setDuplication(false);
+                    window.location.reload();
+                })
+                .catch((error) => {
+                    toast.warning("Admission Failed Try Again", {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                    setDuplication(false);
+                });
+        }
     };
     // const handleChangeMobile = (e: any) => {
     //     const re = /^[0-9\b]+$/; //rules
@@ -125,94 +159,96 @@ const Studentadd = () => {
     //         setAlterPhoneno(e.target.value);
     //     }
     // };
-  
+
     useEffect(() => {
         getAccessToken();
         Axios.get(`${baseUrl}gradeSection`)
             .then((res: any) => {
                 console.log(res.data.data);
                 setGradeSectionList(res.data.data);
+                setFilterGradeSectionList(res.data.data[0]);
             })
             .catch((error) => console.log(error));
-    }, []);
 
-    useEffect(() => {
         getAccessToken();
         Axios.get(`${baseUrl}year`)
             .then((res: any) => {
                 setAcademicYearFinal(res.data.data);
+                setFilterParticularYear([res.data.data[0]]);
             })
             .catch((error) => console.log(error));
+
+        getAccessToken();
+        Axios.get(`${baseUrl}grademaster`)
+            .then((res: any) => {
+                setGradeMaster(res.data.data);
+                setGradeMasterParticular(res.data.data[0]);
+            })
+            .catch((error) => console.log(error));
+
+            setFromgrade("I")
     }, []);
+
+    useEffect(() => {
+        if (gradeSectionList && gradeSectionList.length > 0 && filterParticularYear && filterParticularYear.length > 0 && gradeMaster && gradeMaster.length > 0) {
+            handleGradeFilter(gradeSectionList, filterParticularYear[0].year_id);
+        }
+    }, [gradeSectionList, filterParticularYear, gradeMaster]);
 
     const handleGradeFilter = (gradeSectionList: any, searchInput: any) => {
         console.log(gradeSectionList, searchInput);
         setSearchGradeId("");
         setAcademicYear(searchInput);
-        let resultData:any = [];
+
+        //Filtering Grade by academic year id
+        let resultData: any = [];
         gradeSectionList.forEach((element: any) => {
-          if(searchInput == element.academic_year_id){
-            resultData.push(element);
-          }
-        })
-        console.log(resultData,"grade")
-        const ids = resultData.map((data: any) => data.grade);
-        const filtered = resultData.filter(({ grade }: any, index: any) => !ids.includes(grade, index + 1));
-        setAddGrade(filtered);
-        setSearchGradeId(filtered[0].grade_section_id);
-        handleSectionSearch(resultData,filtered[0].grade)
-        setActualGrade(resultData)
+            if (searchInput == element.academic_year_id) {
+                resultData.push(element);
+            }
+        });
+        // console.log(resultData, "grade");
+
+        //Using Filtered Data with grade master api
+        let grade_id_bind: any[] = [];
+        resultData.forEach((element: any) => {
+            gradeMaster.forEach((grade: any) => {
+                if (element.grade_id == grade.grade_master_id) {
+                    let obj: any = { ...element, ...grade };
+                    grade_id_bind.push(obj);
+                }
+            });
+        });
+
+        //Removing Duplicates ex:I-a,I-b
+        const ids = grade_id_bind.map((o) => o.grade_master_id);
+        const filtered = grade_id_bind.filter(({ grade_master_id }, index) => !ids.includes(grade_master_id, index + 1));
+
+        console.log(grade_id_bind, "grademaster and section");
+        setFilterGradeByYear(filtered);
+        setWithDuplicatesGrade(grade_id_bind);
+        handleSectionSearch(grade_id_bind, filtered[0].grade_master_id);
     };
 
-    console.log(gradeSectionList)
+    console.log(gradeSectionList);
+
     const handleSectionSearch = (gradeSectionList: any, searchInput: any) => {
         console.log(gradeSectionList, "++", searchInput);
-        setAddSection("");
-        setAcademicYear(searchInput);
-        let resultData = gradeSectionList.filter((obj: any) =>
-            Object.values(obj)
-                .flat()
-                .some((v) => `${v}`.toLowerCase().includes(`${searchInput}`.toLowerCase()))
-        );
-        let tempArr:any[] = [];
-        
-        resultData.forEach((element: any) => {
-         // console.log(element.grade);
-          if(searchInput == element.grade)
-          {
-            tempArr.push(element);
-          }
-        })
-        // const ids = resultData.map((data: any) => data.section);
-        // const filtered = resultData.filter(({ section }: any, index: any) => !ids.includes(section, index + 1));
-        // console.log(filtered);
-        console.log(tempArr)
+        setAddSection(Number(searchInput));
+        let tempArr: any[] = [];
+
+        gradeSectionList.forEach((element: any) => {
+            if (searchInput === element.grade_master_id) {
+                tempArr.push(element);
+            }
+        });
+
+        console.log(tempArr);
         SetsectionBasedOnGrade(tempArr);
-        //setAddSection(tempArr[0].section);
+        setGradeMasterParticular(tempArr[0].grade_section_id);
     };
 
     console.log(addGrade);
-
-    // const handleSearch = (gradeSectionList: any, searchInput: any) => {
-    //     console.log(gradeSectionList, "++", searchInput);
-    //     setAddGrade("");
-    //     setAcademicYear(searchInput);
-    //     let mySet1 = new Set();
-    //     let resultData = gradeSectionList.filter((obj: any) =>
-    //         Object.values(obj)
-    //             .flat()
-    //             .some((v) => `${v}`.toLowerCase().includes(`${searchInput}`.toLowerCase()))
-    //     );
-
-    //     let selectedYearArr: any = [];
-    //     resultData.forEach((element: any) => {
-    //         selectedYearArr.push(element);
-    //         mySet1.add(element.grade);
-    //     });
-    //     setGradeBasedOnYearFinal([...mySet1]);
-    //     setFilterParticularYear(selectedYearArr);
-    //     setAddGrade(resultData[0].grade);
-    // };
 
     var date = new Date();
     var formatedDate = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
@@ -222,6 +258,7 @@ const Studentadd = () => {
 
     return (
         <div>
+            <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
             <div id="page-top">
                 <div id="wrapper">
                     <Sidebar></Sidebar>
@@ -246,12 +283,7 @@ const Studentadd = () => {
                                                         </Form.Label>
                                                         <div className="col-md-6">
                                                             <InputGroup hasValidation>
-                                                                <Form.Control
-                                                                    required
-                                                                    type="text"
-                                                                    placeholder="Admission No"
-                                                                    onChange={(e) => setAdmissionno(e.target.value)}
-                                                                />
+                                                                <Form.Control required type="text" placeholder="Admission No" onChange={(e) => setAdmissionno(e.target.value)} />
                                                                 <Form.Control.Feedback type="invalid">Please Enter Admission No</Form.Control.Feedback>
                                                             </InputGroup>
                                                         </div>
@@ -263,12 +295,7 @@ const Studentadd = () => {
                                                         </Form.Label>
                                                         <div className="col-md-6">
                                                             <InputGroup hasValidation>
-                                                                <Form.Control
-                                                                    required
-                                                                    type="name"
-                                                                    placeholder="Student Name"
-                                                                    onChange={(e) => setStudentname(e.target.value)}
-                                                                />
+                                                                <Form.Control required type="name" placeholder="Student Name" onChange={(e) => setStudentname(e.target.value)} />
                                                                 <Form.Control.Feedback type="invalid">Please Enter Student Name</Form.Control.Feedback>
                                                             </InputGroup>
                                                         </div>
@@ -280,18 +307,18 @@ const Studentadd = () => {
                                                         <div className="col-md-6">
                                                             <InputGroup hasValidation>
                                                                 <Form.Select onChange={(e) => setFromgrade(e.target.value)} required>
-                                                                    <option>I</option>
-                                                                    <option>II</option>
-                                                                    <option>III</option>
-                                                                    <option>IV</option>
-                                                                    <option>V</option>
-                                                                    <option>VI</option>
-                                                                    <option>VII</option>
-                                                                    <option>VIII</option>
-                                                                    <option>IX</option>
-                                                                    <option>X</option>
-                                                                    <option>XI</option>
-                                                                    <option>XII</option>
+                                                                    <option value="I">I</option>
+                                                                    <option value="II">II</option>
+                                                                    <option value="III">III</option>
+                                                                    <option value="IV">IV</option>
+                                                                    <option value="V">V</option>
+                                                                    <option value="VI">VI</option>
+                                                                    <option value="VII">VII</option>
+                                                                    <option value="VII">VIII</option>
+                                                                    <option value="IX">IX</option>
+                                                                    <option value="X">X</option>
+                                                                    <option value="XI">XI</option>
+                                                                    <option value="XII">XII</option>
                                                                 </Form.Select>
                                                                 <Form.Control.Feedback type="invalid">Please Enter Grede</Form.Control.Feedback>
                                                             </InputGroup>
@@ -345,12 +372,7 @@ const Studentadd = () => {
                                                         </Form.Label>
                                                         <div className="col-md-6">
                                                             <InputGroup hasValidation>
-                                                                <Form.Control
-                                                                    type="email"
-                                                                    onChange={(e) => setEmail(e.target.value)}
-                                                                    placeholder="Email"
-                                                                    required
-                                                                />
+                                                                <Form.Control type="email" onChange={(e) => setEmail(e.target.value)} placeholder="Email" required />
                                                                 <Form.Control.Feedback type="invalid">Please Enter Email</Form.Control.Feedback>
                                                             </InputGroup>
                                                         </div>
@@ -362,11 +384,7 @@ const Studentadd = () => {
                                                         </Form.Label>
                                                         <div className="col-md-6">
                                                             <InputGroup hasValidation>
-                                                                <Form.Control
-                                                                    type="date"
-                                                                    value={moment(admissionDate).format("YYYY-MM-DD")}
-                                                                    onChange={(e) => setAdmissiondate(e.target.value)}
-                                                                />
+                                                                <Form.Control type="date" value={moment(admissionDate).format("YYYY-MM-DD")} onChange={(e) => setAdmissiondate(e.target.value)} />
                                                                 {/* <Form.Control type="date" value="{formatedDate}"onChange={(e) => setAdmissiondate(e.target.value)} required/> */}
                                                                 <Form.Control.Feedback type="invalid">Please Enter Admission Date</Form.Control.Feedback>
                                                             </InputGroup>
@@ -381,11 +399,11 @@ const Studentadd = () => {
                                                             <InputGroup hasValidation>
                                                                 <Form.Select
                                                                     onChange={(e: any) => {
-                                                                        handleGradeFilter(gradeSectionList, e.target.value);
+                                                                        handleGradeFilter(gradeSectionList, Number(e.target.value));
+                                                                        setAcademicYear(Number(e.target.value));
                                                                     }}
                                                                     required
                                                                 >
-                                                                    <option hidden>--Academic Year--</option>
                                                                     {academicYearFinal &&
                                                                         academicYearFinal.length &&
                                                                         academicYearFinal.map((values: any) => {
@@ -408,15 +426,16 @@ const Studentadd = () => {
                                                         <div className="col-md-6">
                                                             <InputGroup hasValidation>
                                                                 <Form.Select
-                                                                    //value={searchGradeId}
+                                                                    value={addSection}
                                                                     onChange={(e: any) => {
-                                                                        handleSectionSearch(actualGrade, e.target.value);
+                                                                        handleSectionSearch(withDuplicatesGrade, Number(e.target.value));
+                                                                        setAddSection(Number(e.target.value));
                                                                     }}
                                                                 >
-                                                                    {addGrade &&
-                                                                        addGrade.length &&
-                                                                        addGrade.map((values: any, index: any) => {
-                                                                            return <option value={values.grade}>{values.grade}</option>;
+                                                                    {filterGradeByYear &&
+                                                                        filterGradeByYear.length &&
+                                                                        filterGradeByYear.map((values: any, index: any) => {
+                                                                            return <option value={values.grade_master_id}>{values.grade_master}</option>;
                                                                         })}
                                                                 </Form.Select>
                                                                 <Form.Control.Feedback type="invalid">Please Enter Grade</Form.Control.Feedback>
@@ -431,8 +450,9 @@ const Studentadd = () => {
                                                         <div className="col-md-6">
                                                             <InputGroup hasValidation>
                                                                 <Form.Select
+                                                                    value={gradeMasterParticular}
                                                                     onChange={(e) => {
-                                                                        setToSection(e.target.value);
+                                                                        setGradeMasterParticular(e.target.value);
                                                                     }}
                                                                     required
                                                                 >
@@ -453,12 +473,7 @@ const Studentadd = () => {
                                                         </Form.Label>
                                                         <div className="col-md-6">
                                                             <InputGroup hasValidation>
-                                                                <Form.Control
-                                                                    as="textarea"
-                                                                    rows={2}
-                                                                    onChange={(e) => setPreviousSchoolInfo(e.target.value)}
-                                                                    required
-                                                                />
+                                                                <Form.Control as="textarea" rows={2} onChange={(e) => setPreviousSchoolInfo(e.target.value)} required />
                                                                 <Form.Control.Feedback type="invalid">Please Enter Previous School Info</Form.Control.Feedback>
                                                             </InputGroup>
                                                         </div>
@@ -470,12 +485,7 @@ const Studentadd = () => {
                                                         </Form.Label>
                                                         <div className="col-md-6">
                                                             <InputGroup hasValidation>
-                                                                <Form.Control
-                                                                    type="text"
-                                                                    placeholder="Father Name"
-                                                                    onChange={(e) => setFatherName(e.target.value)}
-                                                                    required
-                                                                />
+                                                                <Form.Control type="text" placeholder="Father Name" onChange={(e) => setFatherName(e.target.value)} required />
                                                                 <Form.Control.Feedback type="invalid">Please Enter Fathername</Form.Control.Feedback>
                                                             </InputGroup>
                                                         </div>
@@ -487,12 +497,7 @@ const Studentadd = () => {
                                                         </Form.Label>
                                                         <div className="col-md-6">
                                                             <InputGroup hasValidation>
-                                                                <Form.Control
-                                                                    type="text"
-                                                                    placeholder="Father Occupation"
-                                                                    onChange={(e) => setFatherOccupation(e.target.value)}
-                                                                    required
-                                                                />
+                                                                <Form.Control type="text" placeholder="Father Occupation" onChange={(e) => setFatherOccupation(e.target.value)} required />
                                                                 <Form.Control.Feedback type="invalid">Please Enter FatherOccupation</Form.Control.Feedback>
                                                             </InputGroup>
                                                         </div>
@@ -516,9 +521,12 @@ const Studentadd = () => {
                                                         </Form.Label>
                                                         <div className="col-md-6">
                                                             <Form.Control
-                                                                onChange={(e) => setPhoneno(e.target.value)}
+                                                                value={phoneNo}
+                                                                onChange={(e) => {
+                                                                    e.target.value.length > 10 ? setPhoneno(phoneNo) : setPhoneno(e.target.value);
+                                                                }}
                                                                 required
-                                                                type="text"
+                                                                type="number"
                                                                 pattern="[0-9]*"
                                                                 placeholder="Phone No"
                                                             />
@@ -531,8 +539,11 @@ const Studentadd = () => {
                                                         </Form.Label>
                                                         <div className="col-md-6">
                                                             <Form.Control
-                                                                onChange={(e) => setAlterPhoneno(e.target.value)}
-                                                                type="text"
+                                                                value={alterPhoneno}
+                                                                onChange={(e) => {
+                                                                    e.target.value.length > 10 ? setAlterPhoneno(alterPhoneno) : setAlterPhoneno(e.target.value);
+                                                                }}
+                                                                type="number"
                                                                 pattern="[0-9]*"
                                                                 placeholder="Alt. Phone No"
                                                             />
@@ -541,9 +552,20 @@ const Studentadd = () => {
                                                 </div>
                                             </div>
                                             <div className="card-footerss">
-                                                <Button className="btn btn-danger float-right" type="submit">
-                                                    Submit
-                                                </Button>
+                                                {duplication ? (
+                                                    <></>
+                                                ) : (
+                                                    <Button
+                                                        className="btn btn-danger float-right"
+                                                        type="submit"
+                                                        onClick={(e) => {
+                                                            setDuplication(true);
+                                                            handleSubmit(e);
+                                                        }}
+                                                    >
+                                                        Submit
+                                                    </Button>
+                                                )}
                                             </div>
                                         </div>
                                     </Form>
