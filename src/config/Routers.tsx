@@ -64,7 +64,7 @@ const Routers = (props: any) => {
 							<PrivateRoute path="/Academicyear" component={Year} />
 							<PrivateRoute path="/Grade_section" component={Grade} />
 							<PrivateRoute path="/studentprofile" component={StudentProfile} />
-							<PrivateRoute path="/StudentprofileSearch" component={StudentprofileSearch} />
+							<PrivateRoute path="/StudentprofileSearch/:id" component={StudentprofileSearch} />
 							<PrivateRoute path="/placesprice" component={Placesprice} />
 							<PrivateRoute path="/placesstoppings" component={Placesspotting} />
 							<PrivateRoute path="/Uniform_size" component={Uniform_size} />

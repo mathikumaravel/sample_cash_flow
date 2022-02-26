@@ -7,9 +7,17 @@ import { Row, Col, Form, Button } from "react-bootstrap";
 import axios, { AxiosResponse } from "axios";
 import { baseUrl } from "../../index";
 import { getAccessToken } from "../../config/getAccessToken";
+import { useHistory, useParams } from "react-router-dom";
+
 
 const StudentprofileSearch = () => {
 	//To Make Edit
+
+	const urlParams:any = useParams();
+	const id = urlParams.id;
+	console.log(id)
+
+
 	const [search, setSearch] = useState<any>({
 		text: "",
 		suggestions: [],
@@ -20,6 +28,8 @@ const StudentprofileSearch = () => {
 	const [statusStudentDetailsEdit, setStatusStudentDetailsEdit] = useState<any>({});
 	const [statusStudentSearch, setStatusStudentSearch] = useState<any>({});
 	const [statusStudentDetails, setStatusStudentDetails] = useState<any>({});
+
+
 
 	console.log(statusStudentDetails);
 
@@ -48,9 +58,9 @@ const StudentprofileSearch = () => {
 
 	const searchData = () => {
         getAccessToken();
-		axios.get(`${baseUrl}student_admissions_search/profile?student_id=MVM100006`).then((response: AxiosResponse) => {
-			setStatusStudentDetails(response.data.student_profile[0]);
-            console.log(response.data.student_profile[0])
+		axios.post(`${baseUrl}studentProfile`,{student_admissions_id:id}).then((response: AxiosResponse) => {
+			setStatusStudentDetails(response.data.data[0]);
+            console.log(response.data)
 		});
 	};
     useEffect(()=>{
@@ -180,13 +190,12 @@ const StudentprofileSearch = () => {
 																<Col sm="8" style={{display:"grid",alignItems:'center'}}>
 																	{!statusStudentEdit ? (
 																		<div className="col-md-6 text-black" id="stud_name">
-																			{statusStudentDetails.grade_id}
+																			{statusStudentDetails.grade_master}
 																		</div>
 																	) : (
-																		<Form.Select size="sm" onChange={(e: any) => handleChange(e)}>
-																			<option value="I">I</option>
-																			<option value="II">II</option>
-																		</Form.Select>
+																		<div className="col-md-6 text-black" id="stud_name">
+																			{statusStudentDetails.grade_master}
+																		</div>
 																	)}
 																</Col>
 															</Form.Group>
