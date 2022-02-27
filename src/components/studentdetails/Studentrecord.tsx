@@ -8,8 +8,10 @@ import { Link } from "react-router-dom";
 import axios, { AxiosResponse } from "axios";
 import { baseUrl } from "../../index";
 import { getAccessToken } from "../../config/getAccessToken";
+import { useHistory, useParams } from "react-router-dom";
 const Studentrecord = () => {
 	//To Make Edit
+	let history = useHistory()
 	const [search, setSearch] = useState<any>({
 		text: "",
 		studentid: "",
@@ -542,7 +544,7 @@ const Studentrecord = () => {
 																		<td>{values.grade_master}</td>
 																		<td>{values.section}</td>
 																		<td>
-																			<Button>{values.balance && values.balance > 0 ? "Unpaid" : "Paid"}</Button>
+																			<Button onClick={(e)=>history.push('/stu_pay')}>{values.balance && values.balance > 0 ? "Unpaid" : "Paid"}</Button>
 																		</td>
 																	</tr>
 																</>

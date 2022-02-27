@@ -143,12 +143,7 @@ else if(res.data.data.isDeletable === false){
 	}, [statusAcademicYearAdd]);
 
 	const handleSubmit = async (e: any) => {
-		e.preventDefault();
-		alert(acdYear.fromYear.length)
-		if(acdYear.fromYear && acdYear.fromYear.length == 0){
-		
-		}
-		else if(acdYear.fromYear && acdYear.fromYear.length >3){
+		if(acdYear.fromYear && acdYear.fromYear.toString().length >3){
 			try {
 				getAccessToken();
 				const res: any = await axios
