@@ -466,7 +466,7 @@ const Studentrecord = () => {
 													{academicYearFinal &&
 														academicYearFinal.length &&
 														academicYearFinal.map((academic: any) => {
-															return <option value={academic.academic_year}>{academic.academic_year}</option>;
+															return <option value={academic.year_id}>{academic.academic_year}</option>;
 														})}
 												</Form.Select>
 											</Col>
