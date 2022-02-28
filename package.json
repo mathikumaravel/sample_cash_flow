@@ -3,7 +3,7 @@
   "name": "cash_flow_react",
   "version": "0.1.0",
   "private": true,
-  "homepage": "/",
+  "homepage": "/stage",
   "dependencies": {
     "@salesforce/core": "^2.35.0",
     "@testing-library/jest-dom": "^5.16.1",
