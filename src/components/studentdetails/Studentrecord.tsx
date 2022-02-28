@@ -459,7 +459,7 @@ const Studentrecord = () => {
 												<Form.Select
 													aria-label="Default select example"
 													onChange={(e) => {
-														setAcademicYear(e.target.value);
+														setAcademicYear(e.target.options[e.target.selectedIndex].text);
 														console.log(e.target.value);
 														handleGradeFilter(gradeSectionList, e.target.value);
 													}}>
