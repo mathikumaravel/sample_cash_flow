@@ -12,6 +12,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Studentadd = () => {
+
 	const [validated, setValidated] = useState(false);
 	const [year, setYear] = useState<any>("");
 	const [getYear, setacedamic] = useState<any>("");
@@ -42,6 +43,7 @@ const Studentadd = () => {
 	const [filterGradeSectionList, setFilterGradeSectionList] = useState<any>([]);
 	const [searchGradeId, setSearchGradeId] = useState<any>("");
 
+
 	const [actualGrade, setActualGrade] = useState<any>([]);
 
 	const [gradeMaster, setGradeMaster] = useState<any>([]);
@@ -50,8 +52,6 @@ const Studentadd = () => {
 	const [withDuplicatesGrade, setWithDuplicatesGrade] = useState<any>([]);
 
 	const [duplication, setDuplication] = useState(false);
-
-	console.log(dateofBirth);
 
 	const handleSubmit = (e: any) => {
 		e.preventDefault();
