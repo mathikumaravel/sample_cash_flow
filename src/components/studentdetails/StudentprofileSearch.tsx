@@ -44,7 +44,7 @@ const StudentprofileSearch = () => {
 		});
 	};
 
-	const { suggestions } = search;
+	const { suggestions } = search;	
 
 	const searchData = () => {
         getAccessToken();
@@ -163,7 +163,7 @@ const StudentprofileSearch = () => {
 					
 															<Form.Group as={Row} >
 																<Form.Label column sm="4">
-																	<strong>Student Name</strong>
+																	<strong>Student Namee</strong>
 																</Form.Label>
 																<Col sm="8" style={{display:"grid",alignItems:'center'}}>
 																	{!statusStudentEdit ? (
