@@ -18,14 +18,13 @@ const Studentrecord = () => {
 		PhoneNumber: "",
 		GradeId: "",
 	});
-	const [statusStudentEdit, setStatusStudentEdit] = useState(false);
+	
 	const [isComponentVisible, setIsComponentVisible] = useState(true);
 	const [statusStudentDetailsEdit, setStatusStudentDetailsEdit] = useState<any>({});
 	const [statusStudentSearch, setStatusStudentSearch] = useState<any>({});
 	const [statusStudentDetails, setStatusStudentDetails] = useState<any>({});
 	const [Autosearch, setAutoSearch] = useState<any>([]);
 	const [suggest, setSuggest] = useState<any>([]);
-	const [suggestions, setsuggestions] = useState<any>([]);
 	const [acdyear, setAcdYear] = useState<any>([]);
 	const [Grdsec, setGrdsec] = useState<any>([]);
 	const [academicYear, setAcademicYear] = useState<any>("");
@@ -75,12 +74,13 @@ const Studentrecord = () => {
 	// 		handlesection(filterParticularYear, filterParticularYear[0].grade);
 	// 	}
 	// }, [filterParticularYear]);
+	console.log(Autosearch);
 	const onSuggesthandler = (value: any) => {
 		setIsComponentVisible(false);
 		console.log(value);
 		setAutoSearch({
 			text: value.student_name,
-			studentid: value.student_id,
+			studentid: value.admission_no,
 			PhoneNumber: value.phone_number,
 			GradeId: value.grade_master,
 		});
@@ -130,6 +130,7 @@ const Studentrecord = () => {
 			setAllGotFinalData([]);
 		}
 	}, [searchResultData]);
+
 
 	const Searchauto = () => {
 		if (Autosearch.length > 0) {
@@ -357,7 +358,7 @@ const Studentrecord = () => {
 			.get(`${baseUrl}gradeSection`)
 			.then((res: any) => {
 				setGradeSectionList(res.data.data);
-				//	console.log(res.data.data);
+				//console.log(res.data.data);
 			})
 			.catch((error) => console.log(error));
 	}, []);
@@ -447,7 +448,7 @@ const Studentrecord = () => {
 																		{item.student_name}***
 																		{item.grade_id}***
 																		{item.phone_number}***
-																		{item.student_id}
+																		{item.admission_no}
 																	</div>
 																))}
 															</div>
@@ -455,6 +456,7 @@ const Studentrecord = () => {
 													</ListGroup>
 												</Card>
 											</Col>
+										{Autosearch && Autosearch.text  ? <></> :<>
 											<Col md={2}>
 												<Form.Select
 													aria-label="Default select example"
@@ -507,7 +509,7 @@ const Studentrecord = () => {
 														<i className="fas fa-search fa-sm"></i>
 													</Button>
 												</div>
-											</Col>
+											</Col></>}	
 										</Row>
 									</Container>
 								</div>
@@ -518,7 +520,7 @@ const Studentrecord = () => {
 												<thead>
 													<tr>
 														<th>Name</th>
-														<th>Admission ID</th>
+														<th>Admission No</th>
 														<th>PhoneNumber</th>
 														<th>Grade</th>
 														<th>Section</th>
@@ -539,7 +541,7 @@ const Studentrecord = () => {
 																		{/* <td>{values.studentData.student_id}</td>
                                                                     <td>{values.studentData.phone_number}</td>
                                                                     <td>{values.studentData.grade}</td> */}
-																		<td>{values.student_id}</td>
+																		<td>{values.admission_no}</td>
 																		<td>{values.phone_number}</td>
 																		<td>{values.grade_master}</td>
 																		<td>{values.section}</td>

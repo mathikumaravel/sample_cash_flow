@@ -65,54 +65,35 @@ const Studentadd = () => {
 			fatherName.length <= 0 ||
 			fatherOccupation.length <= 0 ||
 			address.length <= 0 ||
-			phoneNo.length <= 0 ||
-			alterPhoneno.length <= 0 ||
+			phoneNo.length < 10 ||
+			alterPhoneno.length < 10 ||
 			admissionNo.length <= 0 ||
 			fromGrade.length <= 0 ||
 			academicYear.length <= 0 ||
 			gradeMasterParticular.length <= 0
 		) {
-			console.log(
-				studentName,
-				"studentName",
-				dateofBirth,
-				"dateofBirth",
-				gender,
-				"gender",
-				email,
-				"email",
-				addSection,
-				"addSection",
-				previousSchoolInfo,
-				"previousSchoolInfo",
-				fatherName,
-				"fatherName",
-				fatherOccupation,
-				"fatherOccupation",
-				address,
-				"address",
-				phoneNo,
-				"phoneNo",
-				alterPhoneno,
-				"alterPhoneno",
-				admissionNo,
-				"admissionNo",
-				fromGrade,
-				"fromGrade",
-				academicYear,
-				"academicYear",
-				gradeMasterParticular,
-				"gradeMasterParticular"
-			);
-			toast.warning("please Fill All Details", {
-				position: "top-right",
-				autoClose: 5000,
-				hideProgressBar: false,
-				closeOnClick: true,
-				pauseOnHover: true,
-				draggable: true,
-				progress: undefined,
-			});
+			if (phoneNo.length < 10 || alterPhoneno.length < 10) {
+				toast.warning("please Check Phone Number", {
+					position: "top-right",
+					autoClose: 5000,
+					hideProgressBar: false,
+					closeOnClick: true,
+					pauseOnHover: true,
+					draggable: true,
+					progress: undefined,
+				});
+			} else {
+				toast.warning("please Fill All Details", {
+					position: "top-right",
+					autoClose: 5000,
+					hideProgressBar: false,
+					closeOnClick: true,
+					pauseOnHover: true,
+					draggable: true,
+					progress: undefined,
+				});
+			}
+
 			setDuplication(false);
 		} else {
 			getAccessToken();
@@ -273,7 +254,17 @@ const Studentadd = () => {
 
 	return (
 		<div>
-			<ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
+			<ToastContainer
+				position="top-right"
+				autoClose={5000}
+				hideProgressBar={false}
+				newestOnTop={false}
+				closeOnClick
+				rtl={false}
+				pauseOnFocusLoss
+				draggable
+				pauseOnHover
+			/>
 			<div id="page-top">
 				<div id="wrapper">
 					<Sidebar></Sidebar>
@@ -298,7 +289,12 @@ const Studentadd = () => {
 														</Form.Label>
 														<div className="col-md-6">
 															<InputGroup hasValidation>
-																<Form.Control required type="text" placeholder="Admission No" onChange={(e) => setAdmissionno(e.target.value)} />
+																<Form.Control
+																	required
+																	type="text"
+																	placeholder="Admission No"
+																	onChange={(e) => setAdmissionno(e.target.value)}
+																/>
 																<Form.Control.Feedback type="invalid">Please Enter Admission No</Form.Control.Feedback>
 															</InputGroup>
 														</div>
@@ -310,7 +306,12 @@ const Studentadd = () => {
 														</Form.Label>
 														<div className="col-md-6">
 															<InputGroup hasValidation>
-																<Form.Control required type="name" placeholder="Student Name" onChange={(e) => setStudentname(e.target.value)} />
+																<Form.Control
+																	required
+																	type="name"
+																	placeholder="Student Name"
+																	onChange={(e) => setStudentname(e.target.value)}
+																/>
 																<Form.Control.Feedback type="invalid">Please Enter Student Name</Form.Control.Feedback>
 															</InputGroup>
 														</div>
@@ -322,6 +323,7 @@ const Studentadd = () => {
 														<div className="col-md-6">
 															<InputGroup hasValidation>
 																<Form.Select onChange={(e) => setFromgrade(e.target.value)} required>
+																	<option value="No Grade">--Select FromGrade--</option>
 																	<option value="I">I</option>
 																	<option value="II">II</option>
 																	<option value="III">III</option>
@@ -399,7 +401,11 @@ const Studentadd = () => {
 														</Form.Label>
 														<div className="col-md-6">
 															<InputGroup hasValidation>
-																<Form.Control type="date" value={moment(admissionDate).format("YYYY-MM-DD")} onChange={(e) => setAdmissiondate(e.target.value)} />
+																<Form.Control
+																	type="date"
+																	value={moment(admissionDate).format("YYYY-MM-DD")}
+																	onChange={(e) => setAdmissiondate(e.target.value)}
+																/>
 																{/* <Form.Control type="date" value="{formatedDate}"onChange={(e) => setAdmissiondate(e.target.value)} required/> */}
 																<Form.Control.Feedback type="invalid">Please Enter Admission Date</Form.Control.Feedback>
 															</InputGroup>
@@ -497,7 +503,12 @@ const Studentadd = () => {
 														</Form.Label>
 														<div className="col-md-6">
 															<InputGroup hasValidation>
-																<Form.Control type="text" placeholder="Father Name" onChange={(e) => setFatherName(e.target.value)} required />
+																<Form.Control
+																	type="text"
+																	placeholder="Father Name"
+																	onChange={(e) => setFatherName(e.target.value)}
+																	required
+																/>
 																<Form.Control.Feedback type="invalid">Please Enter Fathername</Form.Control.Feedback>
 															</InputGroup>
 														</div>
@@ -509,7 +520,12 @@ const Studentadd = () => {
 														</Form.Label>
 														<div className="col-md-6">
 															<InputGroup hasValidation>
-																<Form.Control type="text" placeholder="Father Occupation" onChange={(e) => setFatherOccupation(e.target.value)} required />
+																<Form.Control
+																	type="text"
+																	placeholder="Father Occupation"
+																	onChange={(e) => setFatherOccupation(e.target.value)}
+																	required
+																/>
 																<Form.Control.Feedback type="invalid">Please Enter FatherOccupation</Form.Control.Feedback>
 															</InputGroup>
 														</div>

@@ -31,7 +31,7 @@ const Studentpay = () => {
 																<i className="far fa-clone pr-1"></i>Fees
 															</a>{" "}
 															<Link to="/StudentprofileSearch">
-																<a className="btn btn-success btn float-right disabled">Back</a>
+																<a className="btn btn-success btn float-right disa bled">Back</a>
 															</Link>
 														</h4>
 													</a>

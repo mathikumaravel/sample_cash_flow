@@ -26,21 +26,28 @@ const Yearoffee = () => {
 	const [FeeDetailsFinal, setFeeDetailsFinal] = useState<any[]>([]);
 	const [GetFinalYearData, setGetFinalYearData] = useState<any[]>([]);
 
-	const [displayFinalData, setDisplayFinalData] = useState<any[]>([]);
-	console.log(searchGradeId);
+	const [displayFinalData, setDisplayFinalData] = useState<any[]>([]);	
+	const [gradeSectionList, setGradeSectionList] = useState<any>([]);
+	const [academicYear, setAcademicYear] = useState<any>("");
+	const [gradeSectionListAdd, setGradeSectionListAdd] = useState<any>([]);
 
-	console.log(datatoDelete);
+
+	const [filterGradeByYear, setFilterGradeByYear] = useState<any>([]);
+	const [filterSectionByYear, setFilterSectionByYear] = useState<any>([]);
+	const [gradeMaster, setGradeMaster] = useState<any>([]);
+	const [gradeMasterParticular, setGradeMasterParticular] = useState<any>([]);
+
+	// console.log(searchGradeId);
+
+	// console.log(datatoDelete);
 
 	//feb 26 by nithish
 	const [allGrade, setAllGrade] = useState<any[]>([]);
-	const [frontSearchGrade, setFrontSearchGrade] = useState("");
-	const [frontSearchYear, setFrontSearchYear] = useState("");
+	const [frontSearchGrade, setFrontSearchGrade] = useState<any>("");
+	const [frontSearchYear, setFrontSearchYear] = useState<any>("");
 	//Modal Popup
 	const [show, setShow] = useState(false);
-	const handleClose = () => {
-		setShow(false);
-		deleteParticularDiscount(datatoDelete.yearoffeesid);
-	};
+
 
 	const SuddenhandleClose = () => {
 		setShow(false);
@@ -58,10 +65,11 @@ const Yearoffee = () => {
 		});
 	};
 
-	console.log(FeeDetailsFinal);
+	// console.log(FeeDetailsFinal);
 	const getAllFeeMasterData = () => {
 		getAccessToken();
 		axios.get(`${baseUrl}year`).then((response: AxiosResponse) => {
+			
 			setAllFeeMaster(response.data.data);
 			setSearchAcademicYear(response.data.data[0].year_id);
 			setFrontSearchYear(response.data.data[0].year_id);
@@ -71,7 +79,7 @@ const Yearoffee = () => {
 	function YearId(gradedata: any) {
 		// console.log(gradedata);
 		var matchedyearid: any = FeeDetailsFinal && FeeDetailsFinal.length && FeeDetailsFinal.filter((data: any) => data.fee_master_id === gradedata.fee_master_id);
-		let combindobject = { ...gradedata, ...matchedyearid[0] };
+		let combindobject = { ...gradedata, ...matchedyearid[0]};
 		GetFinalYearData.push(combindobject);
 		console.log(GetFinalYearData);
 		setDisplayFinalData(GetFinalYearData);
@@ -89,28 +97,143 @@ const Yearoffee = () => {
 	console.log(tableFeeAmount);
 
 	const getAllGrade = () => {
-		axios.get(`${baseUrl}grademaster`).then((res: AxiosResponse) => {
+		getAllFeeMasterData();
+		axios.get(`${baseUrl}gradeSection`).then((res: AxiosResponse) => {
 			setAllGrade(res.data.data);
-			setFrontSearchGrade(res.data.data[0].grade_master_id);
-			setSearchGradeId(res.data.data[0].grade_master_id);
+			setGradeSectionList(res.data.data);
+			setFrontSearchGrade(res.data.data[0].grade_id);
+			setSearchGradeId(res.data.data[0].grade_id);
 		});
 	};
+	useEffect(() => {
+ 		getAllFeeMasterData();
+		
+		getAccessToken();
+		axios
+			.get(`${baseUrl}grademaster`)
+			.then((res: any) => {
+				setGradeMaster(res.data.data);
+				setGradeMasterParticular(res.data.data[0]);
+			})
+			.catch((error) => console.log(error));
+	}, []);
+	useEffect(() => {
+		// console.log(gradeSectionList,filterParticularYear,gradeMaster)
+		if (gradeSectionList && gradeSectionList.length > 0 && feeMaster && feeMaster.length > 0 && gradeMaster && gradeMaster.length > 0) {
+			//console.log(gradeSectionList,firstAcadmicYear[0])
+			setAcademicYear(feeMaster[0].academic_year);
+			handleGradeFilter(gradeSectionList, feeMaster[0].year_id);
+		}
+	}, [gradeSectionList, feeMaster, allGrade]);
+	// console.log(gradeSectionList);
+
+	const handleGradeFilter = (gradeSectionList: any, searchInput: any) => {
+		console.log(gradeSectionList, searchInput);
+		// setDisplayFinalData();
+		//Filtering Grade by academic year id
+		let resultData: any = [];
+		gradeSectionList.forEach((element: any) => {
+			if (searchInput == element.academic_year_id) {
+				resultData.push(element);
+			}
+		});
+		console.log(resultData, "grade");
+
+		//Using Filtered Data with grade master api
+		let grade_id_bind: any[] = [];
+		resultData.forEach((element: any) => {
+			gradeMaster.forEach((grade: any) => {
+				if (element.grade_id == grade.grade_master_id) {
+					let obj: any = { ...element, ...grade };
+					grade_id_bind.push(obj);
+				}
+			});
+		});
+
+	const ids = grade_id_bind.map((o) => o.grade_master_id);
+	const filtered = grade_id_bind.filter(({ grade_master_id }, index) => !ids.includes(grade_master_id, index + 1));
+
+	const idsofSection = grade_id_bind.map((o) => o.section);
+	const filteredForSection = grade_id_bind.filter(({ section }, index) => !idsofSection.includes(section, index + 1));
+
+	console.log(grade_id_bind, "grademaster and section");
+	//  console.log(filtered, "Year");
+	  console.log(filteredForSection);
+	setFilterGradeByYear(filtered);
+	setFilterSectionByYear(filteredForSection);
+	setDisplayFinalData(filteredForSection);
+
+	}
+
+	//Add
+
+	useEffect(() => {
+		// console.log(gradeSectionList,filterParticularYear,gradeMaster)
+		if (gradeSectionList && gradeSectionList.length > 0 && feeMaster && feeMaster.length > 0 && gradeMaster && gradeMaster.length > 0) {
+			//console.log(gradeSectionList,firstAcadmicYear[0])
+			setAcademicYear(feeMaster[0].academic_year);
+			handleGradeFilter(gradeSectionList, feeMaster[0].year_id);
+		}
+	}, [gradeSectionList, feeMaster, allGrade]);
+
+
+	const handleGradeFilterAdd = (gradeSectionListAdd: any, searchInput: any) => {
+		console.log(gradeSectionListAdd, searchInput);
+
+		//Filtering Grade by academic year id
+		let resultData: any = [];
+		gradeSectionListAdd.forEach((element: any) => {
+			if (searchInput == element.academic_year_id) {
+				resultData.push(element);
+			}
+		});
+		console.log(resultData, "gradeAdd");
+
+		//Using Filtered Data with grade master api
+		let grade_id_bind: any[] = [];
+		resultData.forEach((element: any) => {
+			gradeMaster.forEach((grade: any) => {
+				if (element.grade_id == grade.grade_master_id) {
+					let obj: any = { ...element, ...grade };
+					grade_id_bind.push(obj);
+				}
+			});
+		});
+
+	const ids = grade_id_bind.map((o) => o.grade_master_id);
+	const filtered = grade_id_bind.filter(({ grade_master_id }, index) => !ids.includes(grade_master_id, index + 1));
+
+	const idsofSection = grade_id_bind.map((o) => o.section);
+	const filteredForSection = grade_id_bind.filter(({ section }, index) => !idsofSection.includes(section, index + 1));
+
+	console.log(grade_id_bind, "grademaster and section");
+	//  console.log(filtered, "Year");
+	  console.log(filteredForSection);
+	setFilterGradeByYear(filtered);
+	setFilterSectionByYear(filteredForSection);
+	setDisplayFinalData(filteredForSection);
+
+	}
 
 	useEffect(() => {
 		getAllGradeSectionData();
 		getAllFeeMasterData();
 		getAllGrade();
+		// setGradeMaster();
 	}, []);
-
+	
 	//Calling Fees Data
 	useEffect(() => {
+		console.log(frontSearchYear, frontSearchGrade);
 		if (frontSearchGrade && frontSearchGrade != null && frontSearchYear && frontSearchYear != null) {
+		
 			list_fee_details(frontSearchYear, frontSearchGrade);
 		}
 	}, [frontSearchGrade, frontSearchYear]);
-	console.log(searchGradeId);
+	// console.log(searchGradeId);
 
 	const list_fee_details = (year_id: any, grade_id: any) => {
+		setSpinnerLoad(true)
 		getAccessToken();
 		axios
 			.post(`${baseUrl}yearOffee`, {
@@ -118,7 +241,7 @@ const Yearoffee = () => {
 				year_id: year_id,
 			})
 			.then((res: any) => {
-				console.log(res.data.data);
+				console.log(res.data.data,'yearoffee');
 				setTableFeeAmount(res.data.data);
 				setSpinnerLoad(false);
 			});
@@ -296,6 +419,10 @@ const Yearoffee = () => {
 			});
 	};
 
+	const handleClose = () => {
+		setShow(false);
+		deleteParticularDiscount(datatoDelete.yearoffeesid);
+	};
 	return (
 		<div>
 			<ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
@@ -353,10 +480,14 @@ const Yearoffee = () => {
 																			<td>
 																				<div className="form-group" style={{ width: "60%" }}>
 																					<Form.Select
-																						value={frontSearchYear}
+																					//view
+																					value={frontSearchYear}
+																						
 																						onChange={(e: any) => {
-																							//handleGradeFilter(gradeSectionList, e.target.value);
-																							setFrontSearchYear(e.target.value);
+																							setFrontSearchYear(Number(e.target.value));
+																							handleGradeFilter(gradeSectionList, e.target.value);
+																							//setFrontSearchYear(e.target.value);
+																							console.log(e.target.value,"var");
 																						}}>
 																						{feeMaster &&
 																							feeMaster.length &&
@@ -371,11 +502,11 @@ const Yearoffee = () => {
 																					<Form.Select
 																						value={frontSearchGrade}
 																						onChange={(e: any) => {
-																							setFrontSearchGrade(e.target.value);
+																							setFrontSearchGrade(Number(e.target.value));
 																						}}>
-																						{allGrade &&
-																							allGrade.length &&
-																							allGrade.map((values: any, index: any) => {
+																						{filterGradeByYear &&
+																							filterGradeByYear.length &&
+																							filterGradeByYear.map((values: any, index: any) => {
 																								return <option value={values.grade_master_id}>{values.grade_master}</option>;
 																							})}
 																					</Form.Select>
@@ -558,6 +689,7 @@ const Yearoffee = () => {
 													</div>
 												) : (
 													<div>
+													
 														<Row>
 															<>
 																<Col sm="4" className="mb-4">
@@ -568,6 +700,7 @@ const Yearoffee = () => {
 																		//value={searchAcademicYear}
 																		onChange={(e: any) => {
 																			setSearchAcademicYear(e.target.value);
+																			handleGradeFilterAdd(gradeSectionListAdd, e.target.value);
 																		}}>
 																		{feeMaster &&
 																			feeMaster.length &&
@@ -658,6 +791,6 @@ const Yearoffee = () => {
 				</div>
 			</div>
 		</div>
-	);
-};
+	)
+}
 export default Yearoffee;
