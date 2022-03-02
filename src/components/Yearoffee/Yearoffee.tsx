@@ -34,6 +34,8 @@ const Yearoffee = () => {
 
 	const [filterGradeByYear, setFilterGradeByYear] = useState<any>([]);
 	const [filterSectionByYear, setFilterSectionByYear] = useState<any>([]);
+	const [filterSectionByYearAdd, setFilterSectionByYearAdd] = useState<any>([]);
+
 	const [gradeMaster, setGradeMaster] = useState<any>([]);
 	const [gradeMasterParticular, setGradeMasterParticular] = useState<any>([]);
 
@@ -73,6 +75,7 @@ const Yearoffee = () => {
 			setAllFeeMaster(response.data.data);
 			setSearchAcademicYear(response.data.data[0].year_id);
 			setFrontSearchYear(response.data.data[0].year_id);
+			
 		});
 	};
 
@@ -101,6 +104,8 @@ const Yearoffee = () => {
 		axios.get(`${baseUrl}gradeSection`).then((res: AxiosResponse) => {
 			setAllGrade(res.data.data);
 			setGradeSectionList(res.data.data);
+			setGradeSectionListAdd(res.data.data);
+
 			setFrontSearchGrade(res.data.data[0].grade_id);
 			setSearchGradeId(res.data.data[0].grade_id);
 		});
@@ -123,8 +128,11 @@ const Yearoffee = () => {
 			//console.log(gradeSectionList,firstAcadmicYear[0])
 			setAcademicYear(feeMaster[0].academic_year);
 			handleGradeFilter(gradeSectionList, feeMaster[0].year_id);
+			handleGradeFilterAdd(gradeSectionListAdd, feeMaster[0].year_id);
+
 		}
 	}, [gradeSectionList, feeMaster, allGrade]);
+
 	// console.log(gradeSectionList);
 
 	const handleGradeFilter = (gradeSectionList: any, searchInput: any) => {
@@ -175,14 +183,15 @@ const Yearoffee = () => {
 			handleGradeFilter(gradeSectionList, feeMaster[0].year_id);
 		}
 	}, [gradeSectionList, feeMaster, allGrade]);
+ 
 
 
 	const handleGradeFilterAdd = (gradeSectionListAdd: any, searchInput: any) => {
 		console.log(gradeSectionListAdd, searchInput);
-
 		//Filtering Grade by academic year id
+
 		let resultData: any = [];
-		gradeSectionListAdd.forEach((element: any) => {
+		gradeSectionListAdd.forEach((element: any) => { 
 			if (searchInput == element.academic_year_id) {
 				resultData.push(element);
 			}
@@ -193,7 +202,7 @@ const Yearoffee = () => {
 		let grade_id_bind: any[] = [];
 		resultData.forEach((element: any) => {
 			gradeMaster.forEach((grade: any) => {
-				if (element.grade_id == grade.grade_master_id) {
+				if (element.grade_id == grade.grade_master_id) {	
 					let obj: any = { ...element, ...grade };
 					grade_id_bind.push(obj);
 				}
@@ -202,16 +211,16 @@ const Yearoffee = () => {
 
 	const ids = grade_id_bind.map((o) => o.grade_master_id);
 	const filtered = grade_id_bind.filter(({ grade_master_id }, index) => !ids.includes(grade_master_id, index + 1));
-
 	const idsofSection = grade_id_bind.map((o) => o.section);
 	const filteredForSection = grade_id_bind.filter(({ section }, index) => !idsofSection.includes(section, index + 1));
 
-	console.log(grade_id_bind, "grademaster and section");
+	console.log(grade_id_bind, "grademaster and sectionADD");
 	//  console.log(filtered, "Year");
 	  console.log(filteredForSection);
-	setFilterGradeByYear(filtered);
-	setFilterSectionByYear(filteredForSection);
-	setDisplayFinalData(filteredForSection);
+	// setFilterGradeByYear(filtered);
+	// setFilterSectionByYear(filteredForSection);
+	// setDisplayFinalData(filteredForSection);
+	setFilterSectionByYearAdd(filtered);
 
 	}
 
@@ -222,9 +231,11 @@ const Yearoffee = () => {
 		// setGradeMaster();
 	}, []);
 	
+
+	//console.log(frontSearchYear, frontSearchGrade,"=====");
 	//Calling Fees Data
 	useEffect(() => {
-		console.log(frontSearchYear, frontSearchGrade);
+		console.log(frontSearchYear, frontSearchGrade,"=====");
 		if (frontSearchGrade && frontSearchGrade != null && frontSearchYear && frontSearchYear != null) {
 		
 			list_fee_details(frontSearchYear, frontSearchGrade);
@@ -423,6 +434,7 @@ const Yearoffee = () => {
 		setShow(false);
 		deleteParticularDiscount(datatoDelete.yearoffeesid);
 	};
+	console.log(filterSectionByYearAdd)
 	return (
 		<div>
 			<ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
@@ -449,7 +461,13 @@ const Yearoffee = () => {
 																	className="btn btn-primary btn-sm btn-save"
 																	onClick={() => {
 																		setStatusFeeDetailsAdd(true);
-																		FeeDetailsFinal && FeeDetailsFinal.length && setFeeTypeName(FeeDetailsFinal[0].fee_master_id);
+																		 setFrontSearchGrade("");
+																			 setFrontSearchYear("");
+																		//	 getAllGrade();
+																			 getAllFeeMasterData();
+																		  FeeDetailsFinal && FeeDetailsFinal.length && setFeeTypeName(FeeDetailsFinal[0].fee_master_id);
+																		  filterSectionByYearAdd && filterSectionByYearAdd.length && setSearchGradeId(filterSectionByYearAdd[0].grade_master_id);
+
 																	}}>
 																	Add
 																</Button>
@@ -735,9 +753,9 @@ const Yearoffee = () => {
 																	onChange={(e: any) => {
 																		setSearchGradeId(e.target.value);
 																	}}>
-																	{allGrade &&
-																		allGrade.length &&
-																		allGrade.map((values: any, index: any) => {
+																	{filterSectionByYearAdd &&
+																		filterSectionByYearAdd.length &&
+																		filterSectionByYearAdd.map((values: any, index: any) => {
 																			return <option value={values.grade_master_id}>{values.grade_master}</option>;
 																		})}
 																</Form.Select>
@@ -763,6 +781,7 @@ const Yearoffee = () => {
 																		setFinalAmount("");
 																		getAllGrade();
 																		getAllFeeMasterData();
+																	
 																	}}>
 																	Cancel
 																</Button>{" "}

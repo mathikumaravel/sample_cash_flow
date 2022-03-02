@@ -6,6 +6,8 @@ const Feesdetails = (props: any) => {
     let history = useHistory()
     const status = props.status;
 
+
+    
     return (
         <div>
             <div className="row">
