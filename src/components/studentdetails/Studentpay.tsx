@@ -702,7 +702,7 @@ const Studentpay = () => {
                                                                     })}
                                                             </tbody>
                                                             <tfoot>
-                                                                <tr>
+                                                                {/* <tr>
                                                                     <th>Total</th>
                                                                     <th id="totalfeeamt">{AllDetailsOfStudent && AllDetailsOfStudent.length && AllDetailsOfStudent[3].AlltotalFees}</th>
                                                                     <th id="totalpaidamt"> {AllDetailsOfStudent && AllDetailsOfStudent.length && AllDetailsOfStudent[2].Alltotalpaid}</th>
@@ -712,7 +712,7 @@ const Studentpay = () => {
                                                                     </th>
                                                                     <th></th>
                                                                     <th> </th>
-                                                                </tr>
+                                                                </tr> */}
                                                             </tfoot>
                                                         </Table>
                                                     </div>

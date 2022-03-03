@@ -59,20 +59,33 @@ const Login = (props: any) => {
 			try {
 				const res: any = await axios.post(`${baseUrl}login`, { email: username, password: password }).then((res: any) => {
 					console.log(res);
-                    toast.success('Welcome', {
-                        position: "top-right",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        });
-					sessionStorage.setItem("AccessToken", res.data.token);
-
-					history.push("/studentrecord");
-
-				callToPush(); 
+					if(res.data.success == 1) {
+						toast.success('Welcome', {
+							position: "top-right",
+							autoClose: 5000,
+							hideProgressBar: false,
+							closeOnClick: true,
+							pauseOnHover: true,
+							draggable: true,
+							progress: undefined,
+							});
+						sessionStorage.setItem("AccessToken", res.data.token);
+	
+						history.push("/studentrecord");
+	
+					callToPush(); 
+					}else {
+						toast.error('Incorrect Username and Password', {
+							position: "top-right",
+							autoClose: 5000,
+							hideProgressBar: false,
+							closeOnClick: true,
+							pauseOnHover: true,
+							draggable: true,
+							progress: undefined,
+							});
+					}
+                    
         });
 			} catch (err: any) {
 				console.log(err.response.data.error_message);
@@ -116,7 +129,7 @@ const Login = (props: any) => {
 								<div>
 									<div className="p-5">
 										<div className="text-center">
-											<h1 className="h4 text-gray-900 mb-4 cashflow-heading">₹ Cash Flow</h1>
+											<h1 className="h4 text-danger-900 mb-4 cashflow-heading">₹ Cash Flow</h1>
 										</div>
 										<form className="user">
 											<div className="form-group">

@@ -12,7 +12,11 @@ const Listofpayment = () => {
 					<div className="card-header text-center">
 						<h6 className="m-0 text-danger">List of Payment</h6>
 					</div>
-					<div className="row" style={{ padding: "15px" }}>
+					
+					<div className="card-header text-center">
+						<h6 className="m-0 text-danger">Under Construction {`\u{1F6A7}`}</h6>
+					</div>
+					{/* <div className="row" style={{ padding: "15px" }}>
 						<div className="col-md-6">
 							<table>
 								<tr>
@@ -120,7 +124,7 @@ const Listofpayment = () => {
 								<Pagination.Last />
 							</Pagination>
 						</div>
-					</Container>
+					</Container> */}
 				</div>
 			</div>
 		</div>
