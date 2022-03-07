@@ -1,4 +1,3 @@
- 
 {
   "name": "cash_flow_react",
   "version": "0.1.2",
@@ -62,4 +61,3 @@
     "@types/styled-components": "^5.1.21"
   }
 }
-
