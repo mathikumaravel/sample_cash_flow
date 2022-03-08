@@ -18,6 +18,21 @@ body {font-family: Arial, Helvetica, sans-serif;}
     background-color: #fff;
     border: 1px solid #ddd;
   }
+  .pro-sidebar{
+    height:100vh;
+  }
+
+  .pro-sidebar .pro-menu.shaped .pro-menu-item > .pro-inner-item > .pro-icon-wrapper{
+    background-color: #e84118;
+  }
+
+  .pro-sidebar .pro-menu > ul > .pro-sub-menu > .pro-inner-list-item{
+    background-color: #fff;
+  }
+
+  .pro-sidebar.collapsed .pro-menu > ul > .pro-menu-item.pro-sub-menu > .pro-inner-list-item > .popper-inner{
+    background-color: #fff;
+  }
 
   .form-inline Form.Select {
     vertical-align: middle;
@@ -27,12 +42,30 @@ body {font-family: Arial, Helvetica, sans-serif;}
     border: 1px solid #ddd;
   }
   
+  .pro-sidebar .pro-menu .pro-menu-item.active a{
+    border-radius: 0.35rem;
+    color: #4e73df !important;
+    font-weight: 700;
+    display: block;    
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    white-space: nowrap;
+    background-color: #dfdfdf;
+  }
 
+  .pro-sidebar .pro-menu a:hover{
+    border-radius: 0.35rem;    
+    font-weight: 700;
+    display: block;    
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    white-space: nowrap;
+    background-color: #dfdfdf;
+  }
   .button-section {
     margin: 3%;
-  
-
   }
+
   .button-sec {
     margin-top:3%;
   }
@@ -55,4 +88,6 @@ body {font-family: Arial, Helvetica, sans-serif;}
   .remove:hover {
     background-color: rgb(187, 43, 43);
   }
-  
+  a:hover{
+    text-decoration: none;
+  }
