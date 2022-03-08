@@ -19,6 +19,8 @@ body {font-family: Arial, Helvetica, sans-serif;}
     border: 1px solid #ddd;
   }
   .pro-sidebar{
+    min-width:200px;
+    width: 230px;
     height:100vh;
   }
 

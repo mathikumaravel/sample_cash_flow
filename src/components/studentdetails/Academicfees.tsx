@@ -5,8 +5,6 @@ import { getAccessToken } from "../../config/getAccessToken";
 import axios from "axios";
 import "../../assets/vendor/fontawesome-free/css/all.min.css";
 import { ToastContainer, toast } from "react-toastify";
-import paginationFactory from "react-bootstrap-table2-paginator";
-import BootstrapTable from "react-bootstrap-table-next";
 import { useHistory, useParams } from "react-router-dom";
 
 const Academicfees = (props: any) => {
