@@ -3,7 +3,10 @@ import { Table, Button, Row, Col, Spinner, Form } from "react-bootstrap";
 import { baseUrl } from "../../index";
 import { getAccessToken } from "../../config/getAccessToken";
 import axios from "axios";
+import "../../assets/vendor/fontawesome-free/css/all.min.css";
 import { ToastContainer, toast } from "react-toastify";
+import paginationFactory from "react-bootstrap-table2-paginator";
+import BootstrapTable from "react-bootstrap-table-next";
 import { useHistory, useParams } from "react-router-dom";
 
 const Academicfees = (props: any) => {
@@ -15,7 +18,13 @@ const Academicfees = (props: any) => {
   const [updateTableStatus, setUpdateTableStatus] = useState(false);
   const [academicYear, setAcademicYear] = useState<any>([]);
   const [academic, setAcademic] = useState<any>();
-  const [total, setTotal] = useState<any>();
+  const [total, setTotal] = useState<any>({
+    Total_initial_fees: 0,
+    Total_balance: 0,
+    Total_discount: 0,
+  });
+
+  let student_id: any;
   const [studentdiscount, setstudentdiscount] = useState<any>([]);
   const [spinnerLoad, setSpinnerLoad] = useState<any>(false);
   const [feemasterid, setfeemasterid] = useState<any>([]);
@@ -34,13 +43,16 @@ const Academicfees = (props: any) => {
   // console.log(admission_id);
 
   useEffect(() => {
+    student_id = props.studentDetails.student_id;
+    if (student_id && student_id.toString().length) yearacademic();
+  }, [props.studentDetails]);
+  useEffect(() => {
     getapi();
   }, [academicYear]);
 
   useEffect(() => {
     feemaster();
     discountname();
-    yearacademic();
   }, []);
 
   useEffect(() => {
@@ -57,9 +69,11 @@ const Academicfees = (props: any) => {
 
   const yearacademic = () => {
     getAccessToken();
+    console.log(student_id);
     axios
       .post(`${baseUrl}studentyear`, {
         student_admissions_id: Number(id),
+        student_id: student_id,
       })
       .then((res: any) => {
         setAcademic(res.data.data);
@@ -176,8 +190,6 @@ const Academicfees = (props: any) => {
       Total_discount: Total_discount,
     });
   };
-
-  console.log(total);
 
   useEffect(() => {
     Total();
