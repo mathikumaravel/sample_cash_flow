@@ -3,17 +3,28 @@ import { Table, Button, Row, Col, Spinner, Form } from "react-bootstrap";
 import { baseUrl } from "../../index";
 import { getAccessToken } from "../../config/getAccessToken";
 import axios from "axios";
+import "../../assets/vendor/fontawesome-free/css/all.min.css";
 import { ToastContainer, toast } from "react-toastify";
+import paginationFactory from "react-bootstrap-table2-paginator";
+import BootstrapTable from "react-bootstrap-table-next";
 import { useHistory, useParams } from "react-router-dom";
+
 const Academicfees = (props: any) => {
   //table status edit
   const urlParams: any = useParams();
   const id = urlParams.id;
   // console.log(id, "++iss");
+
   const [updateTableStatus, setUpdateTableStatus] = useState(false);
   const [academicYear, setAcademicYear] = useState<any>([]);
   const [academic, setAcademic] = useState<any>();
-  const [academicYearFilter, setAcademicYearFilter] = useState<any>([]);
+  const [total, setTotal] = useState<any>({
+    Total_initial_fees: 0,
+    Total_balance: 0,
+    Total_discount: 0,
+  });
+
+  let student_id: any;
   const [studentdiscount, setstudentdiscount] = useState<any>([]);
   const [spinnerLoad, setSpinnerLoad] = useState<any>(false);
   const [feemasterid, setfeemasterid] = useState<any>([]);
@@ -30,14 +41,21 @@ const Academicfees = (props: any) => {
   const [updateYearOfFee, setUpdateYearOfFee] = useState<any>([]);
   const [updateDiscountFeeType, setUpdateDiscountFeeType] = useState<any>([]);
   // console.log(admission_id);
+
+
+  useEffect(() => {
+    student_id = props.studentDetails.student_id;
+    if (student_id && student_id.toString().length) yearacademic();
+  }, [props.studentDetails]);
   useEffect(() => {
     getapi();
   }, [academicYear]);
+
   useEffect(() => {
     feemaster();
     discountname();
-    yearacademic();
   }, []);
+
   useEffect(() => {
     studentdiscount && studentdiscount.length
       ? studentdiscount.map((data: any) => {
@@ -45,19 +63,28 @@ const Academicfees = (props: any) => {
         })
       : setMerdattwpus([]);
   }, [studentdiscount]);
+
+
   useEffect(() => {
     fetchData();
   }, [Merdattwpus]);
+
   const yearacademic = () => {
     getAccessToken();
+    console.log(student_id);
     axios
-      .get(`${baseUrl}year`)
+      .post(`${baseUrl}studentyear`, {
+        student_admissions_id: Number(id),
+        student_id: student_id,
+      })
       .then((res: any) => {
         setAcademic(res.data.data);
         setAcademicYear(res.data.data[0].year_id);
       })
       .catch((e: any) => {});
   };
+
+
   const feemaster = () => {
     getAccessToken();
     axios.get(`${baseUrl}feeMaster`).then((res: any) => {
@@ -92,6 +119,7 @@ const Academicfees = (props: any) => {
     mergedata.push(combindobject);
     setMerdattwpus(mergedata);
   }
+
   const discountname = () => {
     getAccessToken();
     axios.get(`${baseUrl}discountfee`).then((res: any) => {
@@ -99,6 +127,7 @@ const Academicfees = (props: any) => {
       setUpdateDiscountFeeType(res.data.data[1].dis_feetype_id);
     });
   };
+
   const updateDiscount = (values: any) => {
     getAccessToken();
     axios
@@ -123,6 +152,7 @@ const Academicfees = (props: any) => {
         console.log(e);
       });
   };
+
   function setdiscountt(gdata: any) {
     var matcheddiscou: any =
       discounttype &&
@@ -142,6 +172,28 @@ const Academicfees = (props: any) => {
         })
       : setDiscountallrecord([]);
   };
+
+  const Total = () => {
+    let Total_initial_fees = 0;
+    let Total_discount = 0;
+    let Total_balance = 0;
+
+    discountallrecord.map((value: any) => {
+      Total_initial_fees = value.actual_fees + Total_initial_fees;
+      Total_balance = Number(value.balance) + Total_balance;
+      Total_discount = value.discount_amount + Total_discount;
+    });
+    setTotal({
+      Total_initial_fees: Total_initial_fees,
+      Total_balance: Total_balance,
+      Total_discount: Total_discount,
+    });
+  };
+
+  useEffect(() => {
+    Total();
+  }, [discountallrecord]);
+
   return (
     <div>
       <ToastContainer
@@ -301,6 +353,7 @@ const Academicfees = (props: any) => {
                                       variant="secondary"
                                       onClick={() => {
                                         setEditingYearOfFee({});
+                                        setUpdateYearOfFee("");
                                       }}
                                     >
                                       Cancel
@@ -313,6 +366,9 @@ const Academicfees = (props: any) => {
                                     <Button
                                       variant="primary"
                                       onClick={() => {
+                                        setUpdateYearOfFee(
+                                          Number(values.discount_amount)
+                                        );
                                         setEditingYearOfFee({
                                           id: index,
                                         });
@@ -331,9 +387,15 @@ const Academicfees = (props: any) => {
                     <tfoot>
                       <tr>
                         <th style={{ textAlign: "center" }}>Total</th>
-                        <th style={{ textAlign: "center" }}></th>
-                        <th style={{ textAlign: "center" }}></th>
-                        <th style={{ textAlign: "center" }}></th>
+                        <th style={{ textAlign: "center" }}>
+                          {total.Total_initial_fees}
+                        </th>
+                        <th style={{ textAlign: "center" }}>
+                          {total.Total_balance}
+                        </th>
+                        <th style={{ textAlign: "center" }}>
+                          {total.Total_discount}
+                        </th>
                         <th style={{ textAlign: "center" }}></th>
                       </tr>
                     </tfoot>

@@ -1,161 +1,111 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import "../../assets/css/sb-admin-2.css"
-import { Row, Col, Form, Button, NavDropdown } from "react-bootstrap";
-
-const Sidebar = (props: any) => {
+import "../../assets/css/sb-admin-2.css";
+//import react pro sidebar components
+import { ProSidebar, Menu, MenuItem, SidebarHeader, SidebarContent, SubMenu } from "react-pro-sidebar";
+//import icons from react icons
+import { FaChalkboardTeacher } from "react-icons/fa";
+import { FiArrowLeftCircle, FiArrowRightCircle } from "react-icons/fi";
+import { BiBus,BiHotel,BiTachometer } from "react-icons/bi";
+//import sidebar css from react-pro-sidebar module and our custom css
+import "react-pro-sidebar/dist/css/styles.css";
+import "./header.css";
+const Sidebar = (props: any, { toggled, handleToggleSidebar }: any) => {
     let activeValue = props.data;
+    //create initial menuCollapse state using useState hook
+    const [menuCollapse, setMenuCollapse] = useState(false);
+    //create a custom function that will change menucollapse state from false to true and true to false
+    const menuIconClick = () => {
+        //condition checking to change state from true to false and vice versa
+        menuCollapse ? setMenuCollapse(false) : setMenuCollapse(true);
+    };
     return (
-        <div>
-            <ul className="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-                <div className="sidebar-brand d-flex align-items-center justify-content-center">
-                    <div className="sidebar-brand-icon">
-                        <i className="fas fa-rupee-sign"></i>
-                    </div>
-                    <div className="sidebar-brand-text mx-3">CASHFLOW</div>
-                </div>
-                <hr className="sidebar-divider my-0" />
-
-                <li className="nav-item active">
-                    <a className="nav-link" href="/Dashboard" rel="dashboard">
-                        <i className="fas fa-fw fa-tachometer-alt"></i>
-                        <span>Dashboard</span>
-                    </a>
-                </li>
-
-                <div> </div>
-                <li>
-                    <div> </div>
-                </li>
-                <li className="nav-item">
-                    <div className="nav-link collapsed" style={{ cursor: "pointer" }} data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-                        <i className="fas fa-chalkboard-teacher"></i>
-                        <span>Student</span>
-                    </div>
-                    <div id="collapseTwo" className="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                        <div className="bg-white py-2 collapse-inner rounded">
-                            <h6 className="collapse-header">Custom</h6>
- 
-                            <Link to="/studentrecord" className={activeValue === "studentrecord" ? "active collapse-item" : "collapse-item"}>
-                                Student
-                            </Link>
-                            <Link to="/Stu_add" className={activeValue === "Stu_add" ? "active collapse-item" : "collapse-item"}>
-                                New Admission
-                            </Link>
-                            <Link to="/Stupro" className={activeValue === "Stupro" ? "active collapse-item" : "collapse-item"}>
-                                Promotion
-                            </Link>
-                            <Link to="/Stu_fees" className={activeValue === "Stu_fees" ? "active collapse-item" : "collapse-item"}>
-                                Year of Fee
-                            </Link>
-                            <Link to="/Fee_master" className={activeValue === "Fee_master" ? "active collapse-item" : "collapse-item"}>
-                                Fee Master
-                            </Link>
-                            <Link to="/Discounttype" className={activeValue === "Discounttype" ? "active collapse-item" : "collapse-item"}>
-                                Discount Fee Type Master
-                            </Link>
-                            <Link to="/Academicyear" className={activeValue === "Academicyear" ? "active collapse-item" : "collapse-item"}>
-                                Year
-                            </Link>
-                            <Link to="/Grade_section" className={activeValue === "Grade_section" ? "active collapse-item" : "collapse-item"}>
- 
-                                Grade & section
-                            </Link>
+        <>
+            <div className="navbar-nav bg-gradient-primary header sidebar-dark accordion" id="accordionSidebar">
+                {/* collapsed props to change menu size using menucollapse state */}
+                <ProSidebar collapsed={menuCollapse} toggled={toggled} breakPoint="md" onToggle={handleToggleSidebar}>
+                    <SidebarHeader>
+                        <div className="logotext">
+                            {/* small and big change using menucollapse state */}
+                            <div>
+                                {menuCollapse ? (
+                                    <>
+                                        <div className="sidebar-brand d-flex align-items-center justify-content-center pt-2">
+                                            <div className="sidebar-brand-icon">
+                                                <h2>₹</h2>
+                                            </div>
+                                        </div>
+                                    </>
+                                ) : (
+                                    <>
+                                        <div className="sidebar-brand d-flex align-items-center justify-content-center pt-2">
+                                            <div className="sidebar-brand-icon">
+                                                <h2>₹</h2>
+                                            </div>
+                                            <div className="sidebar-brand-text mx-3" style={{ fontWeight: "900" }}>
+                                                CASHFLOW
+                                            </div>
+                                        </div>
+                                    </>
+                                )}
+                            </div>
                         </div>
-                    </div>
-                </li>
-                
-                <li className="nav-item">
-                    <div className="nav-link collapsed" style={{ cursor: "pointer" }} data-toggle="collapse" data-target="#collapseTransport" aria-expanded="true" aria-controls="collapseTransport">
-                        <i className="fa fa-bus"></i>
-                        <span>Transport</span>
-                    </div>
-                    <div id="collapseTransport" className="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                        <div className="bg-white py-2 collapse-inner rounded">
-                            {/* <h6 className="collapse-header"></h6> */}
- 
-                            <Link to="/placesprice" className={activeValue === "Placesprice" ? "active collapse-item" : "collapse-item"}>
-                                Places
-                            </Link>
-                            <Link to="/placesstoppings" className={activeValue === "placesstoppings" ? "active collapse-item" : "collapse-item"}>
-                                Places & Stoppings
-                            </Link>
+                        <div className="closemenu" onClick={menuIconClick}>
+                            {/* changing menu collapse icon on click */}
+                            {menuCollapse ? <FiArrowRightCircle /> : <FiArrowLeftCircle />}
                         </div>
-                    </div>
-                </li>
+                    </SidebarHeader>
+                    <SidebarContent>
+                    
+                        <Menu iconShape="square">
+                            {console.log(window.location.pathname)}
+                            <MenuItem icon={<BiTachometer />}>
+                            <Link to="/Dashboard" rel="dashboard">
+                                Dashboard
+                                </Link>
+                            </MenuItem>                                                        
+                        </Menu>
+                    
+                        <Menu iconShape="circle">
+                            <SubMenu  title="Student" icon={<FaChalkboardTeacher />}>
+                              <MenuItem active={window.location.pathname === "/studentrecord"}><Link to="/studentrecord" style={{color:"#3a3b45"}}>Student</Link></MenuItem>
+                              <MenuItem active={window.location.pathname === "/Stu_add"}><Link to="/Stu_add" style={{color:"#3a3b45"}}>New Admission</Link></MenuItem>
+                              <MenuItem active={window.location.pathname === "/Stupro"}><Link to="/Stupro" style={{color:"#3a3b45"}}> Promotion</Link></MenuItem>
+                              <MenuItem active={window.location.pathname === "/Stu_fees"}><Link to="/Stu_fees" style={{color:"#3a3b45"}}>  Year of Fee</Link></MenuItem>
+                              <MenuItem active={window.location.pathname === "/Fee_master"}><Link to="/Fee_master" style={{color:"#3a3b45"}}> Fee Master</Link></MenuItem>
+                              <MenuItem active={window.location.pathname === "/Discounttype"}><Link to="/Discounttype" style={{color:"#3a3b45"}}> Discount Fee Type Master</Link></MenuItem>
+                              <MenuItem active={window.location.pathname === "/Academicyear"}><Link to="/Academicyear" style={{color:"#3a3b45"}}>Year</Link></MenuItem>
+                              <MenuItem active={window.location.pathname === "/Grade_section"}><Link to="/Grade_section" style={{color:"#3a3b45"}}> Grade and Section</Link></MenuItem>
+                            </SubMenu>
+                            <SubMenu title="TransPort" icon={<BiBus />}>
+                                <MenuItem active={window.location.pathname === "/placesprice"}><Link to="/placesprice"  style={{color:"#3a3b45"}}>Places</Link></MenuItem>
+                                <MenuItem active={window.location.pathname === "/placesstoppings"}><Link to="/placesstoppings" style={{color:"#3a3b45"}}>Places & Stoppings</Link></MenuItem>                                
+                            </SubMenu>                            
 
-                <li className="nav-item">
-                    <div className="nav-link collapsed" style={{ cursor: "pointer" }} data-toggle="collapse" data-target="#collapseUni" aria-expanded="true" aria-controls="collapseTwo">
-                        <i className="fas fa-chalkboard-teacher"></i>
-                        <span>Uniform</span>
-                    </div>
-                    <div id="collapseUni" className="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                        <div className="bg-white py-2 collapse-inner rounded">
-                            <h6 className="collapse-header">UnifForm</h6>
-                            <Link to="/Uniform_size" className="collapse-item">
-                                Uniform-Size
-                            </Link>
-                            <Link to="/Uniform_things" className="collapse-item">
-                                Uniform-Things
-                            </Link>
-                            <Link to="/Uniform" className="collapse-item">
-                                Uniform
- 
-                            </Link>
-                        </div>
-                    </div>
-                </li>
-
- 
-                <li className="nav-item">
-                    <div className="nav-link collapsed" style={{ cursor: "pointer" }} data-toggle="collapse" data-target="#collapseHostal" aria-expanded="true" aria-controls="collapseHostal">
-                        <i className="fa fa-hotel"></i>
-                        <span>Hostal</span>
-                    </div>
-                    <div id="collapseHostal" className="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                        <div className="bg-white py-2 collapse-inner rounded">
-                            {/* <h6 className="collapse-header"></h6> */}
-                            <Link to="/hostal_fees" className={activeValue === "hostal_fees" ? "active collapse-item" : "collapse-item"}>
-                                Hostal Fees
-                            </Link>
-                            <Link to="/room_no" className={activeValue === "room_no" ? "active collapse-item" : "collapse-item"}>
-                                Room No & Capacity
-                            </Link>
-                            <Link to="/hostal_name" className={activeValue === "hostal_name" ? "active collapse-item" : "collapse-item"}>
-                                Hostal Name
-                            </Link>
-                        </div>
-                    </div>
-                </li>
-
-                {/* <li className="nav-item">
-                    <a className="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-                        <i className="fas fa-chalkboard-teacher"></i>
-                        <span>Options</span>
-                    </a>
-                </li>
-
-                <li className="nav-item">
-                    <a className="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-                        <i className="fas fa-chalkboard-teacher"></i>
-                        <span>Pages</span>
-                    </a>
-                </li>
-                <li className="nav-item">
-                    <a className="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-                        <i className="fas fa-chalkboard-teacher"></i>
-                        <span>Admission</span>
-                    </a>
-                </li> */}
-
-                {/* <hr className="sidebar-divider d-none d-md-block" /> */}
-                <hr />
-
-                {/* <div className="text-center d-none d-md-inline">
-                        <button className="rounded-circle border-0" id="sidebarToggle"></button>
-                    </div> */}
-            </ul>
-        </div>
+                            <SubMenu title="Uniform" icon={<FaChalkboardTeacher />}>
+                                <MenuItem active={window.location.pathname === "/Uniform_size"}><Link to="/Uniform_size" style={{color:"#3a3b45"}}>Uniform-Size</Link></MenuItem>
+                                <MenuItem active={window.location.pathname === "/Uniform_things"}><Link to="/Uniform_things" style={{color:"#3a3b45"}}>Uniform-Things</Link></MenuItem>
+                                <MenuItem active={window.location.pathname === "/Uniform"}><Link to="/Uniform" style={{color:"#3a3b45"}}> Uniform</Link></MenuItem>
+                            </SubMenu>
+                            <SubMenu title="Hostal" icon={<BiHotel />}>
+                                <MenuItem active={window.location.pathname === "/hostal_fees"}><Link to="/hostal_fees" style={{color:"#3a3b45"}}> Hostal Fees </Link></MenuItem>
+                                <MenuItem active={window.location.pathname === "/room_no"}><Link to="/room_no" style={{color:"#3a3b45"}}>Room No & Capacity </Link></MenuItem>
+                                <MenuItem active={window.location.pathname === "/hostal_name"}><Link to="/hostal_name" style={{color:"#3a3b45"}}>Hostal Name</Link></MenuItem>
+                                {/* <SubMenu title={`'submenu' 3`}>
+                                    <MenuItem style={{color:"#3a3b45"}}>'submenu' 3.1 </MenuItem>
+                                    <MenuItem style={{color:"#3a3b45"}}>'submenu' 3.2 </MenuItem>
+                                    <SubMenu title={`'submenu' 3.3`}>
+                                        <MenuItem style={{color:"#3a3b45"}}>'submenu' 3.3.1 </MenuItem>
+                                        <MenuItem style={{color:"#3a3b45"}}>'submenu' 3.3.2 </MenuItem>
+                                        <MenuItem style={{color:"#3a3b45"}}>'submenu' 3.3.3 </MenuItem>
+                                    </SubMenu>
+                                </SubMenu> */}
+                            </SubMenu>
+                        </Menu>
+                    </SidebarContent>                   
+                </ProSidebar>
+            </div>
+        </>
     );
 };
 export default Sidebar;
