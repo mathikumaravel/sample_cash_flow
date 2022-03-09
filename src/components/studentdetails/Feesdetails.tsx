@@ -194,7 +194,7 @@ console.log(YearOfBalanceByYear);
                                         <h6>Action</h6>
                                     </div>
                                     <div>
-                                        <Button onClick={(e)=>{history.push('/stu_pay')}} className="btn-success btn-sm" disabled>Pay / View All</Button>
+                                        <Button onClick={(e)=>{history.push('/stu_pay')}} className="btn-success btn-sm" >Pay / View All</Button>
                                     </div>
                                 </div>
                           
