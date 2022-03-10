@@ -342,6 +342,7 @@ const Grade = () => {
                                                                                     <td>{data.academic_year}</td>
                                                                                     <td>{data.grade_master}</td>
                                                                                     <td>{data.section}</td>
+                                                                                    {console.log(data)}
                                                                                     <td>
                                                                                         <Button
                                                                                             variant="danger"
