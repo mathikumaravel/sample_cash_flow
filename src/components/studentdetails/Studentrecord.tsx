@@ -18,6 +18,8 @@ import axios, { AxiosResponse } from "axios";
 import { baseUrl } from "../../index";
 import { getAccessToken } from "../../config/getAccessToken";
 import { useHistory, useParams } from "react-router-dom";
+import paginationFactory from "react-bootstrap-table2-paginator";
+import BootstrapTable from "react-bootstrap-table-next";
 const Studentrecord = () => {
   //To Make Edit
   let history = useHistory();
@@ -51,38 +53,65 @@ const Studentrecord = () => {
   const [gradea, setGradea] = useState<any>("");
   const [GotAutoSearchOut, setGotAutoSearchOut] = useState<any>([]);
   const [allGotFinalData, setAllGotFinalData] = useState<any>([]);
+
   const [gradeMaster, setGradeMaster] = useState<any>([]);
   const [gradeMasterParticular, setGradeMasterParticular] = useState<any>([]);
   const [firstAcadmicYear, setFirstAcademicYear] = useState<any>([]);
   const [filterGradeByYear, setFilterGradeByYear] = useState<any>([]);
   const [filterSectionByYear, setFilterSectionByYear] = useState<any>([]);
   const [searchBy, setSearchBy] = useState("");
-  //manage state  Autosearch
-  //manage state  academicYear
-  //manage state  gradea
-  //manage state  section
-  //console.log(academicYear);
-  // useEffect(() => {
-  //    if (gradeSectionList && gradeSectionList.length>0) {
-  //        let mySet1 = new Set();
-  //        gradeSectionList.forEach((element: any) => {
-  //            mySet1.add(element.academic_year_id);
-  //        });
-  //        setAcademicYearFinal([...mySet1]);
-  //        handleSearch(gradeSectionList, gradeSectionList[0].academic_year_id);
-  //    }
-  // }, [gradeSectionList]);
-  // useEffect(() => {
-  //    if (filterParticularYear && filterParticularYear.length) {
-  //        let mySet1 = new Set();
-  //        filterParticularYear.forEach((element: any) => {
-  //            mySet1.add(element.grade);
-  //        });
-  //        setGradeBasedOnYearFinal([...mySet1]);
-  //        handlesection(filterParticularYear, filterParticularYear[0].grade);
-  //    }
-  // }, [filterParticularYear]);
-  console.log(Autosearch);
+
+  const paginate = [
+    { text: "5", value: 5 },
+    { text: "10", value: 10 },
+    { text: "15", value: 15 },
+    { text: "20", value: 20 },
+    { text: "25", value: 25 },
+  ];
+
+  const col: any = [
+    {
+      dataField: "student_name",
+      text: "Name",
+      formatter: (cell: any, row: any, rowIndex: any, formatExtraData: any) => {
+        return (
+          <>
+            <Link to={`/StudentprofileSearch/${row.student_admissions_id}`}>
+              {row.student_name}
+            </Link>
+          </>
+        );
+      },
+      sort: true,
+    },
+    { dataField: "admission_no", text: "Admission No", sort: true },
+    { dataField: "phone_number", text: "PhoneNumber", sort: true },
+    { dataField: "grade_master", text: "Grade", sort: true },
+    { dataField: "section", text: "Section", sort: true },
+    {
+      dataField: "discount",
+      text: "Status",
+      formatter: (cell: any, row: any, rowIndex: any, formatExtraData: any) => {
+        return (
+          <>
+            {row.balance && row.balance > 0 ? (
+              <Button
+                onClick={(e) =>
+                  history.push(`/stupay/${row.student_id}/${row.academic_year}`)
+                }
+              >
+                {"Unpaid"}
+              </Button>
+            ) : (
+              <Button disabled>{"Paid"}</Button>
+            )}
+          </>
+        );
+      },
+      sort: true,
+    },
+  ];
+
   const onSuggesthandler = (value: any) => {
     setIsComponentVisible(false);
     console.log(value);
@@ -299,8 +328,6 @@ const Studentrecord = () => {
             });
         }
       }
-    } else {
-      alert("Please Choose Academic Year");
     }
   };
   const getAllAcademicYears = () => {
@@ -476,6 +503,9 @@ const Studentrecord = () => {
     SetsectionBasedOnGrade([...mySet1]);
     //      setAddSection(resultData[0].section);
   };
+
+  console.log(allGotFinalData);
+
   return (
     <div id="page-top">
       <div id="wrapper">
@@ -607,6 +637,7 @@ const Studentrecord = () => {
                                 className="btn btn-danger"
                                 type="button"
                                 onClick={() => {
+                                  setAllGotFinalData([]);
                                   callStudentData();
                                 }}
                               >
@@ -622,67 +653,37 @@ const Studentrecord = () => {
                 <div className="col-xl-11 text-center">
                   {statusStudentSearch ? (
                     <div>
-                      <Table bordered hover>
-                        <thead>
-                          <tr>
-                            <th>Name</th>
-                            <th>Admission No</th>
-                            <th>PhoneNumber</th>
-                            <th>Grade</th>
-                            <th>Section</th>
-                            <th>Status</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {allGotFinalData && allGotFinalData.length > 0 ? (
-                            allGotFinalData.map((values: any, index: any) => {
-                              //   {console.log(values)}
-                              return (
-                                <>
-                                  <tr key={index}>
-                                    <td>
-                                      {" "}
-                                      <Link
-                                        to={`/StudentprofileSearch/${values.student_admissions_id}`}
-                                      >
-                                        {values.student_name}
-                                      </Link>
-                                    </td>
-                                    {/* <td>{values.studentData.student_id}</td>
-                                                                    <td>{values.studentData.phone_number}</td>
-                                                                    <td>{values.studentData.grade}</td> */}
-                                    <td>{values.admission_no}</td>
-                                    <td>{values.phone_number}</td>
-                                    <td>{values.grade_master}</td>
-                                    <td>{values.section}</td>
-                                    <td>
-                                      {values.balance && values.balance > 0 ? (
-                                        <Button
-                                          onClick={(e) =>
-                                            history.push(
-                                              `/stupay/${values.student_id}/${values.academic_year}`
-                                            )
-                                          }
-                                        >
-                                          {"Unpaid"}
-                                        </Button>
-                                      ) : (
-                                        <Button disabled>{"Paid"}</Button>
-                                      )}
-                                    </td>
-                                  </tr>
-                                </>
-                              );
-                            })
-                          ) : (
+                      {allGotFinalData && allGotFinalData.length > 0 ? (
+                        <BootstrapTable
+                          keyField="academic_year"
+                          data={allGotFinalData}
+                          columns={col}
+                          hover
+                          pagination={paginationFactory({
+                            sizePerPageList: paginate,
+                          })}
+                        />
+                      ) : (
+                        <Table bordered hover>
+                          <thead>
+                            <tr>
+                              <th>Name</th>
+                              <th>Admission No</th>
+                              <th>PhoneNumber</th>
+                              <th>Grade</th>
+                              <th>Section</th>
+                              <th>Status</th>
+                            </tr>
+                          </thead>
+                          <tbody>
                             <tr>
                               <td colSpan={6} className="text-center">
                                 No Data Found
                               </td>
                             </tr>
-                          )}
-                        </tbody>
-                      </Table>
+                          </tbody>
+                        </Table>
+                      )}
                     </div>
                   ) : null}
                 </div>
