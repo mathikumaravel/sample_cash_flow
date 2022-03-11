@@ -539,7 +539,7 @@ const Studentpay = () => {
                                                                     <th>Paid</th>
                                                                     <th>Refund</th>
                                                                     <th>Discount</th>
-                                                                    <th style={{ padding: "10px" }}>Balance</th>
+                                                                    {/* <th style={{ padding: "10px" }}>Balance</th> */}
                                                                     <th>
                                                                         Date
                                                                     </th>
@@ -566,7 +566,7 @@ const Studentpay = () => {
                                                                                 <td>{value.cum_amt}</td>
                                                                                 <td>{value.refund}</td>
                                                                                 <td>{value.discount_amount}</td>
-                                                                                <td>{Number(value.balance)}</td>
+                                                                                {/* <td>{Number(value.balance)}</td> */}
                                                                                 <td style={{width: '10%'}}>
                                                                                     {!refundSwitch ? (
                                                                                         <Form.Control
@@ -743,9 +743,8 @@ const Studentpay = () => {
                                                                     <th>{AllDetailsOfStudent && AllDetailsOfStudent.length && AllDetailsOfStudent[1].AlltotalRefund}</th>
                                                                     <th>{AllDetailsOfStudent && AllDetailsOfStudent.length && AllDetailsOfStudent[5].AllDiscount}</th>
                                                                     <th style={{ padding: "13px" }} id="totalbalamt">
-                                                                        {AllDetailsOfStudent && AllDetailsOfStudent.length && AllDetailsOfStudent[0].Allbalance}
+                                                                        {/* {AllDetailsOfStudent && AllDetailsOfStudent.length && AllDetailsOfStudent[0].Allbalance} */}
                                                                     </th>
-                                                                   <th></th>
                                                                    {!refundSwitch ? ( <th style={{ padding: "13px" }} id="totalbalamt">
                                                                         {AllDetailsOfStudent && AllDetailsOfStudent.length && AllDetailsOfStudent[0].Allbalance}
                                                                     </th>) : (<th id="totalpaidamt"> {AllDetailsOfStudent && AllDetailsOfStudent.length && AllDetailsOfStudent[2].Alltotalpaid}</th>)}
