@@ -69,6 +69,9 @@ const Studentpay = () => {
                     if (element && element.totalcumamt >=0) {
                         ParticularStudentBalance.push({ Allcumamt: element.totalcumamt });
                     }
+                    if(element && element.totaldiscountamount >=0){
+                        ParticularStudentBalance.push({ AllDiscount: element.totaldiscountamount });
+                    }
                     if (element && element.studentData && Object.keys(element.studentData).length > 0) {
                         console.log(element.studentData);
                         resultantData.push(element.studentData);
@@ -535,19 +538,19 @@ const Studentpay = () => {
                                                                     <th>Fees</th>
                                                                     <th>Paid</th>
                                                                     <th>Refund</th>
+                                                                    <th>Discount</th>
                                                                     <th style={{ padding: "10px" }}>Balance</th>
                                                                     <th>
                                                                         Date
-                                                                        <span className="text-danger"> * </span>
                                                                     </th>
                                                                     <th style={{ padding: "10px",width:"70px" }}>Pay</th>
                                                                     <th style={{width:"40%"}}>
                                                                         Amount
-                                                                        <span className="text-danger"> * </span>
+                                                                       
                                                                     </th>
                                                                     <th>
                                                                         Mode of Payment
-                                                                        <span className="text-danger"> * </span>
+                                                                        
                                                                     </th>
                                                                     <th>Comments</th>
                                                                 </tr>
@@ -562,6 +565,7 @@ const Studentpay = () => {
                                                                                 <td>{value.actual_fees}</td>
                                                                                 <td>{value.cum_amt}</td>
                                                                                 <td>{value.refund}</td>
+                                                                                <td>{value.discount_amount}</td>
                                                                                 <td>{Number(value.balance)}</td>
                                                                                 <td style={{width: '10%'}}>
                                                                                     {!refundSwitch ? (
@@ -594,7 +598,9 @@ const Studentpay = () => {
                                                                                         />
                                                                                     )}
                                                                                 </td>
-                                                                                <td>{value.amount_paid}</td>
+                                                                                {!refundSwitch ? (<td>{Number(value.balance)}</td>):(<td>{value.amount_paid}</td>)}
+                                                                                
+                                                                                
                                                                                 <td>
                                                                                     {!refundSwitch ? (
                                                                                         <input
@@ -735,11 +741,14 @@ const Studentpay = () => {
                                                                     <th id="totalfeeamt">{AllDetailsOfStudent && AllDetailsOfStudent.length && AllDetailsOfStudent[3].AlltotalFees}</th>
                                                                     <th>{AllDetailsOfStudent && AllDetailsOfStudent.length && AllDetailsOfStudent[4].Allcumamt}</th>
                                                                     <th>{AllDetailsOfStudent && AllDetailsOfStudent.length && AllDetailsOfStudent[1].AlltotalRefund}</th>
+                                                                    <th>{AllDetailsOfStudent && AllDetailsOfStudent.length && AllDetailsOfStudent[5].AllDiscount}</th>
                                                                     <th style={{ padding: "13px" }} id="totalbalamt">
                                                                         {AllDetailsOfStudent && AllDetailsOfStudent.length && AllDetailsOfStudent[0].Allbalance}
                                                                     </th>
-                                                                    <th></th>
-                                                                    <th id="totalpaidamt"> {AllDetailsOfStudent && AllDetailsOfStudent.length && AllDetailsOfStudent[2].Alltotalpaid}</th>
+                                                                   <th></th>
+                                                                   {!refundSwitch ? ( <th style={{ padding: "13px" }} id="totalbalamt">
+                                                                        {AllDetailsOfStudent && AllDetailsOfStudent.length && AllDetailsOfStudent[0].Allbalance}
+                                                                    </th>) : (<th id="totalpaidamt"> {AllDetailsOfStudent && AllDetailsOfStudent.length && AllDetailsOfStudent[2].Alltotalpaid}</th>)}
                                                                 </tr>
                                                             </tfoot>
                                                         </Table>
