@@ -408,7 +408,7 @@ const Feemaster = () => {
                               <Row>
                                 <Col>
                                   <Button
-                                    style={{ marginLeft: "80%" }}
+                                    style={{ marginLeft: "75%" }}
                                     className="btn btn-secondary"
                                     onClick={() => setStatusFeeMasterAdd(false)}
                                   >

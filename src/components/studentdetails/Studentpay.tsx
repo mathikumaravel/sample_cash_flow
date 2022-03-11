@@ -662,6 +662,7 @@ const Studentpay = () => {
                                                                                                           grade_id: value.grade_id,
                                                                                                           student_id: value.student_id,
                                                                                                           refund: Number(e.target.value) + Number(value.refund),
+                                                                                                          refundtyped:Number(e.target.value),
                                                                                                           balance:
                                                                                                               Number(value.balance) + Number(e.target.value),
                                                                                                               cum_amt:value.cum_amt,

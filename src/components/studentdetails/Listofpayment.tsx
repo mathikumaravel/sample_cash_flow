@@ -57,8 +57,8 @@ const Listofpayment = (props: any) => {
       sort: true,
     },
     { dataField: "actual_fees", text: "Actual Fees", sort: true },
-    { dataField: "amount_paid", text: "Paid Amount", sort: true },
-    { dataField: "cum_amt", text: "Cum_Amount", sort: true },
+    { dataField: "amount_paid", text: "Cum_Amount", sort: true },
+    { dataField: "cum_amt", text: "Paid", sort: true },
     { dataField: "refund", text: "Refund Amount", sort: true },
     { dataField: "discount", text: "Discount", sort: true },
     { dataField: "comments", text: "Comments", sort: true },
@@ -243,8 +243,8 @@ const Listofpayment = (props: any) => {
                     <th className="sorting_asc">Fee Type Name</th>
                     <th className="sorting">Date of Transaction</th>
                     <th className="sorting">Actual Fees</th>
-                    <th className="sorting">Paid Amount</th>
                     <th className="sorting">Cum_Amount</th>
+                    <th className="sorting">Paid</th>
                     <th className="sorting">Refund Amount</th>
                     <th className="sorting">discount</th>
                     <th className="sorting">Comments</th>
