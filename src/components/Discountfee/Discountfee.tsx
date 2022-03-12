@@ -118,7 +118,7 @@ const Discountfee = () => {
   const deleteParticularDiscount = (id: any, index: any) => {
     setSpinnerLoad(true);
     let newArrVal = getDiscountFeeTypeName;
-    newArrVal.splice(index, 1);
+    // newArrVal.splice(index, 1);
     getAccessToken();
     axios
       .delete(`${baseUrl}discountfee?`, { data: { dis_feetype_id: id } })
