@@ -620,8 +620,7 @@ const Studentpay = () => {
                                                                                                     ? alert("Amount Greater the Actual Fees")
                                                                                                     : handlePriceChange({
                                                                                                           index: index,
-                                                                                                          amoundTyped: Number(e.target.value),
-                                                                                                          amount_paid:
+                                                                                                          amoundTyped: Number(Math.round(e.target.value)),                                                                                                          amount_paid:
                                                                                                               Number(e.target.value) +
                                                                                                               Number(value.amount_paid),
                                                                                                           student_payment_info_id:
@@ -653,8 +652,7 @@ const Studentpay = () => {
                                                                                                     ? alert("Amount Greater the Actual Fees")
                                                                                                     : handleRefundPriceChange({
                                                                                                           index: index,
-                                                                                                          amoundTyped: Number(e.target.value),
-                                                                                                          amount_paid:
+                                                                                                          amoundTyped: Number(Math.round(e.target.value)),                                                                                                          amount_paid:
                                                                                                               Number(value.amount_paid) -
                                                                                                               Number(e.target.value),
                                                                                                           student_payment_info_id:

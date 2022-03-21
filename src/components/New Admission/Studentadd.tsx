@@ -55,6 +55,25 @@ const Studentadd = () => {
     }, 3000);
     return () => clearInterval(interval);
   };
+  // console.log(admissionDate);
+  // console.log(academicYear);
+  // console.log(academicYearFinal);
+ 
+const yearfilter = academicYearFinal.filter((fff:any) => fff.year_id == academicYear)
+
+const Yearspli = yearfilter.map((val:any) =>val.academic_year);
+// const objecttoarray =Object.assign({},Yearspli)
+
+ const yearaaa = Yearspli.toString().split('-')
+ const checkyear = yearaaa[0];
+// const admissiondateyear = (objecttoarray.split('-'))
+// const indexvalue = admissiondateyear[0];
+// console.log(indexvalue);
+
+  const spiltyear = moment(admissionDate).format(
+    "YYYY"
+  );
+  console.log(spiltyear);
 
   const toastify = (value: any) => {
     toast.warning(`Please Check ${value}`, {
@@ -73,8 +92,8 @@ const Studentadd = () => {
     if (
       studentName.length <= 0 ||
       dateofBirth.length <= 0 ||
+      checkyear !== spiltyear ||
       gender.length <= 0 ||
-      email.length <= 0 ||
       addSection.length <= 0 ||
       previousSchoolInfo.length <= 0 ||
       fatherName.length <= 0 ||
@@ -85,7 +104,8 @@ const Studentadd = () => {
       admissionNo.length <= 0 ||
       fromGrade.length <= 0 ||
       academicYear.length <= 0 ||
-      gradeMasterParticular.length <= 0
+      gradeMasterParticular.length <= 0 ||
+      phoneNo == alterPhoneno 
     ) {
       if (admissionNo.length <= 0) {
         toastify("Admission number");
@@ -95,10 +115,11 @@ const Studentadd = () => {
         toastify("From Grade");
       } else if (dateofBirth.length <= 0) {
         toastify("DOB");
-      } else if (gender.length <= 0) {
+       }else if(checkyear !== spiltyear){
+          toastify("Admission Date and Academic Year same value");
+        }
+       else if (gender.length <= 0) {
         toastify("Gender");
-      } else if (email.length <= 0) {
-        toastify("Email");
       } else if (academicYear.length <= 0) {
         toastify("Academic Year");
       } else if (addSection.length <= 0) {
@@ -115,6 +136,8 @@ const Studentadd = () => {
         toastify("Phone Number");
       } else if (alterPhoneno.length < 10) {
         toastify("Alternative Phone Number");
+      } else if (phoneNo == alterPhoneno) {
+        toastify("Alternate phone number should be different");
       }
       setDuplication(false);
     } else {
@@ -711,10 +734,11 @@ const Studentadd = () => {
                               </InputGroup>
                             </div>
                           </Form.Group>
+                         
                           <Form.Group
                             className="form-group row"
                             controlId="formBasicEmail"
-                          >
+                          > 
                             <Form.Label className="col-md-5 col-form-label text-md-right">
                               Phone No
                               <span className="text-danger"> * </span>
