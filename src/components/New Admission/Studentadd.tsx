@@ -28,8 +28,8 @@ const Studentadd = () => {
     const [toSection, setToSection] = useState<any>({});
     const [previousSchoolInfo, setPreviousSchoolInfo] = useState<any>("");
     const [fatherName, setFatherName] = useState<any>("");
-  const [fatherOccupation, setFatherOccupation] = useState<any>("");
-  const [fatherOccupationtext, setFatherOccupationText] = useState<any>("");
+    const [fatherOccupation, setFatherOccupation] = useState<any>("");
+    const [fatherOccupationtext, setFatherOccupationText] = useState<any>("");
     const [address, setAddress] = useState<any>("");
     const [phoneNo, setPhoneno] = useState<any>("");
     const [alterPhoneno, setAlterPhoneno] = useState<any>("");
@@ -193,46 +193,61 @@ const Studentadd = () => {
                     setDuplication(false);
                 });
         }
-  };
-  // if (re.test(term)) {
+    };
+    // if (re.test(term)) {
     //  console.log("Valid");
     // }
     const handleFatherName = (e: any) => {
         console.log(e);
-    const re = /^[a-z]+$/; //rules
-    if (re.test(e)) {
-      setFatherName(e.target.value);
-          }
-    else {
-      toast.warning("Please Don't Enter Number ", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-    }
+        const re = /^[a-z]+$/; //rules
+        if (re.test(e)) {
+            setFatherName(e.target.value);
+        } else {
+            toast.warning("Please Don't Enter Number ", {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        }
+    };
+    const handleStudentName = (e: any) => {
+      console.log(e);
+      const re = /^[a-z]+$/; //rules
+      if (re.test(e)) {
+          setStudentname(e.target.value);
+      } else {
+          toast.warning("Please Don't Enter Number ", {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+          });
+      }
   };
-  console.log(fatherOccupation);
-  const handleFatherOcc = (e: any) => {
+    console.log(fatherOccupation);
+    const handleFatherOcc = (e: any) => {
         console.log(e);
-    const re = /^[A-Za-z]+$/ //rules
-    if (re.test(e)) {
-      setFatherOccupation(e.target.value);
-          }
-     else {
-      toast.warning("Please Don't Enter Number", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-    }
+        const re = /^[A-Za-z]+$/; //rules
+        if (re.test(e)) {
+            setFatherOccupation(e.target.value);
+        } else {
+            toast.warning("Please Don't Enter Number", {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        }
     };
     const handleChangeMobileAlter = (e: any) => {
         const re = /^[0-9\b]+$/; //rules
@@ -266,7 +281,14 @@ const Studentadd = () => {
         setFromgrade("I");
     }, []);
     useEffect(() => {
-        if (gradeSectionList && gradeSectionList.length > 0 && filterParticularYear && filterParticularYear.length > 0 && gradeMaster && gradeMaster.length > 0) {
+        if (
+            gradeSectionList &&
+            gradeSectionList.length > 0 &&
+            filterParticularYear &&
+            filterParticularYear.length > 0 &&
+            gradeMaster &&
+            gradeMaster.length > 0
+        ) {
             handleGradeFilter(gradeSectionList, filterParticularYear[0].year_id);
         }
     }, [gradeSectionList, filterParticularYear, gradeMaster]);
@@ -384,7 +406,11 @@ const Studentadd = () => {
                                                                     required
                                                                     type="name"
                                                                     placeholder="Student Name"
-                                                                    onChange={(e) => setStudentname(e.target.value)}
+                                                                    onChange={(e: any) => {
+                                                                      console.log(e.target.value);
+                                                                      setStudentname(e.target.value);
+                                                                      handleStudentName(e.target.value);
+                                                                  }}
                                                                 />
                                                                 <Form.Control.Feedback type="invalid">Please Enter Student Name</Form.Control.Feedback>
                                                             </InputGroup>
@@ -466,7 +492,12 @@ const Studentadd = () => {
                                                         </Form.Label>
                                                         <div className="col-md-6">
                                                             <InputGroup hasValidation>
-                                                                <Form.Control type="email" onChange={(e) => setEmail(e.target.value)} placeholder="Email" required />
+                                                                <Form.Control
+                                                                    type="email"
+                                                                    onChange={(e) => setEmail(e.target.value)}
+                                                                    placeholder="Email"
+                                                                    required
+                                                                />
                                                                 <Form.Control.Feedback type="invalid">Please Enter Email</Form.Control.Feedback>
                                                             </InputGroup>
                                                         </div>
@@ -500,7 +531,8 @@ const Studentadd = () => {
                                                                         handleGradeFilter(gradeSectionList, Number(e.target.value));
                                                                         setAcademicYear(Number(e.target.value));
                                                                     }}
-                                                                    required>
+                                                                    required
+                                                                >
                                                                     {academicYearFinal &&
                                                                         academicYearFinal.length &&
                                                                         academicYearFinal.map((values: any) => {
@@ -527,7 +559,8 @@ const Studentadd = () => {
                                                                     onChange={(e: any) => {
                                                                         handleSectionSearch(withDuplicatesGrade, Number(e.target.value));
                                                                         setAddSection(Number(e.target.value));
-                                                                    }}>
+                                                                    }}
+                                                                >
                                                                     {filterGradeByYear &&
                                                                         filterGradeByYear.length &&
                                                                         filterGradeByYear.map((values: any, index: any) => {
@@ -550,7 +583,8 @@ const Studentadd = () => {
                                                                     onChange={(e) => {
                                                                         setGradeMasterParticular(e.target.value);
                                                                     }}
-                                                                    required>
+                                                                    required
+                                                                >
                                                                     {sectionBasedOnGrade &&
                                                                         sectionBasedOnGrade.length &&
                                                                         sectionBasedOnGrade.map((values: any) => {
@@ -568,7 +602,12 @@ const Studentadd = () => {
                                                         </Form.Label>
                                                         <div className="col-md-6">
                                                             <InputGroup hasValidation>
-                                                                <Form.Control as="textarea" rows={2} onChange={(e) => setPreviousSchoolInfo(e.target.value)} required />
+                                                                <Form.Control
+                                                                    as="textarea"
+                                                                    rows={2}
+                                                                    onChange={(e) => setPreviousSchoolInfo(e.target.value)}
+                                                                    required
+                                                                />
                                                                 <Form.Control.Feedback type="invalid">Please Enter Previous School Info</Form.Control.Feedback>
                                                             </InputGroup>
                                                         </div>
@@ -582,9 +621,9 @@ const Studentadd = () => {
                                                             <InputGroup hasValidation>
                                                                 <Form.Control
                                                                     type="text"
-                                  placeholder="Father Name"
-                                                                    onChange={(e:any) => {
-                                    console.log(e.target.value);
+                                                                    placeholder="Father Name"
+                                                                    onChange={(e: any) => {
+                                                                        console.log(e.target.value);
                                                                         setFatherName(e.target.value);
                                                                         handleFatherName(e.target.value);
                                                                     }}
@@ -603,10 +642,10 @@ const Studentadd = () => {
                                                             <InputGroup hasValidation>
                                                                 <Form.Control
                                                                     type="text"
-                                  placeholder="Father Occupation"
-                                  // onChange={(e) => setFatherOccupation(e.target.value)}
-                                  onChange={(e:any) => {
-                                    console.log(e.target.value);
+                                                                    placeholder="Father Occupation"
+                                                                    // onChange={(e) => setFatherOccupation(e.target.value)}
+                                                                    onChange={(e: any) => {
+                                                                        console.log(e.target.value);
                                                                         setFatherOccupation(e.target.value);
                                                                         handleFatherOcc(e.target.value);
                                                                     }}
@@ -655,7 +694,9 @@ const Studentadd = () => {
                                                             <Form.Control
                                                                 value={alterPhoneno}
                                                                 onChange={(e) => {
-                                                                    e.target.value.length > 10 ? setAlterPhoneno(alterPhoneno) : setAlterPhoneno(e.target.value);
+                                                                    e.target.value.length > 10
+                                                                        ? setAlterPhoneno(alterPhoneno)
+                                                                        : setAlterPhoneno(e.target.value);
                                                                 }}
                                                                 type="number"
                                                                 pattern="[0-9]*"
@@ -675,7 +716,8 @@ const Studentadd = () => {
                                                         onClick={(e) => {
                                                             setDuplication(true);
                                                             handleSubmit(e);
-                                                        }}>
+                                                        }}
+                                                    >
                                                         Submit
                                                     </Button>
                                                 )}

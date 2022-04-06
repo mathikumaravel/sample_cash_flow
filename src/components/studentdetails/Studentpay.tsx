@@ -417,9 +417,10 @@ const Studentpay = () => {
                                                 {!refundSwitch ? (
                                                     <a style={{ color: "rgb(230, 63, 63)" }}>
                                                         <h4 className="mb-0">
-                                                            <a>
+                                                        <a>
                                                                 <i className="far fa-clone pr-1"></i>Pay Fees
                                                             </a>{" "}
+                                                           
                                                             <Link to={`/StudentprofileSearch/${admissionidd.student_admission_id}`}>
                                                                 <a className="btn btn-success btn float-right">Back</a>
                                                             </Link>
@@ -428,10 +429,18 @@ const Studentpay = () => {
                                                                 onClick={(e: any) => {
                                                                     handleBalance();
                                                                 }}
-                                                                style={{float: "right",marginRight:"10px"}}
+                                                                style={{float: "right",marginRight:"5px"}}
                                                             >
                                                                 Submit
                                                             </Button>
+                                                            {" "}
+                                                            <div style={{ width: "120px", marginRight: "10px", float: "right" }}>
+                                                                <Form.Control style={{backgroundColor:"#F0E68C"}}
+                                                                    value={AllDetailsOfStudent && AllDetailsOfStudent.length && AllDetailsOfStudent[0].Allbalance}
+                                                                    disabled
+                                                                />
+                                                            </div>
+                                                            
                                                           
                                                         </h4>
                                                     </a>
