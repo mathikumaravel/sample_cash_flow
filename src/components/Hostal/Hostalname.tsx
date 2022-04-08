@@ -19,12 +19,15 @@ const Hostalname = () => {
 
     // Transport places
     const placesList = [{hostalname:'BoysHostal'}, {hostalname:'A-Block'}, {hostalname:'B-Block'}];
+    const [hostelName, setHostelName] = useState<any[]>([]);
+    const [hostelNameList, setHostelNameList] = useState<any[]>([]);
 
+    
     //Modal Popup
     const [show, setShow] = useState(false);
     const handleClose = () => {
         setShow(false);
-        deleteAnAcademicYear(datatoDelete.id, datatoDelete.index);
+        deleteAnHostelName(datatoDelete.id, datatoDelete.index);
     };
     const SuddenhandleClose = () => {
         setShow(false);
@@ -47,10 +50,10 @@ const Hostalname = () => {
     const getAllAcademicYear = () => {
         getAccessToken();
         axios
-            .get(`${baseUrl}academic_year/show`)
+            .get(`${baseUrl}hostal_name`)
             .then((res: any) => {
-                console.log(res.data.academic_years);
-                setAllAcademicYear(res.data.academic_years);
+                console.log(res.data.data);
+                setHostelNameList(res.data.data);
             })
             .catch((e: any) => {
                 console.log(e);
@@ -61,12 +64,14 @@ const Hostalname = () => {
         setAllAcademicYear([...newArrVal]);
     };
 
-    const deleteAnAcademicYear = (year: any, index: any) => {
-        let newArrVal = allAcademicYear;
+    const deleteAnHostelName = (name_id: any, index: any) => {
+        console.log(index);
+        
+        let newArrVal = hostelName;
         newArrVal.splice(index, 1);
         getAccessToken();
         axios
-            .delete(`${baseUrl}academic_year/delete?`, { data: { year_id: year } })
+            .delete(`${baseUrl}hostal_name?`, { data: { hostel_name_id: name_id } })
             .then((res: any) => {
                 toast.success("Year Deleted Successfully", {
                     position: "top-right",
@@ -79,6 +84,7 @@ const Hostalname = () => {
                 });
                 setNewAcademicYear(newArrVal);
                 setdatatoDelete({});
+                getAllAcademicYear()
             })
             .catch((e: any) => {
                 console.log(e);
@@ -98,10 +104,11 @@ const Hostalname = () => {
         e.preventDefault();
         try {
             getAccessToken();
-            const res: any = await axios.post(`${baseUrl}academic_year/new_academic_year`, { academic_year: `${acdYear.fromYear}-${acdYear.toYear}` }).then((res: any) => {
+            const res: any = await axios.post(`${baseUrl}hostal_name`, { hostel_name: hostelName})
+            .then((res: any) => {
                 console.log(res.data);
-                if (res.data.year_id) {
-                    toast.success("Year Added Successfully", {
+                if (res.data.data.IsExsist === false) {
+                    toast.success("Hostel Name Added Successfully", {
                         position: "top-right",
                         autoClose: 5000,
                         hideProgressBar: false,
@@ -110,8 +117,8 @@ const Hostalname = () => {
                         draggable: true,
                         progress: undefined,
                     });
-                } else {
-                    toast.warning("Year Already Added", {
+                } else if((res.data.data.IsExsist === true)) {
+                    toast.warning("Hostel Name Already Added", {
                         position: "top-right",
                         autoClose: 5000,
                         hideProgressBar: false,
@@ -125,10 +132,10 @@ const Hostalname = () => {
                 setStatusAcademicYearAdd(false);
             });
         } catch (err) {
-            alert("Incorrect Username and Password");
+            // alert("Incorrect Username and Password");
         }
     };
-
+    console.log(hostelNameList);
     return (
         <div>
             <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
@@ -188,27 +195,29 @@ const Hostalname = () => {
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
-                                                                    {placesList && placesList.length ? (
-                                                                        placesList.map((values: any, index: any) => {
+                                                                    {hostelNameList && hostelNameList.length ? (
+                                                                        hostelNameList.map((values: any, index: any) => {
+                                                                            // console.log(hostelNameList);
+                                                                            
                                                                             return (
                                                                                 <tr key={index}>
                                                                                     <td>{index + 1}</td>
-                                                                                    <td>{values.hostalname}</td>
+                                                                                    <td>{values.hostel_name}</td>
                                                                                    
                                                                                     <td>
                                                                                         <Button
                                                                                             variant="danger"
                                                                                             onClick={() => {
-                                                                                                // deleteAnAcademicYear(
-                                                                                                //     values.year_id,
+                                                                                                // deleteAnHostelName(
+                                                                                                //     values.hostel_name_id,
                                                                                                 //     index
                                                                                                 // );
-                                                                                                // setdatatoDelete({
-                                                                                                //     index: index,
-                                                                                                //     year: values.placeholder,
-                                                                                                //     id: values.price,
-                                                                                                // });
-                                                                                                // handleShow();
+                                                                                                setdatatoDelete({
+                                                                                                    index: index,
+                                                                                                    year: values.placeholder,
+                                                                                                    id: values.hostel_name_id,
+                                                                                                });
+                                                                                                handleShow();
                                                                                             }}
                                                                                         >
                                                                                             Delete
@@ -269,7 +278,10 @@ const Hostalname = () => {
                                                         <Form.Label style={{ textAlign: "center" }}>
                                                             Hostal Name
                                                             <Form.Control
-                                                                type="text"
+                                                                  type="text"
+                                                                  onChange={(e: any) => {
+                                                                    setHostelName(e.target.value);
+                                                                  }}
                                                                 
                                                             />
                                                         </Form.Label>

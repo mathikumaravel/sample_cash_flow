@@ -15,6 +15,10 @@ const Uniform_size = () => {
 	const [acdYear, setAcdYear] = useState<any>({ fromYear: "", toYear: 0 });
 	const [allAcademicYear, setAllAcademicYear] = useState<any[]>([]);
 	const [datatoDelete, setdatatoDelete] = useState<any>({});
+
+//UniformSize
+const[uniformsize,setUniformsize] = useState<any> ([])
+const[getUniformSize,setGetUniformSize] = useState<any> ([])
 	//Modal Popup
 	const [show, setShow] = useState(false);
 	const handleClose = () => {
@@ -40,10 +44,10 @@ const Uniform_size = () => {
 	const getAllAcademicYear = () => {
 		getAccessToken();
 		axios
-			.get(`${baseUrl}academic_year/show`)
+			.get(`${baseUrl}uniform_size`)
 			.then((res: any) => {
-				console.log(res.data.academic_years);
-				setAllAcademicYear(res.data.academic_years);
+				console.log(res.data.data);
+				setGetUniformSize(res.data.data);
 			})
 			.catch((e: any) => {
 				console.log(e);
@@ -52,12 +56,12 @@ const Uniform_size = () => {
 	const setNewAcademicYear = (newArrVal: any) => {
 		setAllAcademicYear([...newArrVal]);
 	};
-	const deleteAnAcademicYear = (year: any, index: any) => {
+	const deleteAnAcademicYear = (size: any, index: any) => {
 		let newArrVal = allAcademicYear;
 		newArrVal.splice(index, 1);
 		getAccessToken();
 		axios
-			.delete(`${baseUrl}academic_year/delete?`, { data: { year_id: year } })
+			.delete(`${baseUrl}uniform_size?`, { data: { size_id: size } })
 			.then((res: any) => {
 				toast.success("Year Deleted Successfully", {
 					position: "top-right",
@@ -70,6 +74,7 @@ const Uniform_size = () => {
 				});
 				setNewAcademicYear(newArrVal);
 				setdatatoDelete({});
+				getAllAcademicYear();
 			})
 			.catch((e: any) => {
 				console.log(e);
@@ -87,13 +92,13 @@ const Uniform_size = () => {
 		try {
 			getAccessToken();
 			const res: any = await axios
-				.post(`${baseUrl}academic_year/new_academic_year`, {
-					academic_year: `${acdYear.fromYear}-${acdYear.toYear}`,
+				.post(`${baseUrl}uniform_size`,{
+					size_name:uniformsize,
 				})
 				.then((res: any) => {
 					console.log(res.data);
-					if (res.data.year_id) {
-						toast.success("Year Added Successfully", {
+					if (res.data.data.IsExsist === false) {
+						toast.success("Uniform Size Added Successfully",{
 							position: "top-right",
 							autoClose: 5000,
 							hideProgressBar: false,
@@ -102,8 +107,8 @@ const Uniform_size = () => {
 							draggable: true,
 							progress: undefined,
 						});
-					} else {
-						toast.warning("Year Already Added", {
+					} else if (res.data.data.IsExsist === true) {
+						toast.warning("Uniform Size Already Added",{
 							position: "top-right",
 							autoClose: 5000,
 							hideProgressBar: false,
@@ -117,7 +122,8 @@ const Uniform_size = () => {
 					setStatusAcademicYearAdd(false);
 				});
 		} catch (err) {
-			alert("Incorrect Username and Password");
+			alert("Please Enter Value");
+
 		}
 	};
 	return (
@@ -205,41 +211,33 @@ const Uniform_size = () => {
 																	</tr>
 																</thead>
 																<tbody>
-																	{allAcademicYear && allAcademicYear.length ? (
-																		allAcademicYear.map(
+																	{getUniformSize && getUniformSize.length ? (
+																		getUniformSize.map(
 																			(values: any, index: any) => {
 																				return (
-																					// <tr key={index}>
-																					//     <td>{index + 1}</td>
-																					//     <td> </td>
-																					//     <td>
-																					//         <Button
-																					//             variant="danger"
-																					//             onClick={() => {
-																					//                 // deleteAnAcademicYear(
-																					//                 //     values.year_id,
-																					//                 //     index
-																					//                 // );
-																					//                 setdatatoDelete({
-																					//                     index: index,
-																					//                     year: values.academic_year,
-																					//                     id: values.year_id,
-																					//                 });
-																					//                 handleShow();
-																					//             }}>
-																					//             Delete
-																					//         </Button>
-																					//     </td>
-																					// </tr>
-																					<tr>
-																						<td>1</td>
-																						<td>S</td>
-																						<td>
-																							<Button variant="danger">
-																								Delete
-																							</Button>{" "}
-																						</td>
+																					<tr key={index}>
+																					    <td>{index + 1}</td>
+																					    <td> {values.size_name}</td>
+																					    <td>
+																					        <Button
+																					            variant="danger"
+																					            onClick={() => {
+																					                // deleteAnAcademicYear(
+																					                //     values.year_id,
+																					                //     index
+																					                // );
+																					                setdatatoDelete({
+																					                    index: index,
+																					                    year: values.academic_year,
+																					                    id: values.size_id,
+																					                });
+																					                handleShow();
+																					            }}>
+																					            Delete
+																					        </Button>
+																					    </td>
 																					</tr>
+																					 
 																				);
 																			}
 																		)
@@ -259,34 +257,7 @@ const Uniform_size = () => {
 																			</tr>
 																		</>
 																	)}  
-																	<tr>
-																		<td>2</td>
-																		<td>M</td>
-																		<td>
-																			<Button variant="danger">Delete</Button>{" "}
-																		</td>
-																	</tr>
-																	<tr>
-																		<td>3</td>
-																		<td>L</td>
-																		<td>
-																			<Button variant="danger">Delete</Button>{" "}
-																		</td>
-																	</tr>
-																	<tr>
-																		<td>4</td>
-																		<td>XL</td>
-																		<td>
-																			<Button variant="danger">Delete</Button>{" "}
-																		</td>
-																	</tr>
-																	<tr>
-																		<td>5</td>
-																		<td>XXL</td>
-																		<td>
-																			<Button variant="danger">Delete</Button>{" "}
-																		</td>
-																	</tr>
+																	 
 																</tbody>
 															</Table>
 														</div>
@@ -359,7 +330,15 @@ const Uniform_size = () => {
 																</Form.Label>
 															</Col>
 															<Col sm="6">
-																<Form.Control type="text" />
+																<Form.Control type="text" 
+																
+																onChange= {(e:any)=>{
+																	setUniformsize(e.target.value)
+																	// console.log(e.target.value);
+																	
+																}}
+																required
+																/>
 															</Col>
 															{/* <Col md="6">
                                                                 <Form.Group className="mb-3" controlId="formBasicEmail">
