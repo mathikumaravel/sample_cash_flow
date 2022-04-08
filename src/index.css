@@ -18,7 +18,7 @@ input::-webkit-inner-spin-button {
   margin: 0 !important;
 }
 
-/* Firefox */
+/* Firefox */ 
 input[type=number] {
   -moz-appearance: textfield !important;
 }
@@ -26,3 +26,5 @@ input[type=number] {
 .cashflow-heading{
   color: #e84118 !important;
 }
+
+/* Firefox */ 
