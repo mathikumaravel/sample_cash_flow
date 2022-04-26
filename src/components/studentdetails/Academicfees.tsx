@@ -39,15 +39,18 @@ const Academicfees = (props: any) => {
   const [updateYearOfFee, setUpdateYearOfFee] = useState<any>([]);
   const [updateDiscountFeeType, setUpdateDiscountFeeType] = useState<any>([]);
   // console.log(admission_id);
-
+  const [termsmaster, setTermsmaster] = useState<any>("Term1");
+console.log(termsmaster);
 
   useEffect(() => {
     student_id = props.studentDetails.student_id;
     if (student_id && student_id.toString().length) yearacademic();
   }, [props.studentDetails]);
   useEffect(() => {
-    getapi();
-  }, [academicYear]);
+    if(termsmaster !== ''){
+      getapi() 
+    }
+  }, [academicYear,termsmaster]);
 
   useEffect(() => {
     feemaster();
@@ -67,6 +70,10 @@ const Academicfees = (props: any) => {
     fetchData();
   }, [Merdattwpus]);
 
+	useEffect(() => {
+   
+	}, [ ]);
+
   const yearacademic = () => {
     getAccessToken();
     console.log(student_id);
@@ -82,7 +89,6 @@ const Academicfees = (props: any) => {
       .catch((e: any) => {});
   };
 
-
   const feemaster = () => {
     getAccessToken();
     axios.get(`${baseUrl}feeMaster`).then((res: any) => {
@@ -96,6 +102,7 @@ const Academicfees = (props: any) => {
       .post(`${baseUrl}studentdiscount`, {
         student_admissions_id: Number(id),
         year_id: Number(academicYear),
+        term_name:termsmaster
       })
       .then((res: any) => {
         setstudentdiscount(res.data.data);
@@ -175,9 +182,8 @@ const Academicfees = (props: any) => {
     let Total_initial_fees = 0;
     let Total_discount = 0;
     let Total_balance = 0;
-
     discountallrecord.map((value: any) => {
-      Total_initial_fees = value.actual_fees + Total_initial_fees;
+      Total_initial_fees = value.term_amount;
       Total_balance = Number(value.balance) + Total_balance;
       Total_discount = value.discount_amount + Total_discount;
     });
@@ -209,15 +215,28 @@ const Academicfees = (props: any) => {
         <div className="col-lg-11">
           <div className="card shadow mb-4">
             <div className="card-header py-3">
-              <Row>
-                <Col sm="9">
                   <h4 className="m-0 text-danger text-center">
                     <a>
                       <i className="far fa-clone"></i> Student Academic Fees
                     </a>
                   </h4>
+               
+            
+
+              <Col sm="2" style={{ float: "right",marginBottom: "1px"}}>
+                <Form.Select
+															onChange={(e:any) =>{ 
+                                setTermsmaster(e.target.value);
+															}}>
+																							<option value="Term1">Terms 1</option>
+																							<option value="Term2">Terms 2</option>
+																							<option value="Term3">Terms 3</option>
+																							<option value="Term4">Terms 4</option>
+																						</Form.Select>
                 </Col>
-                <Col sm="3">
+            
+                
+                <Col sm="2" style={{ float: "right", marginRight: "10px" }}>
                   <Form.Select
                     onChange={(e: any) => setAcademicYear(e.target.value)}
                   >
@@ -234,11 +253,13 @@ const Academicfees = (props: any) => {
                       })}
                   </Form.Select>
                 </Col>
-              </Row>
+                
+          
             </div>
             <div className="card-body">
               <div className="row">
                 <div className="col-sm-12">
+            
                   <Table
                     striped
                     bordered
@@ -249,7 +270,7 @@ const Academicfees = (props: any) => {
                     <thead>
                       <tr role="row">
                         <th style={{ textAlign: "center" }}>Fee Type Name</th>
-                        <th style={{ textAlign: "center" }}>Actual Fees</th>
+                        <th style={{ textAlign: "center" }}>Term Amount</th>
                         <th style={{ textAlign: "center" }}>Balance</th>
                         <th style={{ textAlign: "center" }}>Discount</th>
                         <th style={{ textAlign: "center" }}>
@@ -260,18 +281,20 @@ const Academicfees = (props: any) => {
                       </tr>
                     </thead>
                     <tbody>
-                      {spinnerLoad ? (
+                       
+ 
+{spinnerLoad ? (
                         <td
                           colSpan={4}
                           style={{
                             textAlign: "center",
                           }}
                         >
-                          <Spinner animation="border" variant="danger" />
+                          <Spinner animation="border" variant="danger"/>
                         </td>
                       ) : (
                         discountallrecord &&
-                        discountallrecord.length &&
+                        discountallrecord.length ?
                         discountallrecord.map((values: any, index: any) => {
                           return (
                             <tr style={{ textAlign: "center" }}>
@@ -279,7 +302,7 @@ const Academicfees = (props: any) => {
                                 {values.fee_type_name}
                               </td>
                               <td style={{ width: "20%", textAlign: "center" }}>
-                                {values.actual_fees}
+                                {values.term_amount}
                               </td>
                               <td style={{ textAlign: "center" }}>
                                 {values.balance}
@@ -379,8 +402,10 @@ const Academicfees = (props: any) => {
                               )}
                             </tr>
                           );
-                        })
+                        }):(<><tr><td colSpan={6} style={{textAlign:"center"}}>No Term Fees</td></tr></>)
                       )}
+ 
+                      
                     </tbody>
                     <tfoot>
                       <tr>

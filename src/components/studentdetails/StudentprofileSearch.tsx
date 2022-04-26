@@ -9,6 +9,9 @@ import { baseUrl } from "../../index";
 import { getAccessToken } from "../../config/getAccessToken";
 import { useHistory, useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
+import Hostel from "./Hostel";
+
+
 
 const StudentprofileSearch = () => {
   //To Make Edit
@@ -196,6 +199,12 @@ const StudentprofileSearch = () => {
 
   console.log(statusStudentDetails, "studentid");
 
+  const windowReload = () => {
+		let interval = setInterval(() => {
+			window.location.reload();
+		}, 3000);
+		return () => clearInterval(interval);
+  };
   return (
     <div id="page-top">
       <ToastContainer
@@ -650,6 +659,7 @@ const StudentprofileSearch = () => {
                       student_id={statusStudentDetails.student_id}
                       year={statusStudentDetails.academic_year_id}
                     ></Feesdetails>
+                     <Hostel></Hostel>
                     <Academicfees
                       studentDetails={statusStudentDetails}
                     ></Academicfees>

@@ -31,7 +31,6 @@ const Studentpay = () => {
 	const [termsmaster, setTermsmaster] = useState<any>([]);
 
 	console.log(termsmaster);
-
 	const urlParams: any = useParams();
 	const id = urlParams.id;
 	const year = urlParams.year;
@@ -486,7 +485,7 @@ const Studentpay = () => {
 																<i className="far fa-clone pr-1"></i>Refund
 															</a>{" "}
 															<Link to={`/StudentprofileSearch/${admissionidd.student_admission_id}`}>
-																<a className="btn btn-success btn float-right">Back</a>
+																<a className="btn btn-success btn float-right" >Back</a>
 															</Link>
 															<Button
 																variant="info"

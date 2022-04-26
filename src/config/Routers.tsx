@@ -26,6 +26,7 @@ import Hostalname from "../components/Hostal/Hostalname";
 import RoomNo from "../components/Hostal/RoomNo";
 import HostalFee from "../components/Hostal/HostalFee";
 import Placesspotting from "../components/Transport/Placesspotting";
+import Profile from "../components/setting_page/Profile";
 
     
    
@@ -72,6 +73,7 @@ const Routers = (props: any) => {
 							<PrivateRoute path="/hostal_name" component={Hostalname} />
 							<PrivateRoute path="/room_no" component={RoomNo} />
 							<PrivateRoute path="/hostal_fees" component={HostalFee} />
+							<PrivateRoute path="/profile" component={Profile} />
 							{/* <PrivateRoute exact component={NotFoundScreen} /> */}
 						</Switch>
 					</React.Fragment>

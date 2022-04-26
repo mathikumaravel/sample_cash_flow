@@ -677,7 +677,6 @@ const Yearoffee = () => {
 																										className="fas fa-save fa-1x"
 																										style={{ color: "blue", cursor: "pointer" }}
 																										onClick={(e: any) => {
-
 																											handleSave(termFeessaveAdd[rowindex]);
 																										}}></i>{" "}
 																									{rowindex ? (
