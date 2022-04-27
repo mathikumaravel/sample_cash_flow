@@ -183,7 +183,9 @@ console.log(termsmaster);
     let Total_discount = 0;
     let Total_balance = 0;
     discountallrecord.map((value: any) => {
-      Total_initial_fees = value.term_amount;
+      console.log(value,"rewrfewrfwe");
+      
+      Total_initial_fees = Number(value.term_amount)+Total_initial_fees;
       Total_balance = Number(value.balance) + Total_balance;
       Total_discount = value.discount_amount + Total_discount;
     });
