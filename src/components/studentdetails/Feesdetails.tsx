@@ -243,7 +243,7 @@ const Feesdetails = (props: any) => {
                                             {lastFourRecord &&
                                                 lastFourRecord.length &&
                                                 lastFourRecord.map((data: any) => {
-                                                    return <option> {data.amount_paid}</option>;
+                                                    return <option> {data.cum_amt}</option>;
                                                 })}
                                         </label>
                                     </div>
