@@ -22,7 +22,7 @@ const Academicfees = (props: any) => {
     Total_discount: 0,
   });
 
-  let student_id: any;
+  let student_id = props.studentDetails.student_id;
   const [studentdiscount, setstudentdiscount] = useState<any>([]);
   const [spinnerLoad, setSpinnerLoad] = useState<any>(false);
   const [feemasterid, setfeemasterid] = useState<any>([]);
@@ -43,9 +43,9 @@ const Academicfees = (props: any) => {
 console.log(termsmaster);
 
   useEffect(() => {
-    student_id = props.studentDetails.student_id;
     if (student_id && student_id.toString().length) yearacademic();
-  }, [props.studentDetails]);
+  }, [student_id]);
+  
   useEffect(() => {
     if(termsmaster !== ''){
       getapi() 

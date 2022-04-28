@@ -30,46 +30,53 @@ const Hostel = (props: any) => {
 
 	console.log(van);
 
-	useEffect(() => {
-		axios
-			.post(`${baseUrl}autosearch`, {
-				allbalance: status,
-			})
-			.then((res) => {
-				console.log("Getting from ::::", res.data.data);
-				setYearOfBalanceByYear(res.data.data);
-				// console.log(YearOfBalanceByYear, "YearOfBalance");
-			})
-			.catch((err) => console.log(err));
-	}, [status]);
+	// useEffect(() => {
+	// 	if (status && status.toString().length > 0) {
+	// 		axios
+	// 			.post(`${baseUrl}autosearch`, {
+	// 				allbalance: status,
+	// 			})
+	// 			.then((res) => {
+	// 				console.log("Getting from ::::", res.data.data);
+	// 				setYearOfBalanceByYear(res.data.data);
+	// 				// console.log(YearOfBalanceByYear, "YearOfBalance");
+	// 			})
+	// 			.catch((err) => console.log(err));
 
-	useEffect(() => {
-		getAccessToken();
-		axios
-			.get(`${baseUrl}feeMaster`)
-			.then((res) => {
-				console.log("Getting from feeMaster::::", res.data.data);
-				setFeeMasterId(res.data.data);
-			})
-			.catch((err) => console.log(err));
-	}, [status]);
+	// 		getAccessToken();
+	// 		axios
+	// 			.get(`${baseUrl}feeMaster`)
+	// 			.then((res) => {
+	// 				console.log("Getting from feeMaster::::", res.data.data);
+	// 				setFeeMasterId(res.data.data);
+	// 			})
+	// 			.catch((err) => console.log(err));
+	// 	}
+	// 	if (status && status.toString().length > 0 && year && year.toString().length>0) {
+	// 		axios
+	// 		.post(`${baseUrl}studentAllPayBalance/four`, {
+	// 			student_id: status,
+	// 			year_id: year,
+	// 		})
+	// 		.then((res) => {
+	// 			console.log("Getting from ::::", res.data.data);
+	// 			setLastFourRecord(res.data.data);
+	// 		})
+	// 		.catch((err) => console.log(err));
+	// 	}
+	// }, [status]);
 
-	const Year_of_fee = () => {
-		axios
-			.post(`${baseUrl}studentAllPayBalance/four`, {
-				student_id: status,
-				year_id: year,
-			})
-			.then((res) => {
-				console.log("Getting from ::::", res.data.data);
-				setLastFourRecord(res.data.data);
-			})
-			.catch((err) => console.log(err));
-	};
+	// useEffect(() => {
+
+	// }, [status]);
+
+	// const Year_of_fee = () => {
+		
+	// };
 	// console.log(FeeMasterId,"Four Record");
-	useEffect(() => {
-		Year_of_fee();
-	}, [status]);
+	// useEffect(() => {
+	// 	Year_of_fee();
+	// }, [status]);
 
 	useEffect(() => {
 		// if (status  && status.toString().length>0   ){
@@ -183,10 +190,10 @@ const Hostel = (props: any) => {
 								</a>{" "}
 								<Link to="" >
 									{" "}
-									<a href="#"className="btn btn-success btn-sm float-right" style={{marginLeft:"10px"}}>submit</a>
+									<a href="#" className="btn btn-success btn-sm float-right" style={{ marginLeft: "10px" }}>submit</a>
 								</Link>{" "}
 
-								<Link to=""style={{marginRight:"10px"}}>
+								<Link to="" style={{ marginRight: "10px" }}>
 									{" "}
 									<a className="btn btn-primary btn-sm float-right">Edit</a>
 								</Link>

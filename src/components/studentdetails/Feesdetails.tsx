@@ -19,44 +19,81 @@ const Feesdetails = (props: any) => {
     const [DisplayFinalData, setDisplayFinalData] = useState<any>([]);
     const [allAcademicYear, setAllAcademicYear] = useState<any>([]);
     const [allAcademicBalance, setAllAcademicBalance] = useState<any>([]);
+
     useEffect(() => {
-        axios
-            .post(`${baseUrl}autosearch`, {
-                allbalance: status,
-            })
-            .then((res) => {
-                console.log("Getting from ::::", res.data.data);
-                setYearOfBalanceByYear(res.data.data);
-                // console.log(YearOfBalanceByYear, "YearOfBalance");
-            })
-            .catch((err) => console.log(err));
-    }, [status]);
-    useEffect(() => {
-        getAccessToken();
-        axios
-            .get(`${baseUrl}feeMaster`)
-            .then((res) => {
-                console.log("Getting from feeMaster::::", res.data.data);
-                setFeeMasterId(res.data.data);
-            })
-            .catch((err) => console.log(err));
-    }, [status]);
-    const Year_of_fee = () => {
-        axios
-            .post(`${baseUrl}studentAllPayBalance/four`, {
-                student_id: status,
-                year_id: year,
-            })
-            .then((res) => {
-                console.log("Getting from ::::", res.data.data);
-                setLastFourRecord(res.data.data);
-            })
-            .catch((err) => console.log(err));
-    };
-    // console.log(FeeMasterId,"Four Record");
-    useEffect(() => {
-        Year_of_fee();
-    }, [status]);
+		if (status && status.toString().length > 0) {
+			axios
+				.post(`${baseUrl}autosearch`, {
+					allbalance: status,
+				})
+				.then((res) => {
+					console.log("Getting from ::::", res.data.data);
+					setYearOfBalanceByYear(res.data.data);
+					// console.log(YearOfBalanceByYear, "YearOfBalance");
+				})
+				.catch((err) => console.log(err));
+
+			getAccessToken();
+			axios
+				.get(`${baseUrl}feeMaster`)
+				.then((res) => {
+					console.log("Getting from feeMaster::::", res.data.data);
+					setFeeMasterId(res.data.data);
+				})
+				.catch((err) => console.log(err));
+		}
+		if (status && status.toString().length > 0 && year && year.toString().length>0) {
+			axios
+			.post(`${baseUrl}studentAllPayBalance/four`, {
+				student_id: status,
+				year_id: year,
+			})
+			.then((res) => {
+				console.log("Getting from ::::", res.data.data);
+				setLastFourRecord(res.data.data);
+			})
+			.catch((err) => console.log(err));
+		}
+	}, [status]);
+
+    // useEffect(() => {
+    //     axios
+    //         .post(`${baseUrl}autosearch`, {
+    //             allbalance: status,
+    //         })
+    //         .then((res) => {
+    //             console.log("Getting from ::::", res.data.data);
+    //             setYearOfBalanceByYear(res.data.data);
+    //             // console.log(YearOfBalanceByYear, "YearOfBalance");
+    //         })
+    //         .catch((err) => console.log(err));
+    // }, [status]);
+    // useEffect(() => {
+    //     getAccessToken();
+    //     axios
+    //         .get(`${baseUrl}feeMaster`)
+    //         .then((res) => {
+    //             console.log("Getting from feeMaster::::", res.data.data);
+    //             setFeeMasterId(res.data.data);
+    //         })
+    //         .catch((err) => console.log(err));
+    // }, [status]);
+    // const Year_of_fee = () => {
+    //     axios
+    //         .post(`${baseUrl}studentAllPayBalance/four`, {
+    //             student_id: status,
+    //             year_id: year,
+    //         })
+    //         .then((res) => {
+    //             console.log("Getting from ::::", res.data.data);
+    //             setLastFourRecord(res.data.data);
+    //         })
+    //         .catch((err) => console.log(err));
+    // };
+    // // console.log(FeeMasterId,"Four Record");
+    // useEffect(() => {
+    //     Year_of_fee();
+    // }, [status]);
     useEffect(() => {
         // if (status  && status.toString().length>0   ){
         console.log(FeeMasterId);

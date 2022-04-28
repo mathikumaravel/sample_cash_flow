@@ -87,8 +87,8 @@ const Sidebar = (props: any, { toggled, handleToggleSidebar }: any) => {
                                 <MenuItem active={window.location.pathname === "/Uniform_things"}><Link to="/Uniform_things" style={{color:"#3a3b45"}}>Uniform-Things</Link></MenuItem>
                                 <MenuItem active={window.location.pathname === "/Uniform"}><Link to="/Uniform" style={{color:"#3a3b45"}}> Uniform</Link></MenuItem>
                             </SubMenu>
-                            <SubMenu title="Hostal" icon={<BiHotel />}>
-                                <MenuItem active={window.location.pathname === "/hostal_fees"}><Link to="/hostal_fees" style={{color:"#3a3b45"}}> Hostal Fees </Link></MenuItem>
+                            <SubMenu title="Hostel" icon={<BiHotel />}>
+                                <MenuItem active={window.location.pathname === "/hostal_fees"}><Link to="/hostal_fees" style={{color:"#3a3b45"}}> Hostel Fees </Link></MenuItem>
                                 <MenuItem active={window.location.pathname === "/room_no"}><Link to="/room_no" style={{color:"#3a3b45"}}>Room No & Capacity </Link></MenuItem>
                                 <MenuItem active={window.location.pathname === "/hostal_name"}><Link to="/hostal_name" style={{color:"#3a3b45"}}>Hostal Name</Link></MenuItem>
                                 {/* <SubMenu title={`'submenu' 3`}>

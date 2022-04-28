@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, useEffect } from "react";
+import React, { useState, ChangeEvent, useEffect,useLayoutEffect } from "react";
 import Sidebar from "../Layouts/Sidebar";
 import Navbar from "../Layouts/Navbar";
 import Feesdetails from "./Feesdetails";
@@ -14,6 +14,7 @@ import Hostel from "./Hostel";
 
 
 const StudentprofileSearch = () => {
+
   //To Make Edit
   let history = useHistory();
   const urlParams: any = useParams();
@@ -199,12 +200,7 @@ const StudentprofileSearch = () => {
 
   console.log(statusStudentDetails, "studentid");
 
-  const windowReload = () => {
-		let interval = setInterval(() => {
-			window.location.reload();
-		}, 3000);
-		return () => clearInterval(interval);
-  };
+
   return (
     <div id="page-top">
       <ToastContainer
