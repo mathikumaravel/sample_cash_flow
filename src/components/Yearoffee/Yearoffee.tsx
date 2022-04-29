@@ -636,7 +636,7 @@ const Yearoffee = () => {
 
 																									newFormValues[rowindex]["optional_fee"] = e.target.checked
 																									setTermFeesSaveAdd(newFormValues)
-																								}} id="custom-switch" style={{ position: "relative" }} />
+																								}} id="custom-switch" style={{ position: "relative" }}/>
 																							</td>
 																							<td>
 																								<Form.Control

@@ -77,6 +77,10 @@ const Sidebar = (props: any, { toggled, handleToggleSidebar }: any) => {
                               <MenuItem active={window.location.pathname === "/Academicyear"}><Link to="/Academicyear" style={{color:"#3a3b45"}}>Year</Link></MenuItem>
                               <MenuItem active={window.location.pathname === "/Grade_section"}><Link to="/Grade_section" style={{color:"#3a3b45"}}> Grade and Section</Link></MenuItem>
                             </SubMenu>
+                            <SubMenu title="Optional Fees" icon={<FaChalkboardTeacher />}>
+                                <MenuItem active={window.location.pathname === "/Optional_Fees"}><Link to="/optionalfees" style={{color:"#3a3b45"}}>Optional_Fees</Link></MenuItem>
+ 
+                            </SubMenu>
                             <SubMenu title="TransPort" icon={<BiBus />}>
                                 <MenuItem active={window.location.pathname === "/placesprice"}><Link to="/placesprice"  style={{color:"#3a3b45"}}>Places</Link></MenuItem>
                                 <MenuItem active={window.location.pathname === "/placesstoppings"}><Link to="/placesstoppings" style={{color:"#3a3b45"}}>Places & Stoppings</Link></MenuItem>                                

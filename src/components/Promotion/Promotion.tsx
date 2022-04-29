@@ -46,7 +46,6 @@ const Promotion = () => {
       })
       .catch((err) => console.log(err));
   };
-
   useEffect(() => {
     getAccessToken();
     Axios.get(`${baseUrl}grademaster`)
@@ -143,9 +142,7 @@ const Promotion = () => {
       });
     }
   };
-
   const [split, setSplit] = useState("")
-
   const onchangeyear = (event: any) => {
     if (event.length > 0) {
       let splitvalue: any
@@ -161,7 +158,6 @@ const Promotion = () => {
       })
     }
   }
-
   const Section = () => {
     getAcademicYear &&
       getAcademicYear.length &&
@@ -260,7 +256,6 @@ const Promotion = () => {
       setAllGotFinalData([]);
     }
   }, [getStudentDetails]);
-
   return (
     <div id="page-top">
       <div id="wrapper">
@@ -319,7 +314,6 @@ const Promotion = () => {
                                       setEventAcademicYearValue(e.target[e.target.selectedIndex].text);
                                       handleGradeFilter(getGradeSection, e.target.value);
                                       onchangeyear(e.target.value)
-
                                     }}>
                                     <option> --Academic_Year--</option>
                                     {getAcademicYear &&
@@ -343,10 +337,10 @@ const Promotion = () => {
                                     required
                                     onChange={(e: any) => {
                                       setEventGradeByYear(e.target.value);
-                                      setEventGradeByYearValue(e.target[e.target.selectedIndex].text);                                      
+                                      setEventGradeByYearValue(e.target[e.target.selectedIndex].text);
                                       setEventGradeByYearUpdate((Number(e.target.value) + 1).toString());
                                     }}>
-                                      {console.log(eventGradeByYearUpdate,"Hiiiii")}
+                                    {console.log(eventGradeByYearUpdate, "Hiiiii")}
                                     <option> --Select Grade--</option>
                                     {filterGradeByYear &&
                                       filterGradeByYear.length &&
@@ -375,7 +369,7 @@ const Promotion = () => {
                                     onChange={(e: any) => {
                                       setEventSectionByYear(e.target.value);
                                       console.log(e.target[e.target.selectedIndex].text);
-                                      setEventSectionByYearValue(e.target[e.target.selectedIndex].text);                                      
+                                      setEventSectionByYearValue(e.target[e.target.selectedIndex].text);
                                       console.log(e.target.value, "section");
                                     }}>
                                     <option> --Select Section--</option>
@@ -504,18 +498,15 @@ const Promotion = () => {
                                             <option value=""> --Select Section--</option>
                                             {getGradeSection &&
                                               getGradeSection.length &&
-                                              getGradeSection.map((section: any) => {
-                                                console.log(eventGradeByYearUpdate);
+                                              getGradeSection.map((section: any) => {                                                
                                                 return (
                                                   <>
-                                                    {" "}
                                                     {section.grade_id === Number(eventGradeByYearUpdate) &&
-                                                      section.academic_year_id === Number(eventAcademicYear) && (
+                                                      section.academic_year_id === Number(eventAcademicYearValueUpdate) && (
                                                         <option value={section.grade_section_id}>
                                                           {section.section}
                                                         </option>
                                                       )}
-                                                      
                                                   </>
                                                 );
                                               })}

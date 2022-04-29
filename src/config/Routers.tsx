@@ -28,7 +28,8 @@ import HostalFee from "../components/Hostal/HostalFee";
 import Placesspotting from "../components/Transport/Placesspotting";
 import Profile from "../components/setting_page/Profile";
 
-    
+import Optional from "../components/Optional Fees/Optional";
+
    
 
 const PrivateRoute = (props: any) => {
@@ -74,6 +75,7 @@ const Routers = (props: any) => {
 							<PrivateRoute path="/room_no" component={RoomNo} />
 							<PrivateRoute path="/hostal_fees" component={HostalFee} />
 							<PrivateRoute path="/profile" component={Profile} />
+							<PrivateRoute path='/optionalfees' component={Optional} />
 							{/* <PrivateRoute exact component={NotFoundScreen} /> */}
 						</Switch>
 					</React.Fragment>
