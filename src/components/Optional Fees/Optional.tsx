@@ -52,6 +52,7 @@ const Optional = () => {
   const [optionalValuesData, setOptionalValuesData] = useState<any>([]);
 
   const [foundOptionaldata, setFoundOptionaldata] = useState<any>([]);
+  const [optionaldrop, setOptionaldrop] = useState<any>([]);
 
   
   console.log(foundOptionaldata);
@@ -82,22 +83,39 @@ const Optional = () => {
   //    }
   // }, [filterParticularYear]);
   console.log(Autosearch);
-  const GotOptionaldata:any[]= [];
+  const [GotOptionaldata, setGotOptionaldata] = useState<any[]>([]);
   const OptionalValuesData = (data:any) =>{
+    console.log(data);
     let dataOnChange={
-      student_id:data.student_name,
-    }    
+      student_admissions_id:data.student_admissions_id,
+      student_id:data.student_id,
+      fee_master_id:Number(optionaldrop),
+      year_id:data.year_id,
+      grade_id:data.grade_id,
+      grade_section_id:data.grade_section_id
+    }
+    if(data.checked){
+      setGotOptionaldata([...GotOptionaldata,dataOnChange])
+
+    }
+    else{
+      let newoptionaldata = [...GotOptionaldata]
+     let indexvalue = GotOptionaldata.indexOf(dataOnChange)
+     newoptionaldata.splice(indexvalue,1)
+     setGotOptionaldata([...newoptionaldata])
+    }
+     
     // data.forEach((element:any) => {
     //   console.log(element);
-      console.log(GotOptionaldata,"karthi");
       
-      GotOptionaldata.push(dataOnChange);      
+    // GotOptionaldata.remove
+      // GotOptionaldata.push(dataOnChange);      
     // }); 
-    setFoundOptionaldata([{...foundOptionaldata},{data}]);
+    setFoundOptionaldata(GotOptionaldata);
     // console.log(GotOptionaldata,"optionaldatattttt");
     
   }
- 
+  console.log(GotOptionaldata,"hhhhh");
   console.log(foundOptionaldata);
   const onSuggesthandler = (value: any) => {
     console.log(value);
@@ -135,7 +153,16 @@ const Optional = () => {
   };
   const submitOptional =( )=>{
     getAccessToken();    
-    console.log(foundOptionaldata);       
+    console.log(foundOptionaldata);     
+    axios
+    .post(`${baseUrl}optional`, 
+     GotOptionaldata 
+    )
+    .then((response: AxiosResponse) => {
+      setOptionalFees(response.data.data);
+      console.log(response.data.data,"guyguyguyg");
+      
+    });  
 
   }
   // console.log(searchResultData[0][1]);
@@ -507,7 +534,7 @@ const Optional = () => {
                   <Container>
                     <Row>
                       <Col md={5}>
-                        <Form.Control
+                        {/* <Form.Control
                           type="search"
                           className="form-control bg-light border-20 small"
                           placeholder="Search for Name,ID,PhoneNo..."
@@ -520,7 +547,15 @@ const Optional = () => {
                             setAutoSearch(e.target.value.trim());
                             setSearchBy(e.target.value.trim());
                           }}
-                        />
+                        /> */}
+                        <Form.Select aria-label="Default select example" onChange={(e) => setOptionaldrop(e.target.value)}>
+                        <option value="none">Select Optical Fees</option>
+                        {optionalFees &&
+                          optionalFees.length &&
+                          optionalFees.map((value: any, i: any) => {
+                            return <option value={value.fee_master_id}>{value.fee_type_name}</option>;
+                          })}
+                      </Form.Select>
                         <Card
                           style={{
                             cursor: "pointer",
@@ -609,7 +644,14 @@ const Optional = () => {
                                 }}
                               >
                                 <i className="fas fa-search fa-sm"></i>
-                              </Button>
+                              </Button>{""}
+                              {" "}
+                              <Button style={{ marginLeft: "9%" }}
+                        type="button"
+                      onClick={(e:any) => {
+                        submitOptional();
+                      }}
+                     >Submit</Button>
                             </div>
                           </Col>
                         </>
@@ -619,23 +661,11 @@ const Optional = () => {
                 </div>
                   <div className="container row pb-2">
                     <div className="col-md-4">
-                      <Form.Select aria-label="Default select example" onChange={(e) => setsection(e.target.value)}>
-                        <option value="none">Select Optical Fees</option>
-                        {optionalFees &&
-                          optionalFees.length &&
-                          optionalFees.map((value: any, i: any) => {
-                            return <option value={value.fee_type_name}>{value.fee_type_name}</option>;
-                          })}
-                      </Form.Select>
+                      
                     </div>
                     
                     <div className="col-md-4">
-                     <Button
-                        type="button"
-                      onClick={(e:any) => {
-                        submitOptional();
-                      }}
-                     >Submit</Button>
+                    
                     </div>
                   </div>
 
@@ -663,8 +693,9 @@ const Optional = () => {
                                       <Form.Check
                                         onChange={(e:any) => {
                                           // console.log(values);
+                                          values.checked=e.target.checked
                                           OptionalValuesData(values)
-                                          setCheckboxValue(e.target.checked)
+                                          // setCheckboxValue(e.target.checked)
                                         }}
                                       type="switch" id="custom-switch" label="switch to add fee"/>
                                     </td>
