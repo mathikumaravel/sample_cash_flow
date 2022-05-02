@@ -60,6 +60,8 @@ const Studentrecord = () => {
   const [filterGradeByYear, setFilterGradeByYear] = useState<any>([]);
   const [filterSectionByYear, setFilterSectionByYear] = useState<any>([]);
   const [searchBy, setSearchBy] = useState("");
+  const [termsmaster, setTermsmaster] = useState<any>("");
+console.log(termsmaster);
 
   const paginate = [
     { text: "5", value: 5 },
@@ -193,6 +195,17 @@ const Studentrecord = () => {
   }, [gradea, section]);
   const callStudentData = () => {
     setIsComponentVisible(false);
+    //  if (termsmaster && termsmaster.length > 0) {
+    //   getAccessToken();
+    //   axios
+    //     .post(`${baseUrl}autoSearch`, {
+    //       academic_year: academicYear,
+    //       terms:termsmaster
+    //     })
+    //     .then((response: AxiosResponse) => {
+    //       setMainSearch(response.data.data);
+    //     });
+    // }
     if (academicYear && academicYear.length > 0) {
       if (searchBy && searchBy.length > 0) {
         if (
@@ -212,6 +225,7 @@ const Studentrecord = () => {
               academic_year: academicYear,
               grade: gradea,
               section: section,
+              term:termsmaster
             })
             .then((response: AxiosResponse) => {
               setMainSearch(response.data.data);
@@ -283,6 +297,7 @@ const Studentrecord = () => {
               academic_year: academicYear,
               grade: gradea,
               section: section,
+              term:termsmaster
             })
             .then((response: AxiosResponse) => {
               setMainSearch(response.data.data);
@@ -298,6 +313,7 @@ const Studentrecord = () => {
             .post(`${baseUrl}autoSearch`, {
               academic_year: academicYear,
               grade: gradea,
+              term:termsmaster
             })
             .then((response: AxiosResponse) => {
               setMainSearch(response.data.data);
@@ -313,6 +329,7 @@ const Studentrecord = () => {
             .post(`${baseUrl}autoSearch`, {
               academic_year: academicYear,
               section: section,
+              term:termsmaster
             })
             .then((response: AxiosResponse) => {
               setMainSearch(response.data.data);
@@ -322,11 +339,24 @@ const Studentrecord = () => {
           axios
             .post(`${baseUrl}autoSearch`, {
               academic_year: academicYear,
+              term:termsmaster
             })
             .then((response: AxiosResponse) => {
               setMainSearch(response.data.data);
             });
         }
+        // else if (academicYear && academicYear.length > 0) {
+        //   getAccessToken();
+        //   axios
+        //     .post(`${baseUrl}autoSearch`, {
+        //       academic_year: academicYear,
+        //       terms:termsmaster
+        //     })
+        //     .then((response: AxiosResponse) => {
+        //       setMainSearch(response.data.data);
+        //     });
+        // }
+        
       }
     }
   };
@@ -518,7 +548,7 @@ const Studentrecord = () => {
                 <div className="d-sm-flex align-items-center justify-content-between mb-5">
                   <Container>
                     <Row>
-                      <Col md={5}>
+                      <Col md={3}>
                         <Form.Control
                           type="search"
                           className="form-control bg-light border-20 small"
@@ -630,6 +660,19 @@ const Studentrecord = () => {
                                   }
                                 )}
                             </Form.Select>
+                          </Col>
+                           
+                          <Col md={2}>
+                          <Form.Select
+															onChange={(e:any) =>{ 
+                                setTermsmaster(e.target.value);
+															}}>
+                                <option value=" " >Terms </option>
+																							<option value="Term1">Terms 1</option>
+																							<option value="Term2">Terms 2</option>
+																							<option value="Term3">Terms 3</option>
+																							<option value="Term4">Terms 4</option>
+																						</Form.Select>
                           </Col>
                           <Col md={1}>
                             <div className="input-group-append">

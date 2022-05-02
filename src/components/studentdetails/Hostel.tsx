@@ -78,6 +78,10 @@ const Hostel = (props: any) => {
 	// 	Year_of_fee();
 	// }, [status]);
 
+		useEffect(() =>{
+			
+		})
+
 	useEffect(() => {
 		// if (status  && status.toString().length>0   ){
 		console.log(FeeMasterId);
@@ -186,7 +190,7 @@ const Hostel = (props: any) => {
 						<div className="card-header py-3">
 							<h4 className="m-0 text-danger text-center">
 								<a>
-									<i className="far fa-clone"></i> Transportation
+									<i className="far fa-clone"></i> Mode Of Transportation
 								</a>{" "}
 								<Link to="" >
 									{" "}

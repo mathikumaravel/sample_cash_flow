@@ -47,7 +47,7 @@ const Optional = () => {
   const [searchBy, setSearchBy] = useState("");
   const [optionalFees, setOptionalFees] = useState<any>([]);
   const [grade, setGradeID] = useState<any>("");
-  const [academicYearId, setAcademicYearId] = useState<any>("");
+  const [academicYearId, setAcademicYearId] = useState<any>(76);
   const [checkboxValue, setCheckboxValue] = useState(false);
   const [optionalValuesData, setOptionalValuesData] = useState<any>([]);
 
@@ -139,6 +139,7 @@ const Optional = () => {
         setMainSearch(response.data.data);
       });
       getAccessToken();
+      getAllAcademicYears();
       axios
         .post(`${baseUrl}optional/opt`, {
           year_id: value.year_id,
@@ -152,7 +153,8 @@ const Optional = () => {
        
   };
   const submitOptional =( )=>{
-    getAccessToken();    
+    getAccessToken();  
+      
     console.log(foundOptionaldata);     
     axios
     .post(`${baseUrl}optional`, 
@@ -166,6 +168,9 @@ const Optional = () => {
 
   }
   // console.log(searchResultData[0][1]);
+  useEffect(()=>{
+    getAllAcademicYears();
+  },[])
   useEffect(() => {
     let AllRoundData: any[] = [];
     if (searchResultData && searchResultData.length > 0) {
@@ -224,7 +229,7 @@ const Optional = () => {
     setIsComponentVisible(false);
      if (academicYear && academicYear.length > 0 && gradea && gradea.length > 0) {
       console.log(academicYear,"check");
-      
+      getAllAcademicYears();
       getAccessToken();
       axios
         .post(`${baseUrl}optional/opt`, {
@@ -640,6 +645,7 @@ const Optional = () => {
                                 className="btn btn-danger"
                                 type="button"
                                 onClick={() => {
+                                  
                                   callStudentData();
                                 }}
                               >
