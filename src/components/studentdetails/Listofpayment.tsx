@@ -12,7 +12,7 @@ const Listofpayment = (props: any) => {
   const [academicyear, setAcademicyear] = useState<any>([]);
   const [payments, setPayments] = useState<any>([]);
   const [academicYearId, setAcademicYearId] = useState<any>([]);
-  const [feemasterid, setfeemasterid] = useState<any>([]);
+  
   const [Merdattwpus, setMerdattwpus] = useState<any>([]);
   const [mergedata, setmergedata] = useState<any>([]);
   const [filter, setfilter] = useState<any>([]);
@@ -62,14 +62,7 @@ const Listofpayment = (props: any) => {
     { dataField: "refund", text: "Refund Amount", sort: true },
     { dataField: "discount", text: "Discount", sort: true },
     { dataField: "comments", text: "Comments", sort: true },
-  ];
-
-  const feemaster = () => {
-    getAccessToken();
-    axios.get(`${baseUrl}feeMaster`).then((res: any) => {
-      setfeemasterid(res.data.data);
-    });
-  };
+  ];  
 
   useEffect(() => {
     payments && payments.length
@@ -79,15 +72,11 @@ const Listofpayment = (props: any) => {
       : setMerdattwpus([]);
   }, [payments]);
 
-  useEffect(() => {
-    feemaster();
-  }, []);
-
   function studentyear(gradedata: any) {
     var matchedyearid: any =
-      feemasterid &&
-      feemasterid.length &&
-      feemasterid.filter(
+      props.feemasterid &&
+      props.feemasterid.length &&
+      props.feemasterid.filter(
         (data: any) => data.fee_master_id === gradedata.fee_master_id
       );
     let combindobject = { ...gradedata, ...matchedyearid[0] };

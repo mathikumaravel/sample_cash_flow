@@ -17,6 +17,7 @@ import moment from "moment";
 import { Right } from "react-bootstrap/lib/Media";
 const Studentpay = () => {
 	const [RefundTableStatus, setRefundTableStatus] = useState(false);
+	const [feemasterid, setfeemasterid] = useState<any>([]);
 	const [searchResultData, setMainSearch] = useState<any>([]);
 	const [allGotFinalData, setAllGotFinalData] = useState<any>([]);
 	const [priceChange, setPriceChange] = useState(0);
@@ -26,7 +27,7 @@ const Studentpay = () => {
 	const [buttonDisable, setButtonDisable] = useState(false);
 	const [admissionidd, setadmissionsid] = useState<any>([]);
 
-	const [termFeesAdd, setTermFeesAdd] = useState(true);
+	const [Payment, setPayment] = useState<any>([]);
 	const [termsTextBox, setTermsTextBox] = useState<any>([]);
 	const [termsmaster, setTermsmaster] = useState<any>([]);
 
@@ -160,9 +161,12 @@ const Studentpay = () => {
 						.then((response: AxiosResponse) => {
 							setMainSearch(response.data.data);
 							setadmissionsid(response.data.data[0][0]);
+							console.log(response.data.data);
+							termsChange(response.data.data[0][1][1].studentData, "1")
 						});
 				}
 			}
+
 		} else {
 			alert("Please Academic Year or Student Id not present");
 		}
@@ -182,6 +186,16 @@ const Studentpay = () => {
 		setPriceDateChange(sortedObjs);
 	};
 	console.log(priceDateChange);
+	useEffect(() => {
+		feemaster();
+	}, []);
+
+	const feemaster = () => {
+		getAccessToken();
+		axios.get(`${baseUrl}feeMaster`).then((res: any) => {
+			setfeemasterid(res.data.data);
+		});
+	};
 
 	const [priceRefundDateChange, setPriceRefundDateChange] = useState<any>([]);
 	const handleRefundDateChange = (value: any) => {
@@ -296,6 +310,18 @@ const Studentpay = () => {
 		return () => clearInterval(interval);
 	};
 
+	const termsChange = (student: any, terms: any) => {
+		console.log(student, "454");
+
+		axios.post(`${baseUrl}payment`, {
+			student_id: student.student_id,
+			year_id: student.year_id,
+			term_name: `term${terms}`
+		}).then((response: AxiosResponse) => {
+			setPayment(response.data.data);
+		})
+	}
+
 	//Handle Balance
 	const handleBalance = () => {
 		setButtonDisable(true);
@@ -311,6 +337,13 @@ const Studentpay = () => {
 				element.payment_mode = paymentMode;
 				element.comments = command;
 				FeetempArr.push(element);
+				delete element.amount_paid;
+				delete element.balance
+				delete element.cum_amt
+				delete element.grade_id
+				delete element.index
+				delete element.refund
+
 			}
 		});
 		if (FeetempArr && FeetempArr.length == 0) {
@@ -439,26 +472,6 @@ const Studentpay = () => {
 															<a>
 																<i className="far fa-clone pr-1"></i>Pay Fees
 															</a>{" "}
-															<div style={{ width: "120px", marginLeft: "10px", float: "right" }}>
-															<Form.Select
-															onChange={(e:any) =>{
-																setTermsmaster(e.target.value);
-															}}
-																						 >
-																							<option value="1">Terms 1</option>
-																							<option value="2">Terms 2</option>
-																							<option value="3">Terms 3</option>
-																							<option value="4">Terms 4</option>
-																							<option value="5">Terms 5</option>
-																							<option value="6">Terms 6</option>
-																							<option value="7">Terms 7</option>
-																							<option value="8">Terms 8</option>
-																							<option value="9">Terms 9</option>
-																							<option value="10">Terms 10</option>
-																							<option value="11">Terms 11</option>
-																							<option value="12">Terms 12</option>
-																						</Form.Select>
-															</div>
 															<Link to={`/StudentprofileSearch/${admissionidd.student_admission_id}`}>
 																<a className="btn btn-success btn float-right">Back</a>
 															</Link>
@@ -470,12 +483,12 @@ const Studentpay = () => {
 																style={{ float: "right", marginRight: "10px" }}>
 																Submit
 															</Button>{" "}
-                                                            <div style={{ width: "120px", marginRight: "10px", float: "right" }}>
-                                                                <Form.Control 
-                                                                    value={AllDetailsOfStudent && AllDetailsOfStudent.length && AllDetailsOfStudent[0].Allbalance}
-                                                                    disabled
-                                                                />
-                                                            </div>
+															-				<div style={{ width: "120px", marginRight: "10px", float: "right" }}>
+																<Form.Control
+																	value={AllDetailsOfStudent && AllDetailsOfStudent.length && AllDetailsOfStudent[0].Allbalance}
+																	disabled
+																/>
+															</div>
 														</h4>
 													</a>
 												) : (
@@ -507,6 +520,7 @@ const Studentpay = () => {
 																<th>Name</th>
 																<th>Admission Number</th>
 																<th>Academic Year</th>
+																<th>Terms</th>
 															</tr>
 														</thead>
 														<tbody>
@@ -519,6 +533,27 @@ const Studentpay = () => {
 																				<td>{values.student_name}</td>
 																				<td>{values.admission_no}</td>
 																				<td>{values.academic_year}</td>
+																				<td><div style={{ width: "120px", marginLeft: "10px", float: "right" }}>
+																					<Form.Select
+																						onChange={(e: any) => {
+																							termsChange(values, e.target.value)
+																							setTermsmaster(e.target.value);
+																						}}
+																					>
+																						<option value="1">Terms 1</option>
+																						<option value="2">Terms 2</option>
+																						<option value="3">Terms 3</option>
+																						<option value="4">Terms 4</option>
+																						<option value="5">Terms 5</option>
+																						<option value="6">Terms 6</option>
+																						<option value="7">Terms 7</option>
+																						<option value="8">Terms 8</option>
+																						<option value="9">Terms 9</option>
+																						<option value="10">Terms 10</option>
+																						<option value="11">Terms 11</option>
+																						<option value="12">Terms 12</option>
+																					</Form.Select>
+																				</div></td>
 																			</tr>
 																		);
 																	}
@@ -569,335 +604,239 @@ const Studentpay = () => {
 											<Form>
 												<div className="table-responsive">
 													<div className="card-body bg-transparent tableFixHead">
-														{termsmaster <= 1 ? (
-															<Table striped bordered hover>
-																<thead>
-																	<tr style={{ backgroundColor: "red" }}>
-																		<th>Fee Name</th>
-																		<th>Fees</th>
-																		<th>Paid</th>
-																		<th>Refund</th>
-																		<th>Discount</th>
+														<Table striped bordered hover>
+															<thead>
+																<tr style={{ backgroundColor: "red" }}>
+																	<th>Fee Name</th>
+																	<th>Fees</th>
+																	<th>Paid</th>
+																	<th>Refund</th>
+																	<th>Discount</th>
+																	<th>Terms</th>
+																	{/* <th style={{ padding: "10px" }}>Balance</th> */}
+																	<th>Date</th>
+																	<th style={{ padding: "10px", width: "70px" }}>Pay</th>
+																	<th style={{ width: "40%" }}>Amount</th>
+																	<th>Mode of Payment</th>
+																	<th>Comments</th>
+																</tr>
+															</thead>
+															<tbody className="pointer">
+																{Payment &&
+																	Payment[0]?.map((value: any, index: any) => {
+																		return (
+																			<tr key={index}>
+																				<td>
+																					{value?.fee_type_name}
+																				</td>
+																				<td>{value?.actual_fees}</td>
+																				<td>{value?.cum_amt}</td>
+																				<td>{value?.refund}</td>
+																				<td>{value?.discount_amount}</td>
+																				<td>{value?.fee_master_id && value?.optional_fees === "1" && <Form.Select name="" id="" style={{ width: "120px", marginLeft: "10px", float: "right" }}>
+																					<option>{value.term_name}</option>
+																				</Form.Select>}</td>
+																				{/* <td>{Number(value.balance)}</td> */}
+																				<td style={{ width: "10%" }}>
+																					{!refundSwitch ? (
+																						<Form.Control
+																							type="date"
+																							style={{ width: "82%" }}
+																							value={
+																								index == priceDateChange[index].index
+																									? moment(priceDateChange[index].date).format("YYYY-MM-DD")
+																									: moment(new Date()).format("YYYY-MM-DD")
+																							}
+																							onChange={(e: any) => {
+																								handleDateChange({ index: index, date: e.target.value });
+																							}}
+																						/>
+																					) : (
+																						<Form.Control
+																							type="date"
+																							style={{ width: "82%" }}
+																							value={
+																								index == priceRefundDateChange[index].index
+																									? moment(priceRefundDateChange[index].date).format("YYYY-MM-DD")
+																									: moment(new Date()).format("YYYY-MM-DD")
+																							}
+																							onChange={(e: any) => {
+																								handleRefundDateChange({ index: index, date: e.target.value });
+																							}}
+																						/>
+																					)}
+																				</td>
+																				{!refundSwitch ? <td>{Number(value.balance)}</td> : <td>{value.amount_paid}</td>}
 
-																		{/* <th style={{ padding: "10px" }}>Balance</th> */}
-																		<th>Date</th>
-																		<th style={{ padding: "10px", width: "70px" }}>Pay</th>
-																		<th style={{ width: "40%" }}>Amount</th>
-																		<th>Mode of Payment</th>
-																		<th>Comments</th>
-																	</tr>
-																</thead>
-																<tbody className="pointer">
-																	{allGotFinalData &&
-																		allGotFinalData.length &&
-																		allGotFinalData.map((value: any, index: any) => {
-																			return (
-																				<tr key={index}>
-																					<td>{value.fee_type_name}</td>
-																					<td>{value.actual_fees}</td>
-																					<td>{value.cum_amt}</td>
-																					<td>{value.refund}</td>
-																					<td>{value.discount_amount}</td>
-																					{/* <td>{Number(value.balance)}</td> */}
-																					<td style={{ width: "10%" }}>
-																						{!refundSwitch ? (
-																							<Form.Control
-																								type="date"
-																								style={{ width: "82%" }}
-																								value={
-																									index == priceDateChange[index].index
-																										? moment(priceDateChange[index].date).format("YYYY-MM-DD")
-																										: moment(new Date()).format("YYYY-MM-DD")
-																								}
-																								onChange={(e: any) => {
-																									handleDateChange({ index: index, date: e.target.value });
-																								}}
-																							/>
-																						) : (
-																							<Form.Control
-																								type="date"
-																								style={{ width: "82%" }}
-																								value={
-																									index == priceRefundDateChange[index].index
-																										? moment(priceRefundDateChange[index].date).format("YYYY-MM-DD")
-																										: moment(new Date()).format("YYYY-MM-DD")
-																								}
-																								onChange={(e: any) => {
-																									handleRefundDateChange({ index: index, date: e.target.value });
-																								}}
-																							/>
-																						)}
-																					</td>
-																					{!refundSwitch ? <td>{Number(value.balance)}</td> : <td>{value.amount_paid}</td>}
-
-																					<td>
-																						{!refundSwitch ? (
-																							<input
-																								type="number"
-																								style={{ width: "100%" }}
-																								className="form-control input-sm txtamt nk border border-warning"
-																								placeholder="Enter Amount"
-																								value={
-																									priceArr && priceArr.length && priceArr[index].amoundTyped >= 0
-																										? priceArr[index].amoundTyped == 0
-																											? ""
-																											: priceArr[index].amoundTyped
-																										: ""
-																								}
-																								onChange={(e: any) => {
-																									Number(e.target.value) > Number(value.balance)
-																										? alert("Amount Greater the Actual Fees")
-																										: handlePriceChange({
-																												index: index,
-																												amoundTyped: Number(Math.round(e.target.value)),
-																												amount_paid:
-																													Number(e.target.value) + Number(value.amount_paid),
-																												student_payment_info_id: value.student_payment_info_id,
-																												grade_id: value.grade_id,
-																												student_id: value.student_id,
-																												refund: Number(value.refund),
-																												balance: Number(value.balance) - Number(e.target.value),
-																												cum_amt: Number(e.target.value) + Number(value.cum_amt),
-																										  });
-																								}}
-																							/>
-																						) : (
-																							<input
-																								type="number"
-																								style={{ width: "100%" }}
-																								className="form-control input-sm txtamt nk border border-primary"
-																								placeholder="Enter Amount"
-																								value={
-																									priceRefundArr && priceRefundArr.length
-																										? priceRefundArr[index].amoundTyped == 0
-																											? ""
-																											: priceRefundArr[index].amoundTyped
-																										: ""
-																								}
-																								onChange={(e: any) => {
-																									Number(e.target.value) > Number(value.amount_paid)
-																										? alert("Amount Greater the Actual Fees")
-																										: handleRefundPriceChange({
-																												index: index,
-																												amoundTyped: Number(Math.round(e.target.value)),
-																												amount_paid:
-																													Number(value.amount_paid) - Number(e.target.value),
-																												student_payment_info_id: value.student_payment_info_id,
-																												grade_id: value.grade_id,
-																												student_id: value.student_id,
-																												refund: Number(e.target.value) + Number(value.refund),
-																												refundtyped: Number(e.target.value),
-																												balance: Number(value.balance) + Number(e.target.value),
-																												cum_amt: value.cum_amt,
-																										  });
-																								}}
-																							/>
-																						)}
-																					</td>
-																					<td>
-																						{!refundSwitch ? (
-																							<select
-																								className="form-control pointer"
-																								style={{ width: "90%" }}
-																								value={modeOFPaymnetChange[index].payment_mode}
-																								onChange={(e: any) => {
-																									handleModeOFPaymnetChange({
+																				<td>
+																					{!refundSwitch ? (
+																						<input
+																							type="number"
+																							style={{ width: "100%" }}
+																							className="form-control input-sm txtamt nk border border-warning"
+																							placeholder="Enter Amount"
+																							value={
+																								priceArr && priceArr.length && priceArr[index].amoundTyped >= 0
+																									? priceArr[index].amoundTyped == 0
+																										? ""
+																										: priceArr[index].amoundTyped
+																									: ""
+																							}
+																							onChange={(e: any) => {
+																								Number(e.target.value) > Number(value.balance)
+																									? alert("Amount Greater the Actual Fees")
+																									: handlePriceChange({
 																										index: index,
-																										payment_mode: e.target.value,
+																										amoundTyped: Number(Math.round(e.target.value)),
+																										amount_paid:
+																											Number(e.target.value) + Number(value.amount_paid),
+																										student_payment_info_id: value.student_payment_info_id,
+																										grade_id: value.grade_id,
+																										student_id: value.student_id,
+																										refund: Number(value.refund),
+																										balance: Number(value.balance) - Number(e.target.value),
+																										cum_amt: Number(e.target.value) + Number(value.cum_amt),
 																									});
-																								}}>
-																								<option value="Cash">Cash</option>
-																								<option value="Card">Card</option>
-																								<option value="Direct Account">Direct Acc.</option>
-																								<option value="Employee Account">Emp. Account</option>
-																							</select>
-																						) : (
-																							<select
-																								className="form-control pointer"
-																								style={{ width: "90%" }}
-																								value={modeOfPayRefundChange[index].payment_mode}
-																								onChange={(e: any) => {
-																									handlemodeOfPayRefundChange({
+																							}}
+																						/>
+																					) : (
+																						<input
+																							type="number"
+																							style={{ width: "100%" }}
+																							className="form-control input-sm txtamt nk border border-primary"
+																							placeholder="Enter Amount"
+																							value={
+																								priceRefundArr && priceRefundArr.length
+																									? priceRefundArr[index].amoundTyped == 0
+																										? ""
+																										: priceRefundArr[index].amoundTyped
+																									: ""
+																							}
+																							onChange={(e: any) => {
+																								Number(e.target.value) > Number(value.amount_paid)
+																									? alert("Amount Greater the Actual Fees")
+																									: handleRefundPriceChange({
 																										index: index,
-																										payment_mode: e.target.value,
+																										amoundTyped: Number(Math.round(e.target.value)),
+																										amount_paid:
+																											Number(value.amount_paid) - Number(e.target.value),
+																										student_payment_info_id: value.student_payment_info_id,
+																										grade_id: value.grade_id,
+																										student_id: value.student_id,
+																										refund: Number(e.target.value) + Number(value.refund),
+																										refundtyped: Number(e.target.value),
+																										balance: Number(value.balance) + Number(e.target.value),
+																										cum_amt: value.cum_amt,
 																									});
-																								}}>
-																								<option value="Cash">Cash</option>
-																								<option value="Card">Card</option>
-																								<option value="Direct Account.">Direct Acc.</option>
-																								<option value="Employee Account">Emp. Account</option>
-																							</select>
-																						)}
-																					</td>
-																					<td>
-																						{!refundSwitch ? (
-																							<Form.Control
-																								as="textarea"
-																								value={commentChange[index].comments}
-																								onChange={(e: any) => {
-																									handleCommentChange({ index: index, comments: e.target.value });
-																								}}
-																								rows={1}
-																							/>
-																						) : (
-																							<Form.Control
-																								as="textarea"
-																								value={commentRefundChange[index].comments}
-																								onChange={(e: any) => {
-																									handleRefundCommentChange({
-																										index: index,
-																										comments: e.target.value,
-																									});
-																								}}
-																								rows={1}
-																							/>
-																						)}
-																					</td>
-																				</tr>
-																			);
-																		})}
-																</tbody>
-																<tfoot>
-																	<tr>
-																		<th>Total</th>
-																		<th id="totalfeeamt">
-																			{AllDetailsOfStudent && AllDetailsOfStudent.length && AllDetailsOfStudent[3].AlltotalFees}
-																		</th>
-																		<th>{AllDetailsOfStudent && AllDetailsOfStudent.length && AllDetailsOfStudent[4].Allcumamt}</th>
-																		<th>
-																			{AllDetailsOfStudent && AllDetailsOfStudent.length && AllDetailsOfStudent[1].AlltotalRefund}
-																		</th>
-																		<th>{AllDetailsOfStudent && AllDetailsOfStudent.length && AllDetailsOfStudent[5].AllDiscount}</th>
+																							}}
+																						/>
+																					)}
+																				</td>
+																				<td>
+																					{!refundSwitch ? (
+																						<select
+																							className="form-control pointer"
+																							style={{ width: "90%" }}
+																							value={modeOFPaymnetChange[index].payment_mode}
+																							onChange={(e: any) => {
+																								handleModeOFPaymnetChange({
+																									index: index,
+																									payment_mode: e.target.value,
+																								});
+																							}}>
+																							<option value="Cash">Cash</option>
+																							<option value="Card">Card</option>
+																							<option value="Direct Account">Direct Acc.</option>
+																							<option value="Employee Account">Emp. Account</option>
+																						</select>
+																					) : (
+																						<select
+																							className="form-control pointer"
+																							style={{ width: "90%" }}
+																							value={modeOfPayRefundChange[index].payment_mode}
+																							onChange={(e: any) => {
+																								handlemodeOfPayRefundChange({
+																									index: index,
+																									payment_mode: e.target.value,
+																								});
+																							}}>
+																							<option value="Cash">Cash</option>
+																							<option value="Card">Card</option>
+																							<option value="Direct Account.">Direct Acc.</option>
+																							<option value="Employee Account">Emp. Account</option>
+																						</select>
+																					)}
+																				</td>
+																				<td>
+																					{!refundSwitch ? (
+																						<Form.Control
+																							as="textarea"
+																							value={commentChange[index].comments}
+																							onChange={(e: any) => {
+																								handleCommentChange({ index: index, comments: e.target.value });
+																							}}
+																							rows={1}
+																						/>
+																					) : (
+																						<Form.Control
+																							as="textarea"
+																							value={commentRefundChange[index].comments}
+																							onChange={(e: any) => {
+																								handleRefundCommentChange({
+																									index: index,
+																									comments: e.target.value,
+																								});
+																							}}
+																							rows={1}
+																						/>
+																					)}
+																				</td>
+																			</tr>
+																		);
+																	})}
+															</tbody>
+															<tfoot>
+																{Payment && Payment.length ? < tr >
+																	<th>Total</th>
+																	<th id="totalfeeamt">
+																		{Payment && Payment.length && Payment[4].totalFees}
+																	</th>
+																	<th>{Payment && Payment.length && Payment[5].totalcumamt}</th>
+																	<th>
+																		{Payment && Payment.length && Payment[2].totalRefund}
+																	</th>
+																	<th>{Payment && Payment.length && Payment[6].totaldiscountamount}</th>
+																	<th style={{ padding: "13px" }} id="totalbalamt">
+																		{/* {AllDetailsOfStudent && AllDetailsOfStudent.length && AllDetailsOfStudent[0].Allbalance} */}
+																	</th>
+																	<th />
+																	<th>{Payment && Payment.length && Payment[1].balance}</th>
+																	{!refundSwitch ? (
 																		<th style={{ padding: "13px" }} id="totalbalamt">
-																			{/* {AllDetailsOfStudent && AllDetailsOfStudent.length && AllDetailsOfStudent[0].Allbalance} */}
+																			{Payment && Payment.length && Payment[1].Allbalance}
 																		</th>
-																		{!refundSwitch ? (
-																			<th style={{ padding: "13px" }} id="totalbalamt">
-																				{AllDetailsOfStudent && AllDetailsOfStudent.length && AllDetailsOfStudent[0].Allbalance}
-																			</th>
-																		) : (
-																			<th id="totalpaidamt">
-																				{" "}
-																				{AllDetailsOfStudent && AllDetailsOfStudent.length && AllDetailsOfStudent[2].Alltotalpaid}
-																			</th>
-																		)}
-																	</tr>
-																</tfoot>
-															</Table>
-														) : (
-															<>
-																<Table striped bordered hover>
-																	<thead>
-																		<tr style={{ backgroundColor: "red" }}>
-																			<th>Fee Name</th>
-																			<th>Fees</th>
-																			<th>Paid</th>
-																			<th>Refund</th>
-																			<th>Discount</th>
-
-																			{/* <th style={{ padding: "10px" }}>Balance</th> */}
-																			<th>Date</th>
-																			<th style={{ padding: "10px", width: "70px" }}>Pay</th>
-																			<th style={{ width: "40%" }}>Amount</th>
-																			<th>Mode of Payment</th>
-																			<th>Comments</th>
-																		</tr>
-																	</thead>
-																	<tbody className="pointer">
-																		<td>Hostel Fee</td>
-																		<td>5000</td>
-																		<td>0</td>
-																		<td>0</td>
-																		<td>0</td>
-																		<td style={{ width: "10%" }}>
-																			<Form.Control
-																				type="date"
-																				className="form-control txtamt nk border border-gray pointer"
-																				onChange={(e: any) => {}}
-																			/>
-																		</td>
-																		<td>5000</td>
-																		<td>
-																			<input
-																				type="number"
-																				style={{ width: "100%" }}
-																				className="form-control input-sm txtamt nk border border-warning"
-																				placeholder="Enter Amount"
-																				onChange={(e: any) => {}}
-																			/>
-																		</td>
-																		<td>
-																			<select
-																				className="form-control txtamt nk border border-gray pointer"
-																				style={{ width: "90%" }}
-																				onChange={(e: any) => {}}>
-																				<option value="Cash">Cash</option>
-																				<option value="Card">Card</option>
-																				<option value="Direct Account.">Direct Acc.</option>
-																				<option value="Employee Account">Emp. Account</option>
-																			</select>
-																		</td>
-																		<td>
-																			<Form.Control
-																				className="form-control txtamt nk border border-gray pointer"
-																				as="textarea"
-																				onChange={(e: any) => {}}
-																				rows={1}
-																			/>
-																		</td>
-																	</tbody>
-																	<tfoot>
-																		<tr>
-																			<th>Total</th>
-																			<th id="totalfeeamt">
-																				{AllDetailsOfStudent && AllDetailsOfStudent.length && AllDetailsOfStudent[3].AlltotalFees}
-																			</th>
-																			<th>
-																				{AllDetailsOfStudent && AllDetailsOfStudent.length && AllDetailsOfStudent[4].Allcumamt}
-																			</th>
-																			<th>
-																				{AllDetailsOfStudent &&
-																					AllDetailsOfStudent.length &&
-																					AllDetailsOfStudent[1].AlltotalRefund}
-																			</th>
-																			<th>
-																				{AllDetailsOfStudent && AllDetailsOfStudent.length && AllDetailsOfStudent[5].AllDiscount}
-																			</th>
-																			<th style={{ padding: "13px" }} id="totalbalamt">
-																				{/* {AllDetailsOfStudent && AllDetailsOfStudent.length && AllDetailsOfStudent[0].Allbalance} */}
-																			</th>
-																			{!refundSwitch ? (
-																				<th style={{ padding: "13px" }} id="totalbalamt">
-																					{AllDetailsOfStudent &&
-																						AllDetailsOfStudent.length &&
-																						AllDetailsOfStudent[0].Allbalance}
-																				</th>
-																			) : (
-																				<th id="totalpaidamt">
-																					{" "}
-																					{AllDetailsOfStudent &&
-																						AllDetailsOfStudent.length &&
-																						AllDetailsOfStudent[2].Alltotalpaid}
-																				</th>
-																			)}
-																		</tr>
-																	</tfoot>
-																</Table>
-															</>
-														)}
+																	) : (
+																		<th id="totalpaidamt">
+																			{" "}
+																			{Payment && Payment.length && Payment[2].Alltotalpaid}
+																		</th>
+																	)}
+																</tr> : <th colSpan={12} className="text-center">No Data Found</th>}
+															</tfoot>
+														</Table>
 													</div>
 												</div>
 											</Form>
 										</div>
 									</div>
 								</div>
-								<Listofpayment studentdetails={AllDetailsOfStudent} studentadmission={AllDetailsOfStudent}></Listofpayment>
+								<Listofpayment feemasterid={feemasterid} studentdetails={AllDetailsOfStudent} studentadmission={AllDetailsOfStudent}></Listofpayment>
 							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-		</div>
+			</div >
+		</div >
 	);
 };
 export default Studentpay;
