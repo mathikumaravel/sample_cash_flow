@@ -63,6 +63,14 @@ const Studentrecord = () => {
   const [termsmaster, setTermsmaster] = useState<any>("");
 console.log(termsmaster);
 
+
+useEffect(() => {
+  axios.get(`${baseUrl}school`)
+    .then((res: any) => {
+      sessionStorage.setItem("School", JSON.stringify(res.data.data[0]));
+    })
+}, [])
+
   const paginate = [
     { text: "5", value: 5 },
     { text: "10", value: 10 },

@@ -8,6 +8,8 @@ import axios, { AxiosResponse } from "axios";
 import { baseUrl } from "../../index";
 import { getAccessToken } from "../../config/getAccessToken";
 import { useHistory, useParams } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+
 const Optional = () => {
   //To Make Edit
   let history = useHistory();
@@ -54,7 +56,7 @@ const Optional = () => {
   const [foundOptionaldata, setFoundOptionaldata] = useState<any>([]);
   const [optionaldrop, setOptionaldrop] = useState<any>([]);
 
-  
+
   console.log(foundOptionaldata);
 
   //manage state  Autosearch
@@ -82,44 +84,47 @@ const Optional = () => {
   //        handlesection(filterParticularYear, filterParticularYear[0].grade);
   //    }
   // }, [filterParticularYear]);
+
+
+
   console.log(Autosearch);
   const [GotOptionaldata, setGotOptionaldata] = useState<any[]>([]);
-  const OptionalValuesData = (data:any) =>{
+  const OptionalValuesData = (data: any) => {
     console.log(data);
-    let dataOnChange={
-      student_admissions_id:data.student_admissions_id,
-      student_id:data.student_id,
-      fee_master_id:Number(optionaldrop),
-      year_id:data.year_id,
-      grade_id:data.grade_id,
-      grade_section_id:data.grade_section_id
+    let dataOnChange = {
+      student_admissions_id: data.student_admissions_id,
+      student_id: data.student_id,
+      fee_master_id: Number(optionaldrop),
+      year_id: data.year_id,
+      grade_id: data.grade_id,
+      grade_section_id: data.grade_section_id
     }
-    if(data.checked){
-      setGotOptionaldata([...GotOptionaldata,dataOnChange])
+    if (data.checked) {
+      setGotOptionaldata([...GotOptionaldata, dataOnChange])
 
     }
-    else{
+    else {
       let newoptionaldata = [...GotOptionaldata]
-     let indexvalue = GotOptionaldata.indexOf(dataOnChange)
-     newoptionaldata.splice(indexvalue,1)
-     setGotOptionaldata([...newoptionaldata])
+      let indexvalue = GotOptionaldata.indexOf(dataOnChange)
+      newoptionaldata.splice(indexvalue, 1)
+      setGotOptionaldata([...newoptionaldata])
     }
-     
+
     // data.forEach((element:any) => {
     //   console.log(element);
-      
+
     // GotOptionaldata.remove
-      // GotOptionaldata.push(dataOnChange);      
+    // GotOptionaldata.push(dataOnChange);      
     // }); 
     setFoundOptionaldata(GotOptionaldata);
     // console.log(GotOptionaldata,"optionaldatattttt");
-    
+
   }
-  console.log(GotOptionaldata,"hhhhh");
+  console.log(GotOptionaldata, "hhhhh");
   console.log(foundOptionaldata);
   const onSuggesthandler = (value: any) => {
     console.log(value);
-    
+
     setIsComponentVisible(false);
     console.log(value);
     setAutoSearch({
@@ -138,39 +143,56 @@ const Optional = () => {
         //  console.log(response.data.data);
         setMainSearch(response.data.data);
       });
-      getAccessToken();
-      getAllAcademicYears();
-      axios
-        .post(`${baseUrl}optional/opt`, {
-          year_id: value.year_id,
-          grade_id: value.grade_id
-        })
-        .then((response: AxiosResponse) => {
-          setOptionalFees(response.data.data);
-          console.log(response.data.data,"guyguyguyg");
-          
-        });
-       
-  };
-  const submitOptional =( )=>{
-    getAccessToken();  
-      
-    console.log(foundOptionaldata);     
+    getAccessToken();
+    getAllAcademicYears();
     axios
-    .post(`${baseUrl}optional`, 
-     GotOptionaldata 
-    )
-    .then((response: AxiosResponse) => {
-      setOptionalFees(response.data.data);
-      console.log(response.data.data,"guyguyguyg");
-      
-    });  
+      .post(`${baseUrl}optional/opt`, {
+        year_id: value.year_id,
+        grade_id: value.grade_id
+      })
+      .then((response: AxiosResponse) => {
+        setOptionalFees(response.data.data);
+        console.log(response.data.data, "guyguyguyg");
 
+      });
+
+  };
+
+
+  const optionaldata = GotOptionaldata;
+
+  console.log(GotOptionaldata);
+  console.log(optionaldata);
+
+  const submitOptional = () => {
+    getAccessToken();
+    console.log(foundOptionaldata);
+    axios
+      .post(`${baseUrl}optional`,
+        GotOptionaldata
+      )
+      .then((response: AxiosResponse) => {
+        setOptionalFees(response.data.data);
+        console.log(response.data.data, "guyguyguyg");
+        if (response.data.data.IsExsist === false) {
+          toast.success("Optional fee Added Successfully", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+        onSuggesthandler("");
+
+      });
   }
   // console.log(searchResultData[0][1]);
-  useEffect(()=>{
+  useEffect(() => {
     getAllAcademicYears();
-  },[])
+  }, [])
   useEffect(() => {
     let AllRoundData: any[] = [];
     if (searchResultData && searchResultData.length > 0) {
@@ -227,8 +249,8 @@ const Optional = () => {
 
   const callStudentData = () => {
     setIsComponentVisible(false);
-     if (academicYear && academicYear.length > 0 && gradea && gradea.length > 0) {
-      console.log(academicYear,"check");
+    if (academicYear && academicYear.length > 0 && gradea && gradea.length > 0) {
+      console.log(academicYear, "check");
       getAllAcademicYears();
       getAccessToken();
       axios
@@ -238,10 +260,10 @@ const Optional = () => {
         })
         .then((response: AxiosResponse) => {
           setOptionalFees(response.data.data);
-          console.log(response.data.data,"guyguyguyg");
-          
+          console.log(response.data.data, "guyguyguyg");
+
         });
-      }
+    }
     if (academicYear && academicYear.length > 0) {
       if (searchBy && searchBy.length > 0) {
         if (
@@ -266,8 +288,8 @@ const Optional = () => {
               setMainSearch(response.data.data);
             });
         }
-        
-         else if (searchBy && searchBy.length > 0 && academicYear && academicYear.length > 0 && gradea && gradea.length > 0) {
+
+        else if (searchBy && searchBy.length > 0 && academicYear && academicYear.length > 0 && gradea && gradea.length > 0) {
           getAccessToken();
           axios
             .post(`${baseUrl}autoSearch`, {
@@ -312,8 +334,8 @@ const Optional = () => {
             .then((response: AxiosResponse) => {
               setMainSearch(response.data.data);
             });
-        } 
-       
+        }
+
         else if (academicYear && academicYear.length > 0 && gradea && gradea.length > 0) {
           getAccessToken();
           axios
@@ -324,7 +346,7 @@ const Optional = () => {
             .then((response: AxiosResponse) => {
               setMainSearch(response.data.data);
             });
-        } 
+        }
         else if (academicYear && academicYear.length > 0 && section && section.length > 0) {
           getAccessToken();
           axios
@@ -345,8 +367,8 @@ const Optional = () => {
               setMainSearch(response.data.data);
             });
         }
-       
-        
+
+
       }
     } else {
       alert("Please Choose Academic Year");
@@ -527,7 +549,19 @@ const Optional = () => {
     //      setAddSection(resultData[0].section);
   };
   return (
+
     <div id="page-top">
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <div id="wrapper">
         <Sidebar data={"studentrecord"}></Sidebar>
         <div id="content-wrapper" className="d-flex flex-column">
@@ -554,35 +588,35 @@ const Optional = () => {
                           }}
                         /> */}
                         <Form.Select aria-label="Default select example" onChange={(e) => setOptionaldrop(e.target.value)}>
-                        <option value="none">Select Optical Fees</option>
-                        {optionalFees &&
-                          optionalFees.length &&
-                          optionalFees.map((value: any, i: any) => {
-                            return <option value={value.fee_master_id}>{value.fee_type_name}</option>;
-                          })}
-                      </Form.Select>
+                          <option value="none">Select Optical Fees</option>
+                          {optionalFees &&
+                            optionalFees.length &&
+                            optionalFees.map((value: any, i: any) => {
+                              return <option value={value.fee_master_id}>{value.fee_type_name}</option>;
+                            })}
+                        </Form.Select>
                         <Card
                           style={{
                             cursor: "pointer",
                             background: "rgba(0,0,0,0)",
                             backdropFilter: "saturate(180%) blur(8px)",
                             color: "black",
-                            fontWeight:700,
-                            zIndex:5,
-                            position:"absolute"
+                            fontWeight: 700,
+                            zIndex: 5,
+                            position: "absolute"
                           }}
                         >
-                          <ListGroup variant="flush" style={{ marginLeft: "10px"}}>
+                          <ListGroup variant="flush" style={{ marginLeft: "10px" }}>
                             {suggest.length > 0 && isComponentVisible && (
                               <div>
                                 {suggest.map((item: any, i: any) => (
-                                <>
-                                  <div key={i} onClick={() => onSuggesthandler(item)} className="mb-1 btn btn-primary pointer" style={{textAlign:'left'}}>
-                                    {item.student_name}***
+                                  <>
+                                    <div key={i} onClick={() => onSuggesthandler(item)} className="mb-1 btn btn-primary pointer" style={{ textAlign: 'left' }}>
+                                      {item.student_name}***
                                     {item.grade_id}***
                                     {item.phone_number}***
                                     {item.admission_no}
-                                  </div>
+                                    </div>
                                   </>
                                 ))}
                               </div>
@@ -593,87 +627,87 @@ const Optional = () => {
                       {Autosearch && Autosearch.text ? (
                         <></>
                       ) : (
-                        <>
-                          <Col md={2}>
-                            <Form.Select
-                              aria-label="Default select example"
-                              onChange={(e) => {
-                                setAcademicYear(e.target.options[e.target.selectedIndex].text);
-                                console.log(e.target.value);
-                                setAcademicYearId(e.target.value)
-                                handleGradeFilter(gradeSectionList, e.target.value);
-                              }}
-                            >
-                              {academicYearFinal &&
-                                academicYearFinal.length &&
-                                academicYearFinal.map((academic: any) => {
-                                  return <option value={academic.year_id}>{academic.academic_year}</option>;
-                                })}
-                            </Form.Select>
-                          </Col>
-                          <Col md={2}>
-                            <Form.Select
-                              aria-label="Default select example"
-                              onChange={(e:any) => {
-                                setGradea(e.target[e.target.selectedIndex].text);
-                                setGradeID(e.target.value)
-                                //handlesection(filterParticularYear, e.target.value);
-                              }}
-                            >
-                              <option value="none">Grade</option>
-                              {filterGradeByYear &&
-                                filterGradeByYear.length &&
-                                filterGradeByYear.map((value: any) => {
-                                  // console.log(academicYear)
-                                  return <option value={value.grade_master_id} label={value.grade_master}>{value.grade_master}</option>;
-                                })}
-                            </Form.Select>
-                          </Col>
-                          <Col md={2}>
-                            <Form.Select aria-label="Default select example" onChange={(e) => setsection(e.target.value)}>
-                              <option value="none">Section</option>
-                              {filterSectionByYear &&
-                                filterSectionByYear.length &&
-                                filterSectionByYear.map((value: any, i: any) => {
-                                  return <option value={value.section}>{value.section}</option>;
-                                })}
-                            </Form.Select>
-                          </Col>
-                          <Col md={1}>
-                            <div className="input-group-append">
-                              <Button
-                                className="btn btn-danger"
-                                type="button"
-                                onClick={() => {
-                                  
-                                  callStudentData();
+                          <>
+                            <Col md={2}>
+                              <Form.Select
+                                aria-label="Default select example"
+                                onChange={(e) => {
+                                  setAcademicYear(e.target.options[e.target.selectedIndex].text);
+                                  console.log(e.target.value);
+                                  setAcademicYearId(e.target.value)
+                                  handleGradeFilter(gradeSectionList, e.target.value);
                                 }}
                               >
-                                <i className="fas fa-search fa-sm"></i>
-                              </Button>{""}
-                              {" "}
-                              <Button style={{ marginLeft: "9%" }}
-                        type="button"
-                      onClick={(e:any) => {
-                        submitOptional();
-                      }}
-                     >Submit</Button>
-                            </div>
-                          </Col>
-                        </>
-                      )}
+                                {academicYearFinal &&
+                                  academicYearFinal.length &&
+                                  academicYearFinal.map((academic: any) => {
+                                    return <option value={academic.year_id}>{academic.academic_year}</option>;
+                                  })}
+                              </Form.Select>
+                            </Col>
+                            <Col md={2}>
+                              <Form.Select
+                                aria-label="Default select example"
+                                onChange={(e: any) => {
+                                  setGradea(e.target[e.target.selectedIndex].text);
+                                  setGradeID(e.target.value)
+                                  //handlesection(filterParticularYear, e.target.value);
+                                }}
+                              >
+                                <option value="none">Grade</option>
+                                {filterGradeByYear &&
+                                  filterGradeByYear.length &&
+                                  filterGradeByYear.map((value: any) => {
+                                    // console.log(academicYear)
+                                    return <option value={value.grade_master_id} label={value.grade_master}>{value.grade_master}</option>;
+                                  })}
+                              </Form.Select>
+                            </Col>
+                            <Col md={2}>
+                              <Form.Select aria-label="Default select example" onChange={(e) => setsection(e.target.value)}>
+                                <option value="none">Section</option>
+                                {filterSectionByYear &&
+                                  filterSectionByYear.length &&
+                                  filterSectionByYear.map((value: any, i: any) => {
+                                    return <option value={value.section}>{value.section}</option>;
+                                  })}
+                              </Form.Select>
+                            </Col>
+                            <Col md={1}>
+                              <div className="input-group-append">
+                                <Button
+                                  className="btn btn-danger"
+                                  type="button"
+                                  onClick={() => {
+
+                                    callStudentData();
+                                  }}
+                                >
+                                  <i className="fas fa-search fa-sm"></i>
+                                </Button>{""}
+                                {" "}
+                                <Button style={{ marginLeft: "9%" }}
+                                  type="button"
+                                  onClick={(e: any) => {
+                                    submitOptional();
+                                  }}
+                                >Submit</Button>
+                              </div>
+                            </Col>
+                          </>
+                        )}
                     </Row>
                   </Container>
                 </div>
-                  <div className="container row pb-2">
-                    <div className="col-md-4">
-                      
-                    </div>
-                    
-                    <div className="col-md-4">
-                    
-                    </div>
+                <div className="container row pb-2">
+                  <div className="col-md-4">
+
                   </div>
+
+                  <div className="col-md-4">
+
+                  </div>
+                </div>
 
                 <div className="col-xl-11 text-center">
                   {statusStudentSearch ? (
@@ -688,7 +722,7 @@ const Optional = () => {
                         </thead>
                         <tbody>
                           {allGotFinalData && allGotFinalData.length > 0 ? (
-                            allGotFinalData.map((values: any, index: any) => {                              
+                            allGotFinalData.map((values: any, index: any) => {
                               return (
                                 <>
                                   <tr key={index}>
@@ -697,25 +731,25 @@ const Optional = () => {
                                     <td>
                                       {" "}
                                       <Form.Check
-                                        onChange={(e:any) => {
+                                        onChange={(e: any) => {
                                           // console.log(values);
-                                          values.checked=e.target.checked
+                                          values.checked = e.target.checked
                                           OptionalValuesData(values)
                                           // setCheckboxValue(e.target.checked)
                                         }}
-                                      type="switch" id="custom-switch" label="switch to add fee"/>
+                                        type="switch" id="custom-switch" label="switch to add fee" />
                                     </td>
                                   </tr>
                                 </>
                               );
                             })
                           ) : (
-                            <tr>
-                              <td colSpan={6} className="text-center">
-                                No Data Found
+                              <tr>
+                                <td colSpan={6} className="text-center">
+                                  No Data Found
                               </td>
-                            </tr>
-                          )}
+                              </tr>
+                            )}
                         </tbody>
                       </Table>
                     </div>

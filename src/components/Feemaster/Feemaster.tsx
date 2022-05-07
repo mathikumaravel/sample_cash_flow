@@ -18,11 +18,22 @@ const Feemaster = () => {
   const [orderId, setOrderId] = useState<any>("");
   const [duplication, setDuplication] = useState(false);
   const [getFeeMaster, setGetFeeMaster] = useState<any>([]);
-  const [datatoDelete, setdatatoDelete] = useState<any>({});
+
   const [loading, setloading] = useState<any>(true);
   const [filter, setfilter] = useState<any>([]);
-
+  const [datatoDelete, setdatatoDelete] = useState<any>({});
   const [show, setShow] = useState(false);
+
+  const [checkboxOptional, setCheckboxOptional] = useState(false);
+  const [checkboxTrans, setCheckboxTrans] = useState(false);
+  const [checkboxHostel, setCheckboxHostel] = useState(false);
+
+const handlecheckbox = () =>{
+  setCheckboxHostel(false);
+  setCheckboxOptional(false);
+  setCheckboxTrans(false);
+}
+
   const handleClose = () => {
     setShow(false);
     deleteParticularDiscount(datatoDelete.id, datatoDelete.index);
@@ -69,6 +80,22 @@ const Feemaster = () => {
       sort: true,
     },
     { dataField: "order_id", text: "Order", sort: true },
+    {
+      dataField: "optional_fee",
+      text: "Make fees as Optional",
+      sort: true,
+    },
+    {
+      dataField: "hostal_fee",
+      text: "Hostel",
+      sort: true,
+    },
+    {
+      dataField: "transport_fee",
+      text: "Transportation",
+      sort: true,
+    },
+    
     {
       dataField: "Actions",
       text: "Actions",
@@ -206,6 +233,7 @@ const Feemaster = () => {
           draggable: true,
           progress: undefined,
         });
+       
       } else if (orderId.length <= 0) {
         toast.warning("Please Enter Order", {
           position: "top-right",
@@ -225,6 +253,9 @@ const Feemaster = () => {
           .post(`${baseUrl}feeMaster`, {
             fee_type_name: feeTypeName,
             order_id: orderId,
+            optional_fee:checkboxOptional.toString(),
+            hostal_fee:checkboxHostel.toString(),
+            transport_fee:checkboxTrans.toString()
           })
           .then((res: any) => {
             console.log(res.data);
@@ -238,6 +269,7 @@ const Feemaster = () => {
                 draggable: true,
                 progress: undefined,
               });
+
             } else if (res.data.data.IsExsist === true) {
               toast.warning(`Data Already Added`, {
                 position: "top-right",
@@ -400,7 +432,53 @@ const Feemaster = () => {
                                       setOrderId(e.target.value);
                                     }}
                                   />
+                                </Col>{" "}
+                                <Col sm="4" style={{ marginTop: "20px" }}>
+                                  <Form.Label style={{ marginLeft: "40px" }}>
+                                    Make fees as Optional
+                                  </Form.Label>
+                                </Col> 
+                                <Col sm="6" style={{ marginLeft: "20px",marginTop: "20px" }}>
+                                <Form.Check
+                                        onChange={(e:any) => {
+                                          console.log(e.target.checked);                                          // values.checked=e.target.checked
+                                       
+                                          setCheckboxOptional(e.target.checked)
+                                        }}
+                                      type="switch" id="custom-switch" label="Optional"/> 
+                                               
+                                                      
                                 </Col>
+                                <Col sm="4" className="mb-4" style={{ marginTop: "20px" }}>
+                                  <Form.Label style={{ marginLeft: "40px" }}>
+                                    Hostel{" "}
+                                  </Form.Label>
+                                </Col>
+                                <Col sm="6" style={{ marginLeft: "20px",marginTop: "20px" }}>
+                                <Form.Check  
+                                        onChange={(e:any) => {
+                                          console.log(e.target.checked);
+                                          // values.checked=e.target.checked
+                                       
+                                          setCheckboxHostel(e.target.checked)
+                                        }}
+                                      type="switch" id="custom-switch" label="Hostel"/> 
+                                </Col>{" "}
+                                <Col sm="4" className="mb-4" >
+                                  <Form.Label style={{ marginLeft: "40px" }}>
+                                  Transportation{" "}
+                                  </Form.Label>
+                                </Col>
+                                <Col sm="6" style={{ marginLeft: "20px" }}>
+                                <Form.Check  
+                                        onChange={(e:any) => {
+                                          console.log(e.target.checked);                                          // values.checked=e.target.checked
+                                       
+                                          setCheckboxTrans(e.target.checked)
+                                        }}
+                                      type="switch" id="custom-switch" label="Transportation"/> 
+                                </Col>{" "}
+                              
                               </Row>
                             </div>
 
@@ -410,7 +488,11 @@ const Feemaster = () => {
                                   <Button
                                     style={{ marginLeft: "75%" }}
                                     className="btn btn-secondary"
-                                    onClick={() => setStatusFeeMasterAdd(false)}
+                                    onClick={() => 
+                                     { setStatusFeeMasterAdd(false);
+                                      handlecheckbox();
+                                    }
+                                    }
                                   >
                                     Cancel
                                   </Button>{" "}
@@ -418,6 +500,7 @@ const Feemaster = () => {
                                     type="submit"
                                     onClick={(e: any) => {
                                       handleSubmit(e);
+                                      handlecheckbox();
                                     }}
                                     className={
                                       duplication

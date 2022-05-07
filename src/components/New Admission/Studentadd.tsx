@@ -200,54 +200,56 @@ const Studentadd = () => {
     const handleFatherName = (e: any) => {
         console.log(e);
         const re = /^[a-z]+$/; //rules
-        if (re.test(e)) {
-            setFatherName(e.target.value);
-        } else {
-            toast.warning("Please Don't Enter Number ", {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            });
-        }
+        // if (re.test(e)) {
+        //     setFatherName(e.target.value);
+        // } else {
+        //     toast.warning("Please Don't Enter Number ", {
+        //         position: "top-right",
+        //         autoClose: 5000,
+        //         hideProgressBar: false,
+        //         closeOnClick: true,
+        //         pauseOnHover: true,
+        //         draggable: true,
+        //         progress: undefined,
+        //     });
+        // }
     };
     const handleStudentName = (e: any) => {
       console.log(e);
-      const re = /^[a-z]+$/; //rules
-      if (re.test(e)) {
-          setStudentname(e.target.value);
-      } else {
-          toast.warning("Please Don't Enter Number ", {
-              position: "top-right",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-          });
-      }
+    //   const re = /[^a-z ]/gi; //rules
+      var regex = /[^a-z ]/gi;
+      e.target.value = e.target.value.replace(regex, "");
+    //   if (regex.test(e)) {
+    //       setStudentname(e.target.value);
+    //   } else {
+    //       toast.warning("Please Don't Enter Number ", {
+    //           position: "top-right",
+    //           autoClose: 5000,
+    //           hideProgressBar: false,
+    //           closeOnClick: true,
+    //           pauseOnHover: true,
+    //           draggable: true,
+    //           progress: undefined,
+    //       });
+    //   }
   };
     console.log(fatherOccupation);
     const handleFatherOcc = (e: any) => {
         console.log(e);
-        const re = /^[A-Za-z]+$/; //rules
-        if (re.test(e)) {
-            setFatherOccupation(e.target.value);
-        } else {
-            toast.warning("Please Don't Enter Number", {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            });
-        }
+        const re = /[^a-z ]/gi; //rules
+        // if (re.test(e)) {
+        //     setFatherOccupation(e.target.value);
+        // } else {
+        //     toast.warning("Please Don't Enter Number", {
+        //         position: "top-right",
+        //         autoClose: 5000,
+        //         hideProgressBar: false,
+        //         closeOnClick: true,
+        //         pauseOnHover: true,
+        //         draggable: true,
+        //         progress: undefined,
+        //     });
+        // }
     };
     const handleChangeMobileAlter = (e: any) => {
         const re = /^[0-9\b]+$/; //rules
@@ -406,6 +408,7 @@ const Studentadd = () => {
                                                                     required
                                                                     type="name"
                                                                     placeholder="Student Name"
+                                                                    onKeyUp={handleStudentName}
                                                                     onChange={(e: any) => {
                                                                       console.log(e.target.value);
                                                                       setStudentname(e.target.value);
@@ -622,6 +625,7 @@ const Studentadd = () => {
                                                                 <Form.Control
                                                                     type="text"
                                                                     placeholder="Father Name"
+                                                                    onKeyUp={handleStudentName}
                                                                     onChange={(e: any) => {
                                                                         console.log(e.target.value);
                                                                         setFatherName(e.target.value);
@@ -643,6 +647,7 @@ const Studentadd = () => {
                                                                 <Form.Control
                                                                     type="text"
                                                                     placeholder="Father Occupation"
+                                                                    onKeyUp={handleStudentName}
                                                                     // onChange={(e) => setFatherOccupation(e.target.value)}
                                                                     onChange={(e: any) => {
                                                                         console.log(e.target.value);

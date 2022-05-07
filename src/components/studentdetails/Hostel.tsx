@@ -1,5 +1,5 @@
 import react from "react";
-import { Button, Form } from "react-bootstrap";
+import { Button, Form, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useHistory, useParams } from "react-router-dom";
 import React, { useState, useEffect } from "react";
@@ -12,7 +12,12 @@ const Hostel = (props: any) => {
 	let history = useHistory();
 	const status = props.student_id;
 	const year = props.year;
-	// console.log(props.year);
+	const grade_id = props.grade;
+	const section = props.section;
+	const Student_admission_id = props.admissions_id;
+ 
+
+	console.log(props);
 
 	const [YearOfBalanceByYear, setYearOfBalanceByYear] = useState<any>({});
 	const [allGotFinalData, setAllGotFinalData] = useState<any>([]);
@@ -20,15 +25,30 @@ const Hostel = (props: any) => {
 	const [FeeMasterId, setFeeMasterId] = useState<any>([]);
 	const [GetFinalMasterData, setGetFinalMasterData] = useState<any>([]);
 	const [DisplayFinalData, setDisplayFinalData] = useState<any>([]);
-	const [allAcademicYear, setAllAcademicYear] = useState<any>([]);
+	const [feemaster, setFeemaster] = useState<any>([]);
 	const [allAcademicBalance, setAllAcademicBalance] = useState<any>([]);
 	const [hostel, setHostel] = useState<any>(false);
 	const [van, setVan] = useState<any>(false);
 	const [currentRadioValue, setCurrentValue] = React.useState("option1");
-
-	console.log(hostel);
+	const [busValue, setBusValue] = useState<any>([]);
+	const [transport, settransport] = useState<any>([]);
+	const [datatoDelete, setdatatoDelete] = useState<any>({});
+	const [show, setShow] = useState(false);
+	console.log(currentRadioValue);
 
 	console.log(van);
+
+	const [profileHostel, setProfileHostel] = useState<any>({
+		Hostal: true,
+		mode_of_transport_touched: true,
+		student_admissions_id: 100451,
+		student_id: "2022dddf3d4",
+		section_id: 71,
+		year_id: 32,
+		grade_id: 11
+	});
+
+	// console.log(profileHostel);
 
 	// useEffect(() => {
 	// 	if (status && status.toString().length > 0) {
@@ -71,16 +91,101 @@ const Hostel = (props: any) => {
 	// }, [status]);
 
 	// const Year_of_fee = () => {
-		
+
 	// };
 	// console.log(FeeMasterId,"Four Record");
 	// useEffect(() => {
 	// 	Year_of_fee();
 	// }, [status]);
 
-		useEffect(() =>{
-			
-		})
+	// useEffect(() => {
+	// 	getAccessToken();
+	// 	axios
+	// 		.post(`${baseUrl}hostal_allocation`, {
+	// 			// student_id: id,
+	// 			// year_id: academicYearId,
+	// 		})
+	// 		.then((res: any) => {
+	// 			console.log(res.data.data, "Hostel");
+	// 		});
+	// }, []);
+
+	 
+
+	 
+	const handleTrans = (e: any) => {
+		console.log(currentRadioValue);
+
+		// alert()
+		if ("transport" === currentRadioValue) {
+			 
+			getAccessToken();
+			axios
+				.post(`${baseUrl}modeoftransport`, {
+					transport:true,
+					mode_of_transport_touched: true,
+					student_admissions_id: Student_admission_id,
+					student_id: status,
+					section_id: section,
+					grade_id: grade_id,
+					year_id: year,
+					fee_master_id: Number(feemaster),
+				})
+				.then((res: any) => {
+					console.log(res.data.data, "Hostel");
+				});
+
+		}
+		else if("Hostal" === currentRadioValue){
+			axios
+			.post(`${baseUrl}modeoftransport`, {
+				Hostal:true,
+				mode_of_transport_touched: true,
+				student_admissions_id: Student_admission_id,
+				student_id: status,
+				section_id: section,
+				year_id: year,
+				fee_master_id: Number(feemaster),
+				grade_id: grade_id
+			})
+			.then((res: any) => {
+				console.log(res.data.data, "Hostel");
+			});
+		}
+		else if("Self" === currentRadioValue){
+			axios
+			.post(`${baseUrl}modeoftransport`, {
+				Self:true,
+				mode_of_transport_touched: true,
+				student_admissions_id: Student_admission_id,
+				student_id: status,
+				section_id: section,
+				year_id: year,
+				fee_master_id: Number(feemaster),
+				grade_id:  grade_id
+			})
+			.then((res: any) => {
+				console.log(res.data.data, "Hostel");
+			});
+		}
+
+	}
+	useEffect(() => {
+
+	}, []);
+	useEffect(() => {
+		getAccessToken();
+		axios
+			.get(`${baseUrl}modeoftransport`, {
+				// student_id: id,
+				// year_id: academicYearId,
+			})
+			.then((res: any) => {
+				setBusValue(res.data.data)
+				console.log(res.data.data, "Hostel");
+
+			});
+	}, []);
 
 	useEffect(() => {
 		// if (status  && status.toString().length>0   ){
@@ -192,15 +297,17 @@ const Hostel = (props: any) => {
 								<a>
 									<i className="far fa-clone"></i> Mode Of Transportation
 								</a>{" "}
-								<Link to="" >
-									{" "}
-									<a href="#" className="btn btn-success btn-sm float-right" style={{ marginLeft: "10px" }}>submit</a>
-								</Link>{" "}
+								<Button
+									variant="success"
+									onClick={(e: any) => {
+										handleTrans(currentRadioValue);
 
-								<Link to="" style={{ marginRight: "10px" }}>
-									{" "}
-									<a className="btn btn-primary btn-sm float-right">Edit</a>
-								</Link>
+									}}
+									style={{ float: "right", marginRight: "10px" }}>
+									Submit
+								</Button>
+
+
 							</h4>
 						</div>
 						<div className="card-body">
@@ -212,7 +319,7 @@ const Hostel = (props: any) => {
 											<input
 												name="radio-item-1"
 												type="radio"
-												value="option1"
+												value="Self"
 												onChange={(e) => setCurrentValue(e.target.value)}
 												defaultChecked={currentRadioValue === "option1"}
 											/>
@@ -223,98 +330,31 @@ const Hostel = (props: any) => {
 										<div>
 											<input
 												name="radio-item-1"
-												value="option2"
+												value="transport"
 												type="radio"
 												onChange={(e) => setCurrentValue(e.target.value)}
 												defaultChecked={currentRadioValue === "option2"}
 											/>
 											<Form.Label>Bus</Form.Label>
-											{currentRadioValue === "option2" && (
+
+											{currentRadioValue === "transport" && (
+
 												<div>
-													<Card style={{ width: "15rem" }}>
-														<Card.Body>
-															<Row>
-																<Col sm="6">
-																	<Form.Check
-																		inline
-																		label="Term 1"
-																		name="group1"
-																		type="checkbox"
-																		value="Term 1"
-																		// onChange={(e) => setGender(e.target.value)}
-																		id={`inline-radio-2`}
-																	/>
-																</Col>
-																<Col sm="6">
-																	<Form.Check
-																		inline
-																		label="Term 2"
-																		name="group1"
-																		type="checkbox"
-																		value="Term 1"
-																		// onChange={(e) => setGender(e.target.value)}
-																		id={`inline-radio-2`}
-																	/>
-																</Col>
-																<Col sm="6">
-																	<Form.Check
-																		inline
-																		label="Term 3"
-																		name="group1"
-																		type="checkbox"
-																		value="Term 1"
-																		// onChange={(e) => setGender(e.target.value)}
-																		id={`inline-radio-2`}
-																	/>
-																</Col>
-																<Col sm="6">
-																	<Form.Check
-																		inline
-																		label="Term 4"
-																		name="group1"
-																		type="checkbox"
-																		value="Term 1"
-																		// onChange={(e) => setGender(e.target.value)}
-																		id={`inline-radio-2`}
-																	/>
-																</Col>
-																<Col sm="6">
-																	<Form.Check
-																		inline
-																		label="Term 5"
-																		name="group1"
-																		type="checkbox"
-																		value="Term 1"
-																		// onChange={(e) => setGender(e.target.value)}
-																		id={`inline-radio-2`}
-																	/>
-																</Col>
-																<Col sm="6">
-																	<Form.Check
-																		inline
-																		label="Term 6"
-																		name="group1"
-																		type="checkbox"
-																		value="Term 1"
-																		// onChange={(e) => setGender(e.target.value)}
-																		id={`inline-radio-2`}
-																	/>
-																</Col>
-																{/* <Col sm="6">
-                                                                                    <Form.Label style={{marginRight:"40%",marginTop:"8%"}}>Term1
-                                                                                    </Form.Label>
-                                                                                    <Form.Label style={{marginRight:"40%",marginTop:"8%"}}>Term2
-                                                                                    </Form.Label>
-                                                                                    </Col>
-                                                                                    <Col sm="6">
-                                                                                    <Form.Label style={{marginRight:"40%",marginTop:"8%"}}>4500
-                                                                                    </Form.Label>
-                                                                                    <Form.Label style={{marginRight:"40%",marginTop:"8%"}}>3500
-                                                                                    </Form.Label>
-                                                                                    </Col> */}
-															</Row>{" "}
-														</Card.Body>
-													</Card>
+													<Form.Select style={{ width: "11rem" }}
+														onChange={(e: any) => {
+															setFeemaster(e.target.value);
+														}}>
+														<option >Select Stopping</option>
+
+														{busValue &&
+															busValue.length &&
+															busValue.map((value: any, i: any) => {
+																return <option value={value.fee_master_id}>{value.fee_type_name}</option>;
+															})}
+													</Form.Select>
+													{/* <Card style={{ width: "15rem", marginTop:"10px" }}>{" "}
+														 
+													</Card> */}
 												</div>
 											)}
 										</div>
@@ -323,7 +363,7 @@ const Hostel = (props: any) => {
 										<div>
 											<input
 												name="radio-item-1"
-												value="option3"
+												value="Hostal"
 												type="radio"
 												onChange={(e) => setCurrentValue(e.target.value)}
 												defaultChecked={currentRadioValue === "option3"}
@@ -331,95 +371,39 @@ const Hostel = (props: any) => {
 											<Form.Label htmlFor="radio-item-2">Hostal</Form.Label>
 											{currentRadioValue === "option3" && (
 												<div>
-													<Card style={{ width: "15rem" }}>
-														<Card.Body>
-															<Row>
-																<Col sm="6">
-																	<Form.Check
-																		inline
-																		label="Term 1"
-																		name="group1"
-																		type="checkbox"
-																		value="Term 1"
-																		// onChange={(e) => setGender(e.target.value)}
-																		id={`inline-radio-2`}
-																	/>
-																</Col>
-																<Col sm="6">
-																	<Form.Check
-																		inline
-																		label="Term 2"
-																		name="group1"
-																		type="checkbox"
-																		value="Term 1"
-																		// onChange={(e) => setGender(e.target.value)}
-																		id={`inline-radio-2`}
-																	/>
-																</Col>
-																<Col sm="6">
-																	<Form.Check
-																		inline
-																		label="Term 3"
-																		name="group1"
-																		type="checkbox"
-																		value="Term 1"
-																		// onChange={(e) => setGender(e.target.value)}
-																		id={`inline-radio-2`}
-																	/>
-																</Col>
-																<Col sm="6">
-																	<Form.Check
-																		inline
-																		label="Term 4"
-																		name="group1"
-																		type="checkbox"
-																		value="Term 1"
-																		// onChange={(e) => setGender(e.target.value)}
-																		id={`inline-radio-2`}
-																	/>
-																</Col>
-																<Col sm="6">
-																	<Form.Check
-																		inline
-																		label="Term 5"
-																		name="group1"
-																		type="checkbox"
-																		value="Term 1"
-																		// onChange={(e) => setGender(e.target.value)}
-																		id={`inline-radio-2`}
-																	/>
-																</Col>
-																<Col sm="6">
-																	<Form.Check
-																		inline
-																		label="Term 6"
-																		name="group1"
-																		type="checkbox"
-																		value="Term 1"
-																		// onChange={(e) => setGender(e.target.value)}
-																		id={`inline-radio-2`}
-																	/>
-																</Col>
-																{/* <Col sm="6">
-                                                                                    <Form.Label style={{marginRight:"40%",marginTop:"8%"}}>Term1
-                                                                                    </Form.Label>
-                                                                                    <Form.Label style={{marginRight:"40%",marginTop:"8%"}}>Term2
-                                                                                    </Form.Label>
-                                                                                    </Col>
-                                                                                    <Col sm="6">
-                                                                                    <Form.Label style={{marginRight:"40%",marginTop:"8%"}}>4500
-                                                                                    </Form.Label>
-                                                                                    <Form.Label style={{marginRight:"40%",marginTop:"8%"}}>3500
-                                                                                    </Form.Label>
-                                                                                    </Col> */}
-															</Row>{" "}
-														</Card.Body>
-													</Card>
+
 												</div>
 											)}
 										</div>
 									</Col>
 								</Row>
+								<Modal show={show} 
+								// onHide={SuddenhandleClose}
+								>
+                              <Modal.Header closeButton>
+                                <Modal.Title>
+                                  Delete 
+								  {/* {datatoDelete.name} */}
+                                </Modal.Title>
+                              </Modal.Header>
+                              <Modal.Body>
+                                Are You Sure You What To Submit{" "}
+                                 
+                              </Modal.Body>
+                              <Modal.Footer>
+                                <Button
+                                  variant="secondary"
+                                //   onClick={SuddenhandleClose}
+                                >
+                                  Close
+                                </Button>
+								<Button variant="danger" 
+								// onClick={handleClose}
+								>
+                                  Delete
+                                </Button>
+                              </Modal.Footer>
+                            </Modal>
 							</div>
 						</div>
 					</div>

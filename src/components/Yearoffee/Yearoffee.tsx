@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import Sidebar from "../Layouts/Sidebar";
 import Navbar from "../Layouts/Navbar";
-import { Button, Table, Form, Col, Row, Spinner, Modal } from "react-bootstrap";
+import { Button, Table, Form, Col, Row, Spinner, Modal, Tab } from "react-bootstrap";
 import axios, { AxiosResponse } from "axios";
 import { getAccessToken } from "../../config/getAccessToken";
 import { baseUrl } from "../../index";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { json } from "stream/consumers";
 const Yearoffee = () => {
 	const [statusFeeDetailsAdd, setStatusFeeDetailsAdd] = useState(false);
 	const [feeMaster, setAllFeeMaster] = useState<any[]>([]);
@@ -19,6 +20,8 @@ const Yearoffee = () => {
 	const [datatoDelete, setdatatoDelete] = useState<any>({});
 	const [duplication, setDuplication] = useState(false);
 	const [searchGradeId, setSearchGradeId] = useState("");
+	const [addSearchGrade, setAddSearchGrade] = useState(0);
+	const [addSearchYear, setAddSearchYear] = useState(0);
 	const [FeeDetailsFinal, setFeeDetailsFinal] = useState<any[]>([]);
 	const [displayFinalData, setDisplayFinalData] = useState<any[]>([]);
 	const [gradeSectionList, setGradeSectionList] = useState<any>([]);
@@ -31,12 +34,31 @@ const Yearoffee = () => {
 	const [gradeMasterParticular, setGradeMasterParticular] = useState<any>([]);
 	const [termsmasterValue, setTermsmasterValue] = useState<any>([]);
 	const [termFeesAdd, setTermFeesAdd] = useState(true);
-	const [termFeessaveAdd, setTermFeesSaveAdd] = useState<any>([]);
+	const [termFeessaveList, setTermFeesSaveList] = useState<any>([]);
+	const school: any = (sessionStorage.getItem("School"))
+	const [termFeessaveAdd, setTermFeesSaveAdd] = useState<any>([
+		{
+			fee_amount: null,
+			fee_master_id: null,
+			grade_id: 0,
+			optional_fee: false,
+			term_count: JSON.parse(school)?.term_count,
+			term_fees: [{
+				"term_name": "Term1",
+				"term_amount": ""
+			}],
+			year_id: 0,
+		}
+	]);
+
 	let removeFormFields = (i: any) => {
 		let newFormValues = [...termFeessaveAdd];
 		newFormValues.splice(i, 1);
 		setTermFeesSaveAdd(newFormValues);
 	};
+	useEffect(() => {
+		ShowingTextBox(JSON.parse(school).term_count, 0);
+	}, [])
 
 	//feb 26 by nithish
 	const [allGrade, setAllGrade] = useState<any[]>([]);
@@ -51,6 +73,7 @@ const Yearoffee = () => {
 	const handleShow = () => {
 		setShow(true);
 	};
+
 	const getAllGradeSectionData = () => {
 		getAccessToken();
 		axios.get(`${baseUrl}feeMaster`).then((res: any) => {
@@ -58,7 +81,6 @@ const Yearoffee = () => {
 			setFeeDetailsFinal(res.data.data);
 		});
 	};
-
 
 
 	const getAllFeeMasterData = () => {
@@ -187,6 +209,7 @@ const Yearoffee = () => {
 		getAllFeeMasterData();
 		getAllGrade();
 	}, []);
+
 	//Calling Fees Data
 	useEffect(() => {
 		if (frontSearchGrade && frontSearchGrade != null && frontSearchYear && frontSearchYear != null) {
@@ -208,8 +231,10 @@ const Yearoffee = () => {
 					console.log(termFeessaveAdd);
 				}
 				else {
-					setTermFeesSaveAdd(res.data.data);
-					console.log(termFeessaveAdd);
+					res.data.data.map((map: any) => {
+						map.optional_fee = map.optional_fee === 1 ? true : false
+					})
+					setTermFeesSaveList(res.data.data);
 				}
 				setSpinnerLoad(false);
 			});
@@ -401,24 +426,25 @@ const Yearoffee = () => {
 		deleteParticularDiscount(datatoDelete.yearoffeesid);
 	};
 
-	const [termRowAmountData, settermRowAmount] = useState<any>([])
 	const handleTermAmount = (data: any) => {
 		let newFormValues = [...termFeessaveAdd];
 		termFeessaveAdd[data.rowindex].term_fees[data.termindex].term_amount = data.amount
 		setTermFeesSaveAdd(newFormValues);
 	}
+
 	const handleTerm = (rowindex: any, editORShow: any) => {
 		let im: any = []
-		let term: any = termFeessaveAdd[rowindex].term_count === "12" ? 2 : 12 / termFeessaveAdd[rowindex].term_count
+		const terms = termFeessaveAdd[rowindex]?.optional_fee ? termFeessaveAdd[rowindex]?.term_count : JSON.parse(school).term_count
+		let term: any = terms === "12" ? 2 : 12 / Number(terms)
 		for (let i: any = 0; i < 12; i++) {
 			if (editORShow === "show") {
-				im.push(termFeessaveAdd[rowindex].term_fees && termFeessaveAdd[rowindex].term_fees.length > 0 && termFeessaveAdd[rowindex].term_fees !== null
-					? i <= termFeessaveAdd[rowindex].term_fees.length - 1 ? <td className="text-center">{"Term" + (i + 1)}<br />{termFeessaveAdd[rowindex].term_fees[i].term_amount}</td> : <></>
+				im.push(termFeessaveList[rowindex]?.terms && termFeessaveList[rowindex]?.terms.length > 0
+					? i <= termFeessaveList[rowindex]?.terms.length - 1 ? <td className="text-center">{"Term" + (i + 1)}<br />{termFeessaveList[rowindex]?.terms[i]?.term_amount}</td> : <></>
 					: <></>)
 			}
 			else {
 				im.push(termFeessaveAdd[rowindex].term_fees && termFeessaveAdd[rowindex].term_fees.length > 0 ? <>
-					{i < termFeessaveAdd[rowindex].term_fees.length &&
+					{i < Number(terms) &&
 						<Col md={term}>
 							<Form.Control
 								type="number"
@@ -439,10 +465,9 @@ const Yearoffee = () => {
 	}
 
 	const handleSave = (values: any) => {
-
-		values.grade_id = frontSearchGrade
-		values.fee_master_id = feeTypeName
-		values.year_id = frontSearchYear
+		values.year_id = addSearchYear
+		values.grade_id = addSearchGrade
+		values.term_count = values.optional_fee ? Number(values.term_count) : Number(JSON.parse(school).term_count)
 		axios.post(`${baseUrl}yearOffee/create_new_yearfee`, values)
 	}
 
@@ -484,8 +509,6 @@ const Yearoffee = () => {
 																			className="btn btn-primary btn-sm btn-save"
 																			onClick={() => {
 																				setStatusFeeDetailsAdd(true);
-																				setFrontSearchGrade("");
-																				setFrontSearchYear("");
 																				//   getAllGrade();
 																				setTermsmasterValue("");
 																				getAllFeeMasterData();
@@ -533,7 +556,6 @@ const Yearoffee = () => {
 																						onChange={(e: any) => {
 																							setFrontSearchYear(Number(e.target.value));
 																							handleGradeFilter(gradeSectionList, e.target.value);
-																							setTermFeesSaveAdd([])
 																						}}>
 																						{feeMaster &&
 																							feeMaster.length &&
@@ -549,7 +571,6 @@ const Yearoffee = () => {
 																						value={frontSearchGrade}
 																						onChange={(e: any) => {
 																							setFrontSearchGrade(Number(e.target.value));
-																							setTermFeesSaveAdd([])
 																						}}>
 																						{filterGradeByYear &&
 																							filterGradeByYear.length &&
@@ -572,140 +593,36 @@ const Yearoffee = () => {
 																		<th className="sorting_asc">Optional</th>
 																		<th className="sorting">Fee amount</th>
 																		<th className="sorting">Term</th>
-																		{termFeessaveAdd && termFeessaveAdd.length > 0
-																			? <> <th className="text-center">Pay By Terms</th></>
-																			: null}
+																		<th className="text-center">Pay By Terms</th>
 																		<th className="sorting">Action</th>
 																	</tr>
 																</thead>
 																<tbody>
-																	{termFeessaveAdd && termFeessaveAdd.length && termFeessaveAdd?.map((elemant: any, rowindex: any) => {
+																	{termFeessaveList?.map((elemant: any, rowindex: any) => {
 																		return (
 																			<>
 																				<tr key={rowindex}>
 																					{termFeesAdd ? (
 																						<>
-																							{elemant.year_of_fees_id ? <>
-																								<td>{elemant.Fee_Type_name}</td>
-																								<td>{elemant.optional_fee}</td>
-																								<td> {elemant.fee_amount}</td>
-																								<td>
-																									{/* {elemant.term_count} */}
-																								</td>
-																								<td>
-																									{/* {handleTerm(rowindex, "show")} */}
-																								</td>
-																							</>
-																								: <td colSpan={5} className="text-center">No data Found</td>}
+																							<td>{elemant.fee_master_name}</td>
+																							<td>{elemant.terms[0].optional_fee}</td>
+																							<td> {elemant.terms[0].fee_amount}</td>
+																							<td>
+																								{elemant?.terms.length}
+																							</td>
+																							<td>
+																								{handleTerm(rowindex, "show")}
+																							</td>
+
 																							<td>
 																								<i
 																									className="fas fa-trash"
 																									style={{ color: "red", cursor: "pointer" }}></i>{" "}
-																								<i
-																									className="fas fa-plus fa-1x"
-																									style={{ color: "green", cursor: "pointer" }}
-																									onClick={(e: any) => {
-																										setTermFeesAdd(false);
-																									}}></i>
 																							</td>
 																						</>
 																					) : (
 																						<>
-																							<td>
-																								<Form.Select
-																									value={feeTypeName}
-																									onChange={(e: any) => {
-																										setFeeTypeName(e.target.value);
-																										setTermsmasterValue(e.target[e.target.selectedIndex].text);
-																									}}>
-																									{FeeDetailsFinal &&
-																										FeeDetailsFinal.length &&
-																										FeeDetailsFinal.map((values: any, index: any) => {
-																											return (
-																												<option value={values.fee_master_id} label={values.fee_type_name} >
-																													{values.fee_type_name}
-																												</option>
-																											);
-																										})}
-																								</Form.Select>
-																							</td>
-																							<td>
-																								<Form.Check type="switch" value={termFeessaveAdd[rowindex].optional_fee} onChange={(e: any) => {
-																									let newFormValues = [...termFeessaveAdd];
-																									console.log();
-
-																									newFormValues[rowindex]["optional_fee"] = e.target.checked
-																									setTermFeesSaveAdd(newFormValues)
-																								}} id="custom-switch" style={{ position: "relative" }}/>
-																							</td>
-																							<td>
-																								<Form.Control
-																									type="text"
-																									value={termFeessaveAdd[rowindex].fee_amount}
-																									onChange={(e: any) => {
-																										let newFormValues = [...termFeessaveAdd];
-																										newFormValues[rowindex]["fee_amount"] = e.target.value
-																										setTermFeesSaveAdd(newFormValues)
-																									}}
-																								/>
-																							</td>
-																							{termFeesAdd ? (
-																								null
-																							) : (
-																								< td className="form-group">
-																									{termFeessaveAdd[rowindex].optional_fee ?
-																										<Form.Select
-																											name="term_count"
-																											value={termFeessaveAdd[rowindex].term_count}
-																											onChange={(e: any) => {
-																												ShowingTextBox(e.target.value, rowindex);
-																											}}>
-																											<option value="1">Yearly</option>
-																											<option value="2">2</option>
-																											<option value="3">3</option>
-																											<option value="4">4</option>
-																											<option value="6">6</option>
-																											<option value="12">12</option>
-																										</Form.Select>
-																										: <Form.Control value={termFeessaveAdd[rowindex].term_count} disabled></Form.Control>}
-																								</td>
-																							)}
-																							<td style={{ minWidth: "400px", maxWidth: "500px" }}><Row>{handleTerm(rowindex, "edit")}</Row></td>
-																							<td>
-																								<div>
-																									<i
-																										className="fas fa-save fa-1x"
-																										style={{ color: "blue", cursor: "pointer" }}
-																										onClick={(e: any) => {
-																											handleSave(termFeessaveAdd[rowindex]);
-																										}}></i>{" "}
-																									{rowindex ? (
-																										<i
-																											className="fa fa-minus fa-1x"
-																											style={{ color: "red", cursor: "pointer" }}
-																											onClick={() => removeFormFields(rowindex)}></i>
-																									) : (
-																										<i
-																											className="fa fa-plus fa-1x"
-																											style={{ color: "green", cursor: "pointer" }}
-																											onClick={(e: any) => {
-																												setTermFeesSaveAdd([
-																													...termFeessaveAdd,
-																													{
-																														S_No: "",
-																														Fee_Type_name: "",
-																														fee_amount: "",
-																														term_count: 1,
-																														term_fees: [{
-																															"term_name": "Term1",
-																															"term_amount": 0
-																														}]
-																													},
-																												]);
-																											}}></i>
-																									)}
-																								</div>
-																							</td>
+																							<td>No Data Found</td>
 																						</>
 																					)}
 																				</tr>
@@ -743,100 +660,164 @@ const Yearoffee = () => {
 												) : (
 													<div>
 														<Row>
-															<>
-																<Col sm="4" className="mb-4">
-																	<Form.Label style={{ marginLeft: "180px" }}>Academic Year</Form.Label>
-																</Col>
-																<Col sm="6">
-																	<Form.Select
-																		onChange={(e: any) => {
-																			setSearchAcademicYear(e.target.value);
-																			handleGradeFilterAdd(gradeSectionListAdd, e.target.value);
-																		}}>
-																		{feeMaster &&
-																			feeMaster.length &&
-																			feeMaster.map((values: any, index: any) => {
-																				return <option value={values.year_id}>{values.academic_year}</option>;
-																			})}
-																	</Form.Select>
-																</Col>
-															</>
-															<Col sm="4" className="mb-4">
-																<Form.Label style={{ marginLeft: "180px" }}>Fee Type Name</Form.Label>
-															</Col>
-															<Col sm="6">
+															<Col md={3} />
+															<Col md={3} className="form-group" style={{ width: "28%" }}>
 																<Form.Select
-																	style={{ width: "300px" }}
-																	value={feeTypeName}
+																	//view
+																	value={addSearchYear}
 																	onChange={(e: any) => {
-																		setFeeTypeName(e.target.value);
-																		setTermsmasterValue(e.target[e.target.selectedIndex].text);
+																		setAddSearchYear(Number(e.target.value));
+																		handleGradeFilter(gradeSectionList, e.target.value);
 																	}}>
-																	{FeeDetailsFinal &&
-																		FeeDetailsFinal.length &&
-																		FeeDetailsFinal.map((values: any, index: any) => {
+																		<option>Select Year</option>
+																	{feeMaster &&
+																		feeMaster.length &&
+																		feeMaster.map((values: any, index: any) => {
+																			
+																			return (<><option value={values.year_id}>{values.academic_year}</option></>);
+																		})}
+																</Form.Select>
+															</Col>
+															<Col md={3} className="form-group" style={{ width: "28%" }}>
+																<Form.Select
+																	value={addSearchGrade}
+																	onChange={(e: any) => {
+																		setAddSearchGrade(Number(e.target.value));
+																	}}>
+																		<option>Select Grade</option>
+																	{filterGradeByYear &&
+																		filterGradeByYear.length &&
+																		filterGradeByYear.map((values: any, index: any) => {
+																			
 																			return (
-																				<option value={values.fee_master_id} label={values.fee_type_name} >
-																					{values.fee_type_name}
-																				</option>
+																				<>
+																					
+																					<option value={values.grade_master_id}>{values.grade_master}</option>
+																				</>
 																			);
 																		})}
 																</Form.Select>
-															</Col>{" "}
-															<Col sm="4" className="mb-4">
-																<Form.Label style={{ marginLeft: "180px" }}>Grade</Form.Label>
 															</Col>
-															<Col sm="6">
-																<Form.Select
-																	style={{ width: "300px" }}
-																	value={searchGradeId}
-																	onChange={(e: any) => {
-																		setSearchGradeId(e.target.value);
-																	}}>
-																	{filterSectionByYearAdd &&
-																		filterSectionByYearAdd.length &&
-																		filterSectionByYearAdd.map((values: any, index: any) => {
-																			return <option value={values.grade_master_id}>{values.grade_master}</option>;
-																		})}
-																</Form.Select>
-															</Col>
-															<Col sm="4" className="mb-4">
-																<Form.Label style={{ marginLeft: "180px" }}>Amount</Form.Label>
-															</Col>
-															<Col sm="6">
-																<Form.Control
-																	style={{ width: "300px" }}
-																	type="number"
-																	onChange={(e) => {
-																		setFinalAmount(e.target.value);
-																	}}
-																/>
-															</Col>
+															<Col md={3} />
 														</Row>
-														<div className="card-footer">
-															<div style={{ display: "flex", justifyContent: "right" }}>
-																<Button
-																	className="btn btn-sm btn-secondary"
-																	onClick={() => {
-																		setStatusFeeDetailsAdd(false);
-																		setFinalAmount("");
-																		getAllGrade();
-																		getAllFeeMasterData();
-																	}}>
-																	Cancel
-																</Button>{" "}
-																&nbsp;
-																<Button
-																	type="submit"
-																	className={duplication ? "disabled btn btn-danger btn-save" : "btn btn-danger btn-save"}
-																	onClick={() => {
-																		setDuplication(true);
-																		handleSubmit();
-																	}}>
-																	Save
-																</Button>
-															</div>
-														</div>
+														<Table bordered responsive>
+															<thead>
+																<tr role="row"  >
+																	<th className="sorting_asc">Fee Type Name</th>
+																	<th className="sorting_asc">Optional</th>
+																	<th className="sorting">Fee amount</th>
+																	<th className="sorting">Term</th>
+																	<th className="text-center">Pay By Terms</th>
+																	<th className="sorting">Action</th>
+																</tr>
+															</thead>
+															<tbody>
+																<>
+																	{termFeessaveAdd?.map((elemant: any, rowindex: any) => {
+																		return (
+																			<tr>
+																				<td>
+																					<Form.Select
+																						value={termFeessaveAdd[rowindex].fee_master_id}
+																						onChange={(e: any) => {
+																							let newFormValues = [...termFeessaveAdd];
+																							newFormValues[rowindex]["fee_master_id"] = Number(e.target.value)
+																							setTermFeesSaveAdd(newFormValues)
+																						}}>
+																							<option>Select fee Name</option>
+																						{FeeDetailsFinal &&
+																							FeeDetailsFinal.length &&
+																							FeeDetailsFinal.map((values: any, index: any) => {
+																								
+																								return (
+																									<>
+																										
+																										<option value={values.fee_master_id} label={values.fee_type_name} >
+																											{values.fee_type_name}
+																										</option>
+																									</>
+																								);
+																							})}
+																					</Form.Select>
+																				</td>
+																				<td>
+																					<Form.Check type="switch" value={termFeessaveAdd[rowindex].optional_fee} onChange={(e: any) => {
+																						let newFormValues = [...termFeessaveAdd];
+																						newFormValues[rowindex]["optional_fee"] = e.target.checked
+																						setTermFeesSaveAdd(newFormValues)
+																						ShowingTextBox(termFeessaveAdd[rowindex]?.optional_fee ? "1" : JSON.parse(school).term_count, rowindex);
+																					}} id="custom-switch" checked={termFeessaveAdd[rowindex].optional_fee} style={{ position: "relative" }} />
+																				</td>
+																				<td>
+																					<Form.Control
+																						type="text"
+																						value={termFeessaveAdd[rowindex].fee_amount}
+																						onChange={(e: any) => {
+																							let newFormValues = [...termFeessaveAdd];
+																							newFormValues[rowindex]["fee_amount"] = Number(e.target.value)
+																							setTermFeesSaveAdd(newFormValues)
+																						}}
+																					/>
+																				</td>
+																				{
+																					< td className="form-group">
+																						{termFeessaveAdd[rowindex].optional_fee ?
+																							<Form.Select
+																								name="term_count"
+																								value={termFeessaveAdd[rowindex]?.term_fees?.length}
+																								onChange={(e: any) => {
+																									ShowingTextBox(e.target.value, rowindex);
+																								}}>
+																								<option value="1">Yearly</option>
+																								<option value="2">2</option>
+																								<option value="3">3</option>
+																								<option value="4">4</option>
+																								<option value="8">6</option>
+																								<option value="12">12</option>
+																							</Form.Select>
+																							: <Form.Control value={JSON.parse(school).term_count} disabled></Form.Control>}
+																					</td>
+																				}
+																				<td style={{ minWidth: "400px", maxWidth: "500px" }}><Row>{handleTerm(rowindex, "edit")}</Row></td>
+																				<td>
+																					<div>
+																						<i
+																							className="fas fa-save fa-1x"
+																							style={{ color: "blue", cursor: "pointer" }}
+																							onClick={(e: any) => {
+																								handleSave(termFeessaveAdd[rowindex]);
+																							}}></i>{" "}
+																						{rowindex ? (
+																							<i
+																								className="fa fa-minus fa-1x"
+																								style={{ color: "red", cursor: "pointer" }}
+																								onClick={() => removeFormFields(rowindex)}></i>
+																						) : (
+																							<i
+																								className="fa fa-plus fa-1x"
+																								style={{ color: "green", cursor: "pointer" }}
+																								onClick={(e: any) => {
+																									setTermFeesSaveAdd([
+																										...termFeessaveAdd,
+																										{
+																											fee_amount: "",
+																											term_count: 1,
+																											optional_fee: false,
+																											term_fees: [{
+																												"term_name": "Term1",
+																												"term_amount": ""
+																											}]
+																										},
+																									]);
+																								}}></i>
+																						)}
+																					</div>
+																				</td>
+																			</tr>)
+																	})}
+																</>
+															</tbody>
+														</Table>
 													</div>
 												)}
 											</div>
@@ -847,7 +828,7 @@ const Yearoffee = () => {
 						</div>
 					</div>
 				</div>
-			</div>
+			</div >
 		</div >
 	);
 };

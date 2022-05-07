@@ -46,8 +46,17 @@ const Navbar = () => {
                                 Logout
                             </button>
                         </div> */}
-
                         <NavDropdown title="Cash Flow Admin" id="basic-nav-dropdown">
+                        <NavDropdown.Item
+                                href="#"
+                                className="btn"
+                                onClick={() => {
+                                    history.push("/profile");
+                                }}
+                            >
+                                <i className="fas fa-edit fa-sm fa-fw mr-2 text-gray-400">  </i>
+                                Edit Profile    
+                            </NavDropdown.Item>
                             <NavDropdown.Item
                                 href="#"
                                 className="btn"
@@ -58,15 +67,7 @@ const Navbar = () => {
                                 <i className="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                 Logout
                             </NavDropdown.Item>
-                            <NavDropdown.Item
-                                href="#"
-                                className="btn"
-                                onClick={() => {
-                                    history.push("/profile");
-                                }}
-                            >
-                                Edit Profile
-                            </NavDropdown.Item>
+                        
                         </NavDropdown>
                     </li>
                 </ul>

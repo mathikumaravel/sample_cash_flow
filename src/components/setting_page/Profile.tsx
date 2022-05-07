@@ -11,134 +11,236 @@ import axios from "axios";
 
 const Profile = () => {
 
-const [schoolName, setSchoolName] = useState<any>([]);
-const [schoolAddress, setSchoolAddress] = useState<any>([]);
+    const [schoolName, setSchoolName] = useState<any>([]);
+    const [schoolAddress, setSchoolAddress] = useState<any>([]);
 
-const [schoolBranch, setSchoolBranch] = useState<any>([]);
+    const [schoolBranch, setSchoolBranch] = useState<any>([]);
 
-const [schoolNameterms, setSchoolTerms] = useState<any>([]);
+    const [schoolNameterms, setSchoolTerms] = useState<any>([]);
 
-console.log(schoolName);
+    const [gotSchoolDetails, setGotSchoolDetails] = useState<any>([]);
 
-const handleSubmit = async (e: any) => {
-    e.preventDefault();
-    try {
-      getAccessToken();
-      const res: any = await axios
-        .post(`${baseUrl}school`, {
-            school_name: schoolName,
-            address: schoolAddress,
-            branch: schoolBranch,
-            term_count:Number(schoolNameterms),
-            one_time:false
-        })
-        .then((res: any) => {
-          console.log(res.data);
-          if (res.data.year_id) {
-            toast.success(" Added Successfully", {
-              position: "top-right",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
+    const [schoolOptioanlTerms, setSchoolOptioanlTerms] = useState<any>([]);
+
+
+    console.log(schoolName);
+
+    const handleSubmit = async (e: any) => {
+        e.preventDefault();
+        try {
+            getAccessToken();
+            const res: any = await axios
+                .post(`${baseUrl}school`, {
+                    school_name: schoolName,
+                    address: schoolAddress,
+                    branch: schoolBranch,
+                    term_count: Number(schoolNameterms),
+                    optional_term_count: Number(schoolOptioanlTerms),
+                    one_time: false
+                })
+                .then((res: any) => {
+                    console.log(res.data);
+                    if (res.data.year_id) {
+                        toast.success(" Added Successfully", {
+                            position: "top-right",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        });
+                    } else {
+                        toast.warning(" Already Added", {
+                            position: "top-right",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        });
+                    }
+
+                });
+        } catch (err) {
+            alert("Please Fill the Details");
+        }
+    };
+
+    useEffect(() => {
+        getAccessToken();
+        axios
+            .get(`${baseUrl}school`)
+            .then((res: any) => {
+                console.log(res.data.data);
+                setGotSchoolDetails(res.data.data);
+                console.log(res.data.data);
+            })
+            .catch((e: any) => {
+                console.log(e);
             });
-          } else {
-            toast.warning(" Already Added", {
-              position: "top-right",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-            });
-          }
-       
-        });
-    } catch (err) {
-      alert("Please Fill the Details");
-    }
-  };
-
+    }, [])
     return (
         <>
             <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
             <div id="wrapper">
                 <Sidebar data={"Stu_fees"}></Sidebar>
                 <div id="content-wrapper" className="d-flex flex-column">
                     <div id="content">
                         <Navbar></Navbar>
-                        <div className="container">
+                        <div className="container" style={{ width: "1000px", marginBottom: "100px" }}>
                             <div className="card">
-                            <Form>
-                                <Row className='m-2'>
-                                    <Col md={6}>
-                                        School Name:
+                                {gotSchoolDetails && gotSchoolDetails.length === 0 ? (
+                                    <Form>
+                                        <Row className='m-2'>
+                                            <Col md={6}>
+                                                School Name :
+                                        </Col>
+                                            <Col md={4}>
+                                                <Form.Control type="text" onChange={(e: any) => {
+                                                    setSchoolName(e.target.value);
+                                                }} />
+
+                                            </Col>
+                                        </Row>
+                                        <Row className='m-2'>
+                                            <Col md={6}>
+                                                Address:
+                                        </Col>
+                                            <Col md={4}>
+                                                <Form.Control type="text" onChange={(e: any) => {
+                                                    setSchoolAddress(e.target.value);
+                                                }} />
+
+                                            </Col>
+                                        </Row>
+                                        <Row className='m-2'>
+                                            <Col md={6} >
+                                                Branch:
+                                        </Col>
+                                            <Col md={4}>
+                                                <Form.Control type="text" onChange={(e: any) => {
+                                                    setSchoolBranch(e.target.value);
+                                                }} />
+                                            </Col>
+                                        </Row>
+
+                                        <Row className='m-2'>
+                                            <Col md={6}>
+                                                Terms :
+                                        </Col>
+                                            <Col md={4}>
+                                                <Form.Control type="text" onChange={(e: any) => {
+                                                    setSchoolTerms(e.target.value);
+                                                }} />
+                                            </Col>
+                                        </Row>
+                                        <Row className='m-2'>
+                                            <Col md={6}>
+                                                Optional Terms :
+                                        </Col>
+                                            <Col md={4}>
+                                                <Form.Control type="text" onChange={(e: any) => {
+                                                    setSchoolOptioanlTerms(e.target.value);
+                                                }} />
+                                            </Col>
+                                        </Row>
+                                        <Row>
+                                            <Col md={4} />
+                                            <Col md={4} >
+                                                <Button className='text-center'
+                                                    type="submit"
+                                                    onClick={(e: any) => {
+                                                        handleSubmit(e);
+                                                    }}
+                                                >
+                                                    Submit
+                                            </Button>
+                                            </Col>
+                                            <Col md={4} />
+                                        </Row>
+                                    </Form>
+                                ) :
+                                    (
+                                        <Form>
+                                            <Row className='m-2'>
+                                                <Col md={6}>
+                                                    School Name:
                                     </Col>
-                                    <Col md={4}>
-                                        <Form.Control type="text" 	onChange={(e: any) => {
-																		setSchoolName(e.target.value);
-																	}}/>
+                                                <Col md={4}>
+
+                                                    {gotSchoolDetails && gotSchoolDetails.length && gotSchoolDetails.map((details: any) => {
+                                                        return <option value={details.school_name}>{details.school_name}</option>;
+
+                                                    })}
+
+                                                </Col>
+                                            </Row>
+                                            <Row className='m-2'>
+                                                <Col md={6}>
+                                                    Address:
                                     </Col>
-                                </Row>
-                                <Row className='m-2'>
-                                    <Col md={6}>
-                                        Address:
+                                                <Col md={4}>
+
+                                                    {gotSchoolDetails && gotSchoolDetails.length && gotSchoolDetails.map((details: any) => {
+                                                        return <option value={details.address}>{details.address}</option>;
+
+                                                    })}
+
+                                                </Col>
+                                            </Row>
+                                            <Row className='m-2'>
+                                                <Col md={6} >
+                                                    Branch:
                                     </Col>
-                                    <Col md={4}>
-                                        <Form.Control type="text" onChange={(e: any) => {
-																		setSchoolAddress(e.target.value);
-																	}} />
+                                                <Col md={4}>
+
+                                                    {gotSchoolDetails && gotSchoolDetails.length && gotSchoolDetails.map((details: any) => {
+                                                        return <option value={details.branch}>{details.branch}</option>;
+
+                                                    })}
+                                                </Col>
+                                            </Row>
+
+                                            <Row className='m-2'>
+                                                <Col md={6}>
+                                                    Terms :
                                     </Col>
-                                </Row>
-                                <Row className='m-2'>
-                                    <Col md={6} >
-                                        Branch:
-                                    </Col>
-                                    <Col md={4}>
-                                        <Form.Control type="text" onChange={(e: any) => {
-																		setSchoolBranch(e.target.value);
-																	}} />
-                                    </Col>
-                                </Row>
-                                 
-                                <Row className='m-2'>
-                                    <Col md={6}>
-                                    Terms :
-                                    </Col>
-                                    <Col md={4}>
-                                        <Form.Control type="text"  onChange={(e: any) => {
-																		setSchoolTerms(e.target.value);
-																	}} />
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col md={4} />
-                                    <Col md={4} >
-                                        <Button className='text-center'
-                                        type="submit"
-                                        onClick={(e: any) => {
-                                            handleSubmit(e);
-                                          }}
-                                        >
-                                            Submit
-                                        </Button>
-                                    </Col>
-                                    <Col md={4} />
-                                </Row>
-                            </Form>
+                                                <Col md={4}>
+
+                                                    {gotSchoolDetails && gotSchoolDetails.length && gotSchoolDetails.map((details: any) => {
+                                                        return <option value={details.term_count}>{details.term_count}</option>;
+
+                                                    })}
+                                                </Col>
+                                            </Row>
+                                            <Row className='m-2'>
+                                                <Col md={6}>
+                                                    Optional Terms :
+                                        </Col>
+                                                <Col md={4}>
+                                                    {gotSchoolDetails && gotSchoolDetails.length && gotSchoolDetails.map((details: any) => {
+                                                        return <option value={details.optional_term_count}>{details.optional_term_count}</option>;
+
+                                                    })}
+                                                </Col>
+                                            </Row>
+
+                                        </Form>
+                                    )
+                                }
+
                             </div>
                         </div>
                     </div>
