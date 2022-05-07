@@ -59,6 +59,7 @@ const Yearoffee = () => {
 	useEffect(() => {
 		ShowingTextBox(JSON.parse(school).term_count, 0);
 	}, [])
+	
 
 	//feb 26 by nithish
 	const [allGrade, setAllGrade] = useState<any[]>([]);
