@@ -7,6 +7,7 @@ import { baseUrl } from "../../index";
 import { getAccessToken } from "../../config/getAccessToken";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { log } from "console";
 const Promotion = () => {
   const [spinnerLoad, setSpinnerLoad] = useState<any>(true);
   const [getAcademicYear, setGetAcademicYear] = useState<any>([]);
@@ -144,18 +145,21 @@ const Promotion = () => {
   };
   const [split, setSplit] = useState("")
   const onchangeyear = (event: any) => {
-    if (event.length > 0) {
+    if (String(event).length > 0) {
       let splitvalue: any
+
       getAcademicYear.map((ele: any) => {
         if (ele.year_id === Number(event)) {
           splitvalue = ele.academic_year.split("-");
         }
+      })
+      getAcademicYear.map((ele: any) => {
         if (ele.academic_year.split("-")[0] === splitvalue[1]) {
           setSplit(ele.academic_year);
           setEventAcademicYearUpdate(ele.year_id)
           UpdatePromotion(getGradeSection, Number(ele.year_id));
         }
-      })
+      })      
     }
   }
   const Section = () => {
@@ -498,7 +502,7 @@ const Promotion = () => {
                                             <option value=""> --Select Section--</option>
                                             {getGradeSection &&
                                               getGradeSection.length &&
-                                              getGradeSection.map((section: any) => {                                                
+                                              getGradeSection.map((section: any) => {
                                                 return (
                                                   <>
                                                     {section.grade_id === Number(eventGradeByYearUpdate) &&
