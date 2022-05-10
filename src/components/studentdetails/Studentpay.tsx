@@ -578,12 +578,10 @@ useEffect (()=>{
 																							setTermsmaster(e.target.value);
 																						}}
 																					>
-																				{gotSchoolDetails &&
-																						gotSchoolDetails.length &&
-																						gotSchoolDetails.map((academic: any) => {
-																							
-																							return <option value={academic.year_id}>{academic.term_count}</option>;
-																						})}
+																						<option value="1">Terms 1</option>
+																						<option value="2">Terms 2</option>
+																						<option value="3">Terms 3</option>
+																						<option value="4">Terms 4</option>
 																					</Form.Select>
 																				</div></td>
 																			</tr>
