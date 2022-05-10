@@ -49,7 +49,7 @@ const Optional = () => {
   const [searchBy, setSearchBy] = useState("");
   const [optionalFees, setOptionalFees] = useState<any>([]);
   const [grade, setGradeID] = useState<any>("");
-  const [academicYearId, setAcademicYearId] = useState<any>(76);
+  const [academicYearId, setAcademicYearId] = useState<any>(1);
   const [checkboxValue, setCheckboxValue] = useState(false);
   const [optionalValuesData, setOptionalValuesData] = useState<any>([]);
 
@@ -568,11 +568,11 @@ const Optional = () => {
           <div className="student-profile py-2">
             <div id="content">
               <Navbar></Navbar>
-              <div className="container" style={{ marginLeft: "3%" }}>
+              <div className="container" style={{ marginLeft: "4%" }}>
                 <div className="d-sm-flex align-items-center justify-content-between mb-3">
                   <Container>
                     <Row>
-                      <Col md={5}>
+                      <Col md={2}>
                         {/* <Form.Control
                           type="search"
                           className="form-control bg-light border-20 small"
@@ -587,14 +587,7 @@ const Optional = () => {
                             setSearchBy(e.target.value.trim());
                           }}
                         /> */}
-                        <Form.Select aria-label="Default select example" onChange={(e) => setOptionaldrop(e.target.value)}>
-                          <option value="none">Select Optical Fees</option>
-                          {optionalFees &&
-                            optionalFees.length &&
-                            optionalFees.map((value: any, i: any) => {
-                              return <option value={value.fee_master_id}>{value.fee_type_name}</option>;
-                            })}
-                        </Form.Select>
+
                         <Card
                           style={{
                             cursor: "pointer",
@@ -686,75 +679,102 @@ const Optional = () => {
                                   <i className="fas fa-search fa-sm"></i>
                                 </Button>{""}
                                 {" "}
-                                <Button style={{ marginLeft: "9%" }}
-                                  type="button"
-                                  onClick={(e: any) => {
-                                    submitOptional();
-                                  }}
-                                >Submit</Button>
+
                               </div>
                             </Col>
+                            {" "}
+
+
                           </>
                         )}
-                    </Row>
+                    </Row>{" "}
+
+
                   </Container>
+
                 </div>
-                <div className="container row pb-2">
-                  <div className="col-md-4">
+                <div className="container ">
 
-                  </div>
+                  {optionalFees.length > 0 ? (<div>
+                    <div className="col-md-12" style={{  marginLeft: "170px" }} >
+                      <Row >
+                        <Col md={4}>
+                          <Form.Select aria-label="Default select example" onChange={(e) => setOptionaldrop(e.target.value)} >
+                            <option value="none">Select Optical Fees</option>
+                            {optionalFees &&
+                              optionalFees.length &&
+                              optionalFees.map((value: any, i: any) => {
+                                return <option value={value.fee_master_id}>{value.fee_type_name}</option>;
+                              })}
+                          </Form.Select>{" "}
+                        </Col>
 
-                  <div className="col-md-4">
+                        <Col>
+                          <Button  
+                            type="button"
+                            onClick={(e: any) => {
+                              submitOptional();
+                            }}
+                          >Submit</Button>
+                        </Col>
 
-                  </div>
-                </div>
 
-                <div className="col-xl-11 text-center">
-                  {statusStudentSearch ? (
-                    <div>
-                      <Table bordered hover>
-                        <thead>
-                          <tr>
-                            <th>Admission No</th>
-                            <th>Name</th>
-                            <th>Select Students</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {allGotFinalData && allGotFinalData.length > 0 ? (
-                            allGotFinalData.map((values: any, index: any) => {
-                              return (
-                                <>
-                                  <tr key={index}>
-                                    <td>{values.admission_no}</td>
-                                    <td>{values.student_name}</td>
-                                    <td>
-                                      {" "}
-                                      <Form.Check
-                                        onChange={(e: any) => {
-                                          // console.log(values);
-                                          values.checked = e.target.checked
-                                          OptionalValuesData(values)
-                                          // setCheckboxValue(e.target.checked)
-                                        }}
-                                        type="switch" id="custom-switch" label="switch to add fee" />
-                                    </td>
-                                  </tr>
-                                </>
-                              );
-                            })
-                          ) : (
-                              <tr>
-                                <td colSpan={6} className="text-center">
-                                  No Data Found
-                              </td>
-                              </tr>
-                            )}
-                        </tbody>
-                      </Table>
+                      </Row>
                     </div>
-                  ) : null}
+                    <div className="col-xl-12 text-center" style={{margin:"10px"}}>
+                      {statusStudentSearch ? (
+                        <div>
+
+                          <Table bordered hover>
+                            <thead>
+                              <tr>
+                                <th>Admission No</th>
+                                <th>Name</th>
+                                <th>Select Students</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {allGotFinalData && allGotFinalData.length > 0 ? (
+                                allGotFinalData.map((values: any, index: any) => {
+                                  return (
+                                    <>
+                                      <tr key={index}>
+                                        <td>{values.admission_no}</td>
+                                        <td>{values.student_name}</td>
+                                        <td>
+                                          {" "}
+                                          <Form.Check
+                                            onChange={(e: any) => {
+                                              // console.log(values);
+                                              values.checked = e.target.checked
+                                              OptionalValuesData(values)
+                                              // setCheckboxValue(e.target.checked)
+                                            }}
+                                            type="switch" id="custom-switch" label="switch to add fee" />
+                                        </td>
+                                      </tr>
+                                    </>
+                                  );
+                                })
+                              ) : (
+                                  <tr>
+                                    <td colSpan={6} className="text-center">
+                                      No Data Found
+                              </td>
+                                  </tr>
+                                )}
+                            </tbody>
+                          </Table>
+                        </div>
+                      ) : null}
+                    </div>
+                  </div>) : null}
+
+
+
                 </div>
+
+
               </div>
             </div>
           </div>

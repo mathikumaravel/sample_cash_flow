@@ -42,9 +42,9 @@ const handlecheckbox = () =>{
     setShow(false);
     setdatatoDelete({});
   };
-  const handleShow = () => {
-    setShow(true);
-  };
+    const handleShow = () => {
+      setShow(true);
+    };
   const paginate = [
     {
       text: "5",

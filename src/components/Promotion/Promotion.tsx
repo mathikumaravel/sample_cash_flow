@@ -28,9 +28,9 @@ const Promotion = () => {
   const [eventGradeByYearUpdate, setEventGradeByYearUpdate] = useState<any>([]);
   const [eventSectionByYearUpdate, setEventSectionByYearUpdate] = useState<any>([]);
   const [filterGradeByYearUpdate, setFilterGradeByYearUpdate] = useState<any>([]);
-  console.log(eventAcademicYearValueUpdate);
-  console.log(eventGradeByYear);
-  console.log(eventSectionByYear);
+  // console.log(eventAcademicYearValueUpdate);
+  // console.log(eventGradeByYear);
+  // console.log(eventSectionByYear);
   const windowReload = () => {
     let interval = setInterval(() => {
       window.location.reload();
@@ -90,7 +90,7 @@ const Promotion = () => {
     });
     setSpinnerLoad(false);
   };
-  console.log(eventAcademicYear);
+  // console.log(eventAcademicYear);
   const UpdatePromotionRecord = (student_admissions_id: any, student_id: any) => {
     if (eventSectionByYearUpdate <= 0) {
       toast.warning("Enter All Details", {
@@ -163,12 +163,12 @@ const Promotion = () => {
       getAcademicYear.length &&
       getAcademicYear.map((year: any) => {
         let getyear: any = [];
-        console.log(year.year_id);
+        // console.log(year.year_id);
         if (year.year_id === eventAcademicYear) {
-          console.log(year);
+          // console.log(year);
           getyear.push(year);
         }
-        console.log(getyear);
+        // console.log(getyear);
       });
   };
   const UpdatePromotion = (getChangeGrade: any, input: any) => {
@@ -189,13 +189,13 @@ const Promotion = () => {
         }
       });
     });
-    console.log(Got_grade_id);
+    // console.log(Got_grade_id);
     const ids = Got_grade_id.map((o) => o.grade_master_id);
     const filtered = Got_grade_id.filter(({ grade_master_id }, index) => !ids.includes(grade_master_id, index + 1));
     console.log(filtered);
     const idsofSection = Got_grade_id.map((o) => o.section);
     const filteredForSection = Got_grade_id.filter(({ section }, index) => !idsofSection.includes(section, index + 1));
-    console.log(filteredForSection);
+    // console.log(filteredForSection);
     setFilterGradeByYearUpdate(filtered);
     setFilterSectionByYearUpdate(filteredForSection);
   };
@@ -219,7 +219,7 @@ const Promotion = () => {
     });
     const ids = Got_grade_id.map((o) => o.grade_master_id);
     const filtered = Got_grade_id.filter(({ grade_master_id }, index) => !ids.includes(grade_master_id, index + 1));
-    console.log(filtered);
+    // console.log(filtered);
     const idsofSection = Got_grade_id.map((o) => o.section);
     const filteredForSection = Got_grade_id.filter(({ section }, index) => !idsofSection.includes(section, index + 1));
     setFilterGradeByYear(filtered);
@@ -229,7 +229,7 @@ const Promotion = () => {
   useEffect(() => {
     let AllRoundData: any[] = [];
     if (getStudentDetails && getStudentDetails.length > 0) {
-      console.log(getStudentDetails);
+      // console.log(getStudentDetails);
       getStudentDetails.forEach((allData: any) => {
         let newData = allData[1];
         let ParticularStudentData: any = [];
@@ -247,7 +247,7 @@ const Promotion = () => {
         let newFinalArr = [{ ...ParticularStudentBalance[0], ...ParticularStudentData[0] }];
         AllRoundData.push(newFinalArr[0]);
       });
-      console.log(AllRoundData);
+      // console.log(AllRoundData);
       setAllGotFinalData(AllRoundData);
       if (AllRoundData && AllRoundData.length > 0) {
         setSpinnerLoad(false);
@@ -310,7 +310,7 @@ const Promotion = () => {
                                     required
                                     onChange={(e: any) => {
                                       setEventAcademicYear(e.target.value);
-                                      console.log(e.target.value, "yr");
+                                      // console.log(e.target.value, "yr");
                                       setEventAcademicYearValue(e.target[e.target.selectedIndex].text);
                                       handleGradeFilter(getGradeSection, e.target.value);
                                       onchangeyear(e.target.value)
@@ -340,7 +340,7 @@ const Promotion = () => {
                                       setEventGradeByYearValue(e.target[e.target.selectedIndex].text);
                                       setEventGradeByYearUpdate((Number(e.target.value) + 1).toString());
                                     }}>
-                                    {console.log(eventGradeByYearUpdate, "Hiiiii")}
+                                    {/* {console.log(eventGradeByYearUpdate, "Hiiiii")} */}
                                     <option> --Select Grade--</option>
                                     {filterGradeByYear &&
                                       filterGradeByYear.length &&
@@ -368,9 +368,9 @@ const Promotion = () => {
                                     required
                                     onChange={(e: any) => {
                                       setEventSectionByYear(e.target.value);
-                                      console.log(e.target[e.target.selectedIndex].text);
+                                      // console.log(e.target[e.target.selectedIndex].text);
                                       setEventSectionByYearValue(e.target[e.target.selectedIndex].text);
-                                      console.log(e.target.value, "section");
+                                      // console.log(e.target.value, "section");
                                     }}>
                                     <option> --Select Section--</option>
                                     {getGradeSection &&

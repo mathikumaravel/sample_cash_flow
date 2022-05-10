@@ -200,7 +200,7 @@ useEffect(() => {
   }, [gradea, section]);
   const callStudentData = () => {
     setIsComponentVisible(false);
-    //  if (termsmaster && termsmaster.length > 0) {
+    //  if (academicYear && academicYear.length > 0 && termsmaster && termsmaster.length > 0) {
     //   getAccessToken();
     //   axios
     //     .post(`${baseUrl}autoSearch`, {
@@ -339,28 +339,32 @@ useEffect(() => {
             .then((response: AxiosResponse) => {
               setMainSearch(response.data.data);
             });
-        } else if (academicYear && academicYear.length > 0) {
-          getAccessToken();
-          axios
-            .post(`${baseUrl}autoSearch`, {
-              academic_year: academicYear,
-              term:termsmaster
-            })
-            .then((response: AxiosResponse) => {
-              setMainSearch(response.data.data);
-            });
-        }
-        // else if (academicYear && academicYear.length > 0) {
+        }  
+        //   else if (academicYear && academicYear.length > 0 && termsmaster && termsmaster.length > 0) {
         //   getAccessToken();
         //   axios
         //     .post(`${baseUrl}autoSearch`, {
         //       academic_year: academicYear,
-        //       terms:termsmaster
+        //       term:termsmaster
         //     })
         //     .then((response: AxiosResponse) => {
         //       setMainSearch(response.data.data);
         //     });
         // }
+        
+          else if (academicYear && academicYear.length > 0) {
+            getAccessToken();
+            axios
+              .post(`${baseUrl}autoSearch`, {
+                academic_year: academicYear,
+              
+              })
+              .then((response: AxiosResponse) => {
+                setMainSearch(response.data.data);
+              });
+          }
+      
+      
         
       }
     }

@@ -7,6 +7,7 @@ import { baseUrl } from "../../index";
 import axios, { AxiosResponse } from "axios";
 import { getAccessToken } from "../../config/getAccessToken";
 import { Card, Row, Col } from "react-bootstrap";
+import { ToastContainer, toast } from "react-toastify";
 
 const Hostel = (props: any) => {
 	let history = useHistory();
@@ -31,11 +32,12 @@ const Hostel = (props: any) => {
 	const [van, setVan] = useState<any>(false);
 	const [currentRadioValue, setCurrentValue] = React.useState("option1");
 	const [busValue, setBusValue] = useState<any>([]);
+	const [hostalFeeValue, setHostalFeeValue] = useState<any>([]);
 	const [transport, settransport] = useState<any>([]);
 	const [datatoDelete, setdatatoDelete] = useState<any>({});
 	const [show, setShow] = useState(false);
 	console.log(currentRadioValue);
-
+	
 	console.log(van);
 
 	const [profileHostel, setProfileHostel] = useState<any>({
@@ -109,10 +111,28 @@ const Hostel = (props: any) => {
 	// 			console.log(res.data.data, "Hostel");
 	// 		});
 	// }, []);
+	console.log(hostalFeeValue);
+	const checkhostelvalue = () =>{
+		if(hostalFeeValue && hostalFeeValue.length >0){
+			let hostelnameId = hostalFeeValue[0].fee_master_id;
+			console.log(hostelnameId);
+			return hostelnameId;
+		}
+	}
+ 
+	
+// let hostelnameId = hostalFeeValue[0].fee_master_id;
 
-	 
 
+const handleShow = () => {
+    setShow(true);
+  };
 	 
+  const SuddenhandleClose = () => {
+    setShow(false);
+ 
+  };
+   
 	const handleTrans = (e: any) => {
 		console.log(currentRadioValue);
 
@@ -133,6 +153,17 @@ const Hostel = (props: any) => {
 				})
 				.then((res: any) => {
 					console.log(res.data.data, "Hostel");
+					if(res.data.data.IsExsist === true){
+						toast.warning("Mode of transport already present", {
+							position: "top-right",
+							autoClose: 5000,
+							hideProgressBar: false,
+							closeOnClick: true,
+							pauseOnHover: true,
+							draggable: true,
+							progress: undefined,
+						});
+					}
 				});
 
 		}
@@ -145,12 +176,25 @@ const Hostel = (props: any) => {
 				student_id: status,
 				section_id: section,
 				year_id: year,
-				fee_master_id: Number(feemaster),
+				fee_master_id: checkhostelvalue(),
 				grade_id: grade_id
 			})
 			.then((res: any) => {
-				console.log(res.data.data, "Hostel");
+				console.log(res.data.data);
+				if(res.data.data.IsExsist === true){
+					toast.warning("Mode of transport already present", {
+						position: "top-right",
+						autoClose: 5000,
+						hideProgressBar: false,
+						closeOnClick: true,
+						pauseOnHover: true,
+						draggable: true,
+						progress: undefined,
+					});
+				}
+			
 			});
+			handleShow()
 		}
 		else if("Self" === currentRadioValue){
 			axios
@@ -173,6 +217,20 @@ const Hostel = (props: any) => {
 	useEffect(() => {
 
 	}, []);
+	useEffect(() => {
+		getAccessToken();
+		axios
+			.get(`${baseUrl}modeoftransport/hostal`, {
+				// student_id: id,
+				// year_id: academicYearId,
+			})
+			.then((res: any) => {
+				setHostalFeeValue(res.data.data)
+				console.log(res.data.data, "Hostel");
+
+			});
+	}, []);
+
 	useEffect(() => {
 		getAccessToken();
 		axios
@@ -289,6 +347,17 @@ const Hostel = (props: any) => {
 	//stupay/mvm10006/2021-2022
 	return (
 		<div>
+			       <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
 			<div className="row">
 				<div className="col-lg-6">
 					<div className="card shadow mb-4">
@@ -300,8 +369,7 @@ const Hostel = (props: any) => {
 								<Button
 									variant="success"
 									onClick={(e: any) => {
-										handleTrans(currentRadioValue);
-
+										handleShow();
 									}}
 									style={{ float: "right", marginRight: "10px" }}>
 									Submit
@@ -378,29 +446,32 @@ const Hostel = (props: any) => {
 									</Col>
 								</Row>
 								<Modal show={show} 
-								// onHide={SuddenhandleClose}
+								onHide={SuddenhandleClose}
 								>
                               <Modal.Header closeButton>
                                 <Modal.Title>
-                                  Delete 
+                                  Mode Of Transportation
 								  {/* {datatoDelete.name} */}
                                 </Modal.Title>
                               </Modal.Header>
                               <Modal.Body>
-                                Are You Sure You What To Submit{" "}
-                                 
+                                Are You Sure You Want To Submit{" "}
+								{currentRadioValue} ?
                               </Modal.Body>
                               <Modal.Footer>
                                 <Button
                                   variant="secondary"
-                                //   onClick={SuddenhandleClose}
+                                  onClick={SuddenhandleClose}
                                 >
                                   Close
                                 </Button>
 								<Button variant="danger" 
-								// onClick={handleClose}
+									onClick={(e: any) => {
+										handleTrans(currentRadioValue);
+										handleShow();
+									}}
 								>
-                                  Delete
+                                  Submit
                                 </Button>
                               </Modal.Footer>
                             </Modal>

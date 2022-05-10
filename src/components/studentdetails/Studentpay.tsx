@@ -30,6 +30,7 @@ const Studentpay = () => {
 	const [Payment, setPayment] = useState<any>([]);
 	const [termsTextBox, setTermsTextBox] = useState<any>([]);
 	const [termsmaster, setTermsmaster] = useState<any>([]);
+	const [gotSchoolDetails, setGotSchoolDetails] = useState<any>([]);
 
 	console.log(termsmaster);
 	const urlParams: any = useParams();
@@ -440,7 +441,43 @@ const Studentpay = () => {
 		}
 		console.log(FeetempArr);
 	};
+	useEffect(() => {
+		getAccessToken();
+		axios
+			.get(`${baseUrl}school`)
+			.then((res: any) => {
+				console.log(res.data.data);
+				setGotSchoolDetails(res.data.data);
+				console.log(res.data.data);
+			})
+			.catch((e: any) => {
+				console.log(e);
+			});
+			
+	}, [])
+// console.log(gotSchoolDetails[0].term_count);
+useEffect (()=>{
+	ShowingTermsValue();
+},[])
+ 	const ShowingTermsValue= ( ) => {
+	 
+		 {gotSchoolDetails && gotSchoolDetails.length && gotSchoolDetails.map((terms:any)=>{
+			for (var i = 0; i < terms; i++) {
+				console.log(i);
+		   }
+		   console.log(i);
+		 })}
+		
+		 
+	 
+ 
+	};
+//  const termscount = gotSchoolDetails[0].term_count;
+	 
+// 	for(var i=0; i<termscount; i++){
+// console.log(i);
 
+// 	}
 	//============================End of Api===================================//
 	return (
 		<div>
@@ -492,25 +529,25 @@ const Studentpay = () => {
 														</h4>
 													</a>
 												) : (
-													<a style={{ color: "rgb(230, 63, 63)" }}>
-														<h4 className="mb-0">
-															<a>
-																<i className="far fa-clone pr-1"></i>Refund
+														<a style={{ color: "rgb(230, 63, 63)" }}>
+															<h4 className="mb-0">
+																<a>
+																	<i className="far fa-clone pr-1"></i>Refund
 															</a>{" "}
-															<Link to={`/StudentprofileSearch/${admissionidd.student_admission_id}`}>
-																<a className="btn btn-success btn float-right" >Back</a>
-															</Link>
-															<Button
-																variant="info"
-																onClick={(e: any) => {
-																	handleRefund();
-																}}
-																style={{ float: "right", marginRight: "10px" }}>
-																Initiate Refund
+																<Link to={`/StudentprofileSearch/${admissionidd.student_admission_id}`}>
+																	<a className="btn btn-success btn float-right" >Back</a>
+																</Link>
+																<Button
+																	variant="info"
+																	onClick={(e: any) => {
+																		handleRefund();
+																	}}
+																	style={{ float: "right", marginRight: "10px" }}>
+																	Initiate Refund
 															</Button>
-														</h4>
-													</a>
-												)}
+															</h4>
+														</a>
+													)}
 											</div>
 											<div className="row">
 												<div className="col-md-6">
@@ -534,24 +571,19 @@ const Studentpay = () => {
 																				<td>{values.admission_no}</td>
 																				<td>{values.academic_year}</td>
 																				<td><div style={{ width: "120px", marginLeft: "10px", float: "right" }}>
+																					
 																					<Form.Select
 																						onChange={(e: any) => {
 																							termsChange(values, e.target.value)
 																							setTermsmaster(e.target.value);
 																						}}
 																					>
-																						<option value="1">Terms 1</option>
-																						<option value="2">Terms 2</option>
-																						<option value="3">Terms 3</option>
-																						<option value="4">Terms 4</option>
-																						<option value="5">Terms 5</option>
-																						<option value="6">Terms 6</option>
-																						<option value="7">Terms 7</option>
-																						<option value="8">Terms 8</option>
-																						<option value="9">Terms 9</option>
-																						<option value="10">Terms 10</option>
-																						<option value="11">Terms 11</option>
-																						<option value="12">Terms 12</option>
+																				{gotSchoolDetails &&
+																						gotSchoolDetails.length &&
+																						gotSchoolDetails.map((academic: any) => {
+																							
+																							return <option value={academic.year_id}>{academic.term_count}</option>;
+																						})}
 																					</Form.Select>
 																				</div></td>
 																			</tr>
@@ -583,18 +615,18 @@ const Studentpay = () => {
 																		Note: Click here to Switch to Refund
 																	</td>
 																) : (
-																	<td>
-																		<Button
-																			variant="warning"
-																			onClick={(e: any) => {
-																				setRefundSwitch(!refundSwitch);
-																			}}>
-																			Pay Balance
+																		<td>
+																			<Button
+																				variant="warning"
+																				onClick={(e: any) => {
+																					setRefundSwitch(!refundSwitch);
+																				}}>
+																				Pay Balance
 																		</Button>
-																		<br />
+																			<br />
 																		Note: Click here to Switch to Pay Balance
-																	</td>
-																)}
+																		</td>
+																	)}
 															</tr>
 														</tbody>
 													</Table>
@@ -652,19 +684,19 @@ const Studentpay = () => {
 																							}}
 																						/>
 																					) : (
-																						<Form.Control
-																							type="date"
-																							style={{ width: "82%" }}
-																							value={
-																								index == priceRefundDateChange[index].index
-																									? moment(priceRefundDateChange[index].date).format("YYYY-MM-DD")
-																									: moment(new Date()).format("YYYY-MM-DD")
-																							}
-																							onChange={(e: any) => {
-																								handleRefundDateChange({ index: index, date: e.target.value });
-																							}}
-																						/>
-																					)}
+																							<Form.Control
+																								type="date"
+																								style={{ width: "82%" }}
+																								value={
+																									index == priceRefundDateChange[index].index
+																										? moment(priceRefundDateChange[index].date).format("YYYY-MM-DD")
+																										: moment(new Date()).format("YYYY-MM-DD")
+																								}
+																								onChange={(e: any) => {
+																									handleRefundDateChange({ index: index, date: e.target.value });
+																								}}
+																							/>
+																						)}
 																				</td>
 																				{!refundSwitch ? <td>{Number(value.balance)}</td> : <td>{value.amount_paid}</td>}
 
@@ -700,37 +732,37 @@ const Studentpay = () => {
 																							}}
 																						/>
 																					) : (
-																						<input
-																							type="number"
-																							style={{ width: "100%" }}
-																							className="form-control input-sm txtamt nk border border-primary"
-																							placeholder="Enter Amount"
-																							value={
-																								priceRefundArr && priceRefundArr.length
-																									? priceRefundArr[index].amoundTyped == 0
-																										? ""
-																										: priceRefundArr[index].amoundTyped
-																									: ""
-																							}
-																							onChange={(e: any) => {
-																								Number(e.target.value) > Number(value.amount_paid)
-																									? alert("Amount Greater the Actual Fees")
-																									: handleRefundPriceChange({
-																										index: index,
-																										amoundTyped: Number(Math.round(e.target.value)),
-																										amount_paid:
-																											Number(value.amount_paid) - Number(e.target.value),
-																										student_payment_info_id: value.student_payment_info_id,
-																										grade_id: value.grade_id,
-																										student_id: value.student_id,
-																										refund: Number(e.target.value) + Number(value.refund),
-																										refundtyped: Number(e.target.value),
-																										balance: Number(value.balance) + Number(e.target.value),
-																										cum_amt: value.cum_amt,
-																									});
-																							}}
-																						/>
-																					)}
+																							<input
+																								type="number"
+																								style={{ width: "100%" }}
+																								className="form-control input-sm txtamt nk border border-primary"
+																								placeholder="Enter Amount"
+																								value={
+																									priceRefundArr && priceRefundArr.length
+																										? priceRefundArr[index].amoundTyped == 0
+																											? ""
+																											: priceRefundArr[index].amoundTyped
+																										: ""
+																								}
+																								onChange={(e: any) => {
+																									Number(e.target.value) > Number(value.amount_paid)
+																										? alert("Amount Greater the Actual Fees")
+																										: handleRefundPriceChange({
+																											index: index,
+																											amoundTyped: Number(Math.round(e.target.value)),
+																											amount_paid:
+																												Number(value.amount_paid) - Number(e.target.value),
+																											student_payment_info_id: value.student_payment_info_id,
+																											grade_id: value.grade_id,
+																											student_id: value.student_id,
+																											refund: Number(e.target.value) + Number(value.refund),
+																											refundtyped: Number(e.target.value),
+																											balance: Number(value.balance) + Number(e.target.value),
+																											cum_amt: value.cum_amt,
+																										});
+																								}}
+																							/>
+																						)}
 																				</td>
 																				<td>
 																					{!refundSwitch ? (
@@ -750,22 +782,22 @@ const Studentpay = () => {
 																							<option value="Employee Account">Emp. Account</option>
 																						</select>
 																					) : (
-																						<select
-																							className="form-control pointer"
-																							style={{ width: "90%" }}
-																							value={modeOfPayRefundChange[index].payment_mode}
-																							onChange={(e: any) => {
-																								handlemodeOfPayRefundChange({
-																									index: index,
-																									payment_mode: e.target.value,
-																								});
-																							}}>
-																							<option value="Cash">Cash</option>
-																							<option value="Card">Card</option>
-																							<option value="Direct Account.">Direct Acc.</option>
-																							<option value="Employee Account">Emp. Account</option>
-																						</select>
-																					)}
+																							<select
+																								className="form-control pointer"
+																								style={{ width: "90%" }}
+																								value={modeOfPayRefundChange[index].payment_mode}
+																								onChange={(e: any) => {
+																									handlemodeOfPayRefundChange({
+																										index: index,
+																										payment_mode: e.target.value,
+																									});
+																								}}>
+																								<option value="Cash">Cash</option>
+																								<option value="Card">Card</option>
+																								<option value="Direct Account.">Direct Acc.</option>
+																								<option value="Employee Account">Emp. Account</option>
+																							</select>
+																						)}
 																				</td>
 																				<td>
 																					{!refundSwitch ? (
@@ -778,18 +810,18 @@ const Studentpay = () => {
 																							rows={1}
 																						/>
 																					) : (
-																						<Form.Control
-																							as="textarea"
-																							value={commentRefundChange[index].comments}
-																							onChange={(e: any) => {
-																								handleRefundCommentChange({
-																									index: index,
-																									comments: e.target.value,
-																								});
-																							}}
-																							rows={1}
-																						/>
-																					)}
+																							<Form.Control
+																								as="textarea"
+																								value={commentRefundChange[index].comments}
+																								onChange={(e: any) => {
+																									handleRefundCommentChange({
+																										index: index,
+																										comments: e.target.value,
+																									});
+																								}}
+																								rows={1}
+																							/>
+																						)}
 																				</td>
 																			</tr>
 																		);
@@ -816,11 +848,11 @@ const Studentpay = () => {
 																			{Payment && Payment.length && Payment[1].Allbalance}
 																		</th>
 																	) : (
-																		<th id="totalpaidamt">
-																			{" "}
-																			{Payment && Payment.length && Payment[2].Alltotalpaid}
-																		</th>
-																	)}
+																			<th id="totalpaidamt">
+																				{" "}
+																				{Payment && Payment.length && Payment[2].Alltotalpaid}
+																			</th>
+																		)}
 																</tr> : <th colSpan={12} className="text-center">No Data Found</th>}
 															</tfoot>
 														</Table>

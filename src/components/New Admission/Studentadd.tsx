@@ -155,7 +155,19 @@ const Studentadd = () => {
             })
                 .then((response: any) => {
                     console.log(response);
-                    if (response.data.data.IsExsist == true) {
+                    if (response.data.data.IsExsist == "year") {
+                        toast.warning("Please fill the Fee Year of Fee", {
+                            position: "top-right",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                               closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        });
+                        
+                    }
+                    else if (response.data.data.IsExsist == true) {
                         toast.warning("Admission No Already Present Try Again", {
                             position: "top-right",
                             autoClose: 5000,
@@ -166,7 +178,9 @@ const Studentadd = () => {
                             progress: undefined,
                         });
                         //  history.push(`StudentprofileSearch/${}`)
-                    } else if (response.data.data.IsExsist == false) {
+                    } 
+                    
+                    else if (response.data.data.IsExsist == false) {
                         toast.success("Student Admission Success", {
                             position: "top-right",
                             autoClose: 5000,
@@ -216,7 +230,7 @@ const Studentadd = () => {
     };
     const handleStudentName = (e: any) => {
       console.log(e);
-    //   const re = /[^a-z ]/gi; //rules
+    //   const re = /[a-z ]/gi; //rules
       var regex = /[^a-z ]/gi;
       e.target.value = e.target.value.replace(regex, "");
     //   if (regex.test(e)) {
