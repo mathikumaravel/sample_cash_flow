@@ -61,8 +61,13 @@ const Optional = () => {
   const [secionId, setSecionId] = useState<any>("");
   const [loading, setloading] = useState<any>(true);
 
-  console.log(section);
+  // console.log(section);
+  // console.log(grade);
+  // console.log(academicYearId);
 
+console.log(academicYearFinal);
+console.log(filterGradeByYear);
+console.log(filterSectionByYear);
   //manage state  Autosearch
   //manage state  academicYear
   //manage state  gradea
@@ -92,9 +97,8 @@ const Optional = () => {
 
 
   const [GotOptionaldata, setGotOptionaldata] = useState<any[]>([]);
-  console.log(GotOptionaldata)
-  const OptionalValuesData = (e: any,data:any) => {
-    console.log(e.target.checked,data,"llllllll");
+   const OptionalValuesData = (e: any,data:any) => {
+    // console.log(e.target.checked,data,"llllllll");
     let dataOnChange = {
       student_admissions_id: data.student_admissions_id,
       student_id: data.student_id,
@@ -228,6 +232,7 @@ const Optional = () => {
         })
         .then((response: AxiosResponse) => {
           setSuggest(response.data.data);
+          setAcademicYearId(response.data.data[0].year_id)
           //    console.log(response.data.data);
           setIsComponentVisible(true);
         });
@@ -237,11 +242,12 @@ const Optional = () => {
     if (gradea && gradea === "none") setGradea("");
     if (section && section === "none") setsection("");
   }, [gradea, section]);
-
+ 
   useEffect(() => {
     setGotOptionaldata([])
     setGotStudentDetails([])
     getAccessToken();
+    // setOptionalFees([])
     axios
       .post(`${baseUrl}optional/search`, {
         year_id: Number(academicYearId),
@@ -332,6 +338,7 @@ const Optional = () => {
       handleGradeFilter(gradeSectionList, firstAcadmicYear[0].year_id);
     }
   }, [gradeSectionList, firstAcadmicYear, gradeMaster]);
+
   const handleGradeFilter = (gradeSectionList: any, searchInput: any) => {
   
     //Filtering Grade by academic year id
@@ -360,10 +367,24 @@ const Optional = () => {
     //  console.log(filtered);
     //   console.log(filteredForSection);
     setFilterGradeByYear(filtered);
-    setFilterSectionByYear(filteredForSection);
+    setGradeID(filtered[0].grade_master_id)
     // setWithDuplicatesGrade(grade_id_bind);
-    // handleSectionSearch(grade_id_bind, filtered[0].grade_master_id);
+   handleSectionSearch(filtered[0].grade_master_id,filtered);
   };
+
+  function handleSectionSearch(gradeIdPass:any,filteredGrade:any){
+       //Filtering Section by Grade
+       let resultData: any = [];
+       filteredGrade.forEach((element: any) => {
+         if (gradeIdPass == element.grade_master_id) {
+           resultData.push(element);
+         }
+       });
+       console.log(resultData)
+       setFilterSectionByYear(resultData);
+       setsection(resultData[0].grade_section_id)
+  }
+
   //    console.log(academicYearFinal);
   //    console.log(gradeSectionList);
   function YearId(yeardata: any) {
@@ -548,10 +569,11 @@ const Optional = () => {
                                 onChange={(e: any) => {
                                   setGradea(e.target[e.target.selectedIndex].text);
                                   setGradeID(e.target.value)
+                                  handleSectionSearch(e.target.value,filterGradeByYear)
                                   //handlesection(filterParticularYear, e.target.value);
                                 }}
                               >
-                                <option value="none">Grade</option>
+                        
                                 {filterGradeByYear &&
                                   filterGradeByYear.length &&
                                   filterGradeByYear.map((value: any) => {
@@ -568,10 +590,10 @@ const Optional = () => {
                                   //handlesection(filterParticularYear, e.target.value);
                                 }}
                               >
-                                <option value="none">Section</option>
                                 {filterSectionByYear &&
                                   filterSectionByYear.length &&
                                   filterSectionByYear.map((value: any, i: any) => {
+                                     
                                     return <option value={value.grade_section_id} label={value.section}>{value.section}</option>;
                                   })}
                               </Form.Select>

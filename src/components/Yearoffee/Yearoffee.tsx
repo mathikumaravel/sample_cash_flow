@@ -8,6 +8,7 @@ import { baseUrl } from "../../index";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { json } from "stream/consumers";
+import _ from "lodash";
 const Yearoffee = () => {
 	const [statusFeeDetailsAdd, setStatusFeeDetailsAdd] = useState(false);
 	const [feeMaster, setAllFeeMaster] = useState<any[]>([]);
@@ -20,8 +21,6 @@ const Yearoffee = () => {
 	const [datatoDelete, setdatatoDelete] = useState<any>({});
 	const [duplication, setDuplication] = useState(false);
 	const [searchGradeId, setSearchGradeId] = useState("");
-	const [addSearchGrade, setAddSearchGrade] = useState(0);
-	const [addSearchYear, setAddSearchYear] = useState(0);
 	const [FeeDetailsFinal, setFeeDetailsFinal] = useState<any[]>([]);
 	const [displayFinalData, setDisplayFinalData] = useState<any[]>([]);
 	const [gradeSectionList, setGradeSectionList] = useState<any>([]);
@@ -36,6 +35,7 @@ const Yearoffee = () => {
 	const [termFeesAdd, setTermFeesAdd] = useState(true);
 	const [termFeessaveList, setTermFeesSaveList] = useState<any>([]);
 	const school: any = (sessionStorage.getItem("School"))
+	const [total, setTotal] = useState<any>(0);
 	const [termFeessaveAdd, setTermFeesSaveAdd] = useState<any>([
 		{
 			fee_amount: null,
@@ -45,20 +45,20 @@ const Yearoffee = () => {
 			term_count: JSON.parse(school)?.term_count,
 			term_fees: [{
 				"term_name": "Term1",
-				"term_amount": ""
+				"term_amount": "0"
 			}],
 			year_id: 0,
 		}
 	]);
-
+	const [finalTerms, setFinalterms] = useState<any>([]);
 	let removeFormFields = (i: any) => {
 		let newFormValues = [...termFeessaveAdd];
 		newFormValues.splice(i, 1);
 		setTermFeesSaveAdd(newFormValues);
 	};
 	useEffect(() => {
-		ShowingTextBox(JSON.parse(school).term_count, 0);
-	}, [])
+		ShowingTextBox(JSON.parse(school).term_count, termFeessaveAdd.length - 1);
+	}, [termFeessaveAdd.length])
 
 	//feb 26 by nithish
 	const [allGrade, setAllGrade] = useState<any[]>([]);
@@ -249,6 +249,20 @@ const Yearoffee = () => {
 		setTermFeesSaveAdd(newFormValues)
 	};
 
+	useEffect(() => {
+		ShowingTermsValue(JSON.parse(school)?.optional_term_count);
+	}, [])
+	const ShowingTermsValue = (termsss: any) => {
+		console.log(termsss, "uthay");
+
+		let termscount = []
+		for (var i = 1; i <= Number(termsss); i++) {
+			console.log("Terms" + i, "----");
+			termscount.push(String(i))
+		}
+		setFinalterms(termscount);
+	}
+
 	const handleSubmit = () => {
 		let newfeeTypeName = feeTypeName.toString();
 		if (amount.length <= 0 || searchGradeId.length <= 0 || searchAcademicYear.length <= 0 || newfeeTypeName.length <= 0) {
@@ -428,7 +442,6 @@ const Yearoffee = () => {
 		setTermFeesSaveAdd(newFormValues);
 	}
 
-
 	const handleTerm = (rowindex: any, editORShow: any) => {
 		let im: any = []
 		const terms = termFeessaveAdd[rowindex]?.optional_fee ? termFeessaveAdd[rowindex]?.term_count : JSON.parse(school).term_count
@@ -462,37 +475,53 @@ const Yearoffee = () => {
 	}
 
 	const handleSave = (values: any) => {
-		values.year_id = addSearchYear
-		values.grade_id = addSearchGrade
+		let sumoftermFees = 0
+		values.year_id = frontSearchYear
+		values.grade_id = frontSearchGrade
 		values.term_count = values.optional_fee ? values.term_count : JSON.parse(school).term_count
-		axios.post(`${baseUrl}yearOffee/create_new_yearfee`, values).then((res: any) => {
-			console.log(res.data.message);
-			if (res.data.message.includes("Year of Fee already present")) {
-				toast.warning(res.data.message, {
-					position: "top-right",
-					autoClose: 5000,
-					hideProgressBar: false,
-					closeOnClick: true,
-					pauseOnHover: true,
-					draggable: true,
-					progress: undefined,
-				});
-			}
-			else if (res.data.message.includes("Year of Fee inserted")) {
-				toast.success("Saved successfully", {
-					position: "top-right",
-					autoClose: 5000,
-					hideProgressBar: false,
-					closeOnClick: true,
-					pauseOnHover: true,
-					draggable: true,
-					progress: undefined,
-				});
-			}
+		values.term_fees.map((value: any, index: any) => {
+			sumoftermFees = sumoftermFees + Number(value.term_amount)
+		})
+		_.remove(values.term_fees, function (n: any) { return n.term_amount === 0 });
 
+		if (sumoftermFees === values.fee_amount) {
+			axios.post(`${baseUrl}yearOffee/create_new_yearfee`, values).then((res: any) => {
+				if (res.data.message.includes("Year of Fee already present")) {
+					toast.warning(res.data.message, {
+						position: "top-right",
+						autoClose: 5000,
+						hideProgressBar: false,
+						closeOnClick: true,
+						pauseOnHover: true,
+						draggable: true,
+						progress: undefined,
+					});
+				}
+				else if (res.data.message.includes("Year of Fee inserted")) {
+					toast.success("Saved successfully", {
+						position: "top-right",
+						autoClose: 5000,
+						hideProgressBar: false,
+						closeOnClick: true,
+						pauseOnHover: true,
+						draggable: true,
+						progress: undefined,
+					});
+				}
+			}).catch((res: any) => {
+				toast.warning("Enter Correct data", {
+					position: "top-right",
+					autoClose: 5000,
+					hideProgressBar: false,
+					closeOnClick: true,
+					pauseOnHover: true,
+					draggable: true,
+					progress: undefined,
+				});
+			})
 		}
-		).catch((res: any) => {
-			toast.warning("Enter Correct data", {
+		else if (sumoftermFees < values.fee_amount) {
+			toast.warning("Fee amount is Greater than sum of term amount", {
 				position: "top-right",
 				autoClose: 5000,
 				hideProgressBar: false,
@@ -500,8 +529,19 @@ const Yearoffee = () => {
 				pauseOnHover: true,
 				draggable: true,
 				progress: undefined,
-			});
-		})
+			})
+		}
+		else if (sumoftermFees > values.fee_amount) {
+			toast.warning("Fee amount is less than sum of term amount", {
+				position: "top-right",
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+			})
+		}
 	}
 
 	return (
@@ -555,7 +595,7 @@ const Yearoffee = () => {
 																			Add
 																		</Button>
 																	) : (
-																		<Button onClick={() => { setStatusFeeDetailsAdd(false); list_fee_details(addSearchYear, addSearchGrade); }}>Back</Button>
+																		<Button onClick={() => { setStatusFeeDetailsAdd(false); list_fee_details(frontSearchYear, frontSearchGrade); }}>Back</Button>
 																	)}
 																</div>
 															</>
@@ -706,9 +746,9 @@ const Yearoffee = () => {
 															<Col md={3} className="form-group" style={{ width: "28%" }}>
 																<Form.Select
 																	//view
-																	value={addSearchYear}
+																	value={frontSearchYear}
 																	onChange={(e: any) => {
-																		setAddSearchYear(Number(e.target.value));
+																		setFrontSearchYear(Number(e.target.value));
 																		handleGradeFilter(gradeSectionList, e.target.value);
 																	}}>
 																	<option>Select Year</option>
@@ -721,9 +761,9 @@ const Yearoffee = () => {
 															</Col>
 															<Col md={3} className="form-group" style={{ width: "28%" }}>
 																<Form.Select
-																	value={addSearchGrade}
+																	value={frontSearchGrade}
 																	onChange={(e: any) => {
-																		setAddSearchGrade(Number(e.target.value));
+																		setFrontSearchGrade(Number(e.target.value));
 																	}}>
 																	<option>Select Year</option>
 																	{filterGradeByYear &&
@@ -806,12 +846,12 @@ const Yearoffee = () => {
 																								onChange={(e: any) => {
 																									ShowingTextBox(e.target.value, rowindex);
 																								}}>
-																								<option value="1">Yearly</option>
-																								<option value="2">2</option>
-																								<option value="3">3</option>
-																								<option value="4">4</option>
-																								<option value="8">6</option>
-																								<option value="12">12</option>
+																								{finalTerms?.map((option: any) => {
+																									return <>
+																										<option value={option}>Term {option}</option>
+																									</>
+																								})}
+
 																							</Form.Select>
 																							: <Form.Control value={JSON.parse(school).term_count} disabled></Form.Control>}
 																					</td>
@@ -825,7 +865,7 @@ const Yearoffee = () => {
 																							onClick={(e: any) => {
 																								handleSave(termFeessaveAdd[rowindex]);
 																							}}></i>{" "}
-																						{rowindex ? (
+																						{rowindex !== 0 ? (
 																							<i
 																								className="fa fa-minus fa-1x"
 																								style={{ color: "red", cursor: "pointer" }}

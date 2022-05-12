@@ -140,6 +140,17 @@ const Promotion = () => {
           setEventGradeByYearUpdate("");
           setEventSectionByYearUpdate("");
         }
+        else if(response.data.data.IsExsist == true){
+          toast.warning(" Promotion already present", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
       });
     }
   };

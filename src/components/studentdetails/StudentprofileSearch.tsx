@@ -145,12 +145,29 @@ const StudentprofileSearch = () => {
     const { name, value } = event.target;
     setStatusStudentDetails({ ...statusStudentDetails, [name]: value });
   };
+console.log(statusStudentDetails.alt_phone_number  );
+console.log(statusStudentDetails.phone_number );
+console.log(mobileNoPattern);
+// console.log( statusStudentDetails.alt_phone_number.toString().match(mobileNoPattern) ===
+// statusStudentDetails.phone_number.toString().match(mobileNoPattern));
 
   const searchedit = () => {
+
     if (
-      statusStudentDetails.alt_phone_number.match(mobileNoPattern) &&
-      statusStudentDetails.phone_number.match(mobileNoPattern)
+      statusStudentDetails.alt_phone_number.toString().match(mobileNoPattern) ===
+      statusStudentDetails.phone_number.toString().match(mobileNoPattern) 
     ) {
+      toast.warning("please Check Phone Number", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      
+    } else {
       axios
         .put(`${baseUrl}studentProfile/${id}`, {
           student_name: statusStudentDetails.student_name,
@@ -185,16 +202,6 @@ const StudentprofileSearch = () => {
         .catch((error) => {
           alert(error);
         });
-    } else {
-      toast.warning("please Check Phone Number", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
     }
   };
 

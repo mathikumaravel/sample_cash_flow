@@ -241,11 +241,11 @@ console.log(result );
 			});
 			
 	}, [])
-
+  
 useEffect (()=>{
 	ShowingTermsValue(gotSchoolDetails);
  
-	console.log(gotSchoolDetails,"--08098098");
+	console.log(gotSchoolDetails.max_count,"--08098098");
   
 },[gotSchoolDetails])
 
@@ -253,18 +253,20 @@ useEffect (()=>{
 		  
  	 
 
-		 {gotSchoolDetails && gotSchoolDetails.length && gotSchoolDetails.map((terms:any)=>{
-			 
+		 {termsss && termsss.length && termsss.map((terms:any)=>{
+			 console.log(terms);
+       
 			 let termscount = [] 
-			for (var i = 1; i <= terms.term_count; i++) {
+			for (var i = 1; i <= terms.max_count; i++) {
 				
 				console.log( "Terms" + i,"----");
 
 				termscount.push("Term" + i)
 				
 		   }
-		  console.log(termscount);
-		  setFinalterms(termscount);
+		  
+      setFinalterms(termscount);
+      
      })}
     }
   return (

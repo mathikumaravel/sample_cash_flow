@@ -383,8 +383,8 @@ const Studentadd = () => {
                     <div id="content-wrapper" className="d-flex flex-column">
                         <div id="content">
                             <Navbar></Navbar>
-                            <div className="container-fluid">
-                                <div className="col-xl-11 m-auto">
+                            <div className="">
+                                <div className=" card m-auto">
                                     <div className="card-header">
                                         <h4 className="card-title font-weight text-center" style={{ color: "red" }}>
                                             New Admission

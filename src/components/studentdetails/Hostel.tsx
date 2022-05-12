@@ -157,7 +157,7 @@ const handleShow = () => {
 					console.log(res.data.message, "Hostel");
 					if(res.data.data.IsExsist === true){
 						alert()
-						toast.warning(res.data.message, {
+						toast.success(res.data.message, {
 							position: "top-right",
 							autoClose: 5000,
 							hideProgressBar: false,
@@ -197,6 +197,16 @@ const handleShow = () => {
 			.then((res: any) => {
 				console.log(res.data.data);
 				if(res.data.data.IsExsist === false){
+					toast.success(res.data.message, {
+						position: "top-right",
+						autoClose: 5000,
+						hideProgressBar: false,
+						closeOnClick: true,
+						pauseOnHover: true,
+						draggable: true,
+						progress: undefined,
+					});
+				}else if(res.data.data.IsExsist ===  "year"){
 					toast.warning(res.data.message, {
 						position: "top-right",
 						autoClose: 5000,
@@ -226,7 +236,7 @@ const handleShow = () => {
 			.then((res: any) => {
 				console.log(res.data.data, "Hostel");
 				if(res.data.data.IsExsist === false){
-					toast.warning(res.data.message, {
+					toast.success(res.data.message, {
 						position: "top-right",
 						autoClose: 5000,
 						hideProgressBar: false,

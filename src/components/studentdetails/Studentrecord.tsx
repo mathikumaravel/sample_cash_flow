@@ -61,7 +61,7 @@ const Studentrecord = () => {
   const [filterSectionByYear, setFilterSectionByYear] = useState<any>([]);
   const [searchBy, setSearchBy] = useState("");
   const [termsmaster, setTermsmaster] = useState<any>("");
-console.log(termsmaster);
+console.log(section,"gggggggggg");
 
 
 useEffect(() => {
@@ -682,10 +682,10 @@ useEffect(() => {
                                 setTermsmaster(e.target.value);
 															}}>
                                 <option value=" " >Terms </option>
-																							<option value="Term1">Terms 1</option>
-																							<option value="Term2">Terms 2</option>
-																							<option value="Term3">Terms 3</option>
-																							<option value="Term4">Terms 4</option>
+																							<option value="term1">Terms 1</option>
+																							<option value="term2">Terms 2</option>
+																							<option value="term3">Terms 3</option>
+																							<option value="term4">Terms 4</option>
 																						</Form.Select>
                           </Col>
                           <Col md={1}>

@@ -165,6 +165,7 @@ console.log(Payment,"rewrewrwerwe");
 						})
 						.then((response: AxiosResponse) => {
 							setMainSearch(response.data.data);
+ 							
 							setadmissionsid(response.data.data[0][0]);
 							console.log(response.data.data);
 							termsChange(response.data.data[0][1][1].studentData, "term1")
@@ -459,7 +460,7 @@ console.log(Payment,"rewrewrwerwe");
 				console.log(e);
 			});
 			
-	}, [])
+	},[])
 
 useEffect (()=>{
 	ShowingTermsValue(gotSchoolDetails);
@@ -581,6 +582,8 @@ useEffect (()=>{
 															{AllDetailsOfStudent &&
 																AllDetailsOfStudent.length &&
 																AllDetailsOfStudent.map((values: any) => {
+																	console.log(AllDetailsOfStudent);
+																	
 																	if (values.student_name || values.admission_no || values.academic_year) {
 																		return (
 																			<tr>
@@ -853,9 +856,7 @@ useEffect (()=>{
 																		{Payment && Payment.length && Payment[2].totalRefund}
 																	</th>
 																	<th>{Payment && Payment.length && Payment[6].totaldiscountamount}</th>
-																	<th style={{ padding: "13px" }} id="totalbalamt">
-																		{/* {AllDetailsOfStudent && AllDetailsOfStudent.length && AllDetailsOfStudent[0].Allbalance} */}
-																	</th>
+																	
 																	<th />
 																	<th>{Payment && Payment.length && Payment[1].balance}</th>
 																	{!refundSwitch ? (
