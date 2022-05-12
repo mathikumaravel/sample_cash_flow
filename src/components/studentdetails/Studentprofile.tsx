@@ -20,6 +20,9 @@ const StudentProfile = () => {
   const [statusStudentSearch, setStatusStudentSearch] = useState<any>({});
   const [statusStudentDetails, setStatusStudentDetails] = useState<any>({});
 
+
+  const [alterPhoneno, setAlterPhoneno] = useState<any>("");
+
   console.log(statusStudentDetails)
 
   const onTextChanged = (e: any) => {
@@ -92,7 +95,12 @@ const StudentProfile = () => {
     setStatusStudentDetails({ ...statusStudentDetails, [name]: value });
   };
 
-  
+  const handleChangeMobileAlter = (e: any) => {
+    const re = /^[0-9\b]+$/; //rules
+    if (e.target.value === "" || re.test(e.target.value)) {
+        setAlterPhoneno(e.target.value);
+    }
+};
 
   // console.log(statusStudentDetails)
 
@@ -251,7 +259,7 @@ const StudentProfile = () => {
                               </Form.Group>
                               <Form.Group as={Row}>
                                 <Form.Label column sm="4">
-                                  <strong>Section</strong>
+                                  <strong> </strong>
                                 </Form.Label>
                                 <Col sm="8">
                                   {!statusStudentEdit ? (
@@ -353,7 +361,12 @@ const StudentProfile = () => {
                                     </div>
                                   ) : (
                                     <Form.Control
-                                      onChange={handleChange}
+                                    
+                                      onChange={(e:any) => {
+                                          
+                                          setAlterPhoneno(e.target.value);
+                                          setAlterPhoneno(alterPhoneno)
+                                    }}
                                       type="text"
                                       name="phone_number"
                                       value={statusStudentDetails.phone_number}
@@ -377,7 +390,11 @@ const StudentProfile = () => {
                                     </div>
                                   ) : (
                                     <Form.Control
-                                      onChange={handleChange}
+                                    onChange={(e:any) => {
+                                          
+                                      setAlterPhoneno(e.target.value);
+                                      setAlterPhoneno(alterPhoneno)
+                                }}
                                       type="text"
                                       name="alt_phone_number"
                                       value={

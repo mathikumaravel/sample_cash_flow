@@ -266,7 +266,7 @@ const Feesdetails = (props: any) => {
                                         <h6>Academic Year</h6>
                                     </div>
                                     <div>
-                                        <label>
+                                        <label style={{margin:"3px"}}>
                                             {allGotFinalData &&
                                                 allGotFinalData.length &&
                                                 allGotFinalData.map((amount: any) => {
@@ -281,7 +281,7 @@ const Feesdetails = (props: any) => {
                                         <h6>Balance ₹</h6>
                                     </div>
                                     <div>
-                                        <label>
+                                        <label style={{margin:"3px"}}>
                                             {allGotFinalData &&
                                                 allGotFinalData.length &&
                                                 allGotFinalData.map((amount: any) => {
@@ -299,14 +299,14 @@ const Feesdetails = (props: any) => {
                                             allGotFinalData.length &&
                                             allGotFinalData.map((amount: any) => {
                                                 return (
-                                                    <Button
+                                                    <Button style={{margin:"2px"}}
                                                         onClick={(e) => {
                                                             history.push(`/stupay/${status}/${(amount = amount.academic_year)}`);
                                                             // history.push("/stupay");/stupay/MVM10004/2021-2022
                                                         }}
                                                         className="btn-success btn-sm">
-                                                        Pay / View All
-                                                    </Button>
+                                                        Pay / View All 
+                                                    </Button> 
                                                 );
                                             })}
                                     </div>

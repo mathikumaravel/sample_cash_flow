@@ -31,8 +31,12 @@ const Studentpay = () => {
 	const [termsTextBox, setTermsTextBox] = useState<any>([]);
 	const [termsmaster, setTermsmaster] = useState<any>([]);
 	const [gotSchoolDetails, setGotSchoolDetails] = useState<any>([]);
+	const [finalterms, setFinalterms] = useState<any>([]);
 
-	console.log(termsmaster);
+
+console.log(Payment,"rewrewrwerwe");
+
+	
 	const urlParams: any = useParams();
 	const id = urlParams.id;
 	const year = urlParams.year;
@@ -163,7 +167,7 @@ const Studentpay = () => {
 							setMainSearch(response.data.data);
 							setadmissionsid(response.data.data[0][0]);
 							console.log(response.data.data);
-							termsChange(response.data.data[0][1][1].studentData, "1")
+							termsChange(response.data.data[0][1][1].studentData, "term1")
 						});
 				}
 			}
@@ -317,10 +321,11 @@ const Studentpay = () => {
 		axios.post(`${baseUrl}payment`, {
 			student_id: student.student_id,
 			year_id: student.year_id,
-			term_name: `term${terms}`
+			term_name: terms
 		}).then((response: AxiosResponse) => {
 			setPayment(response.data.data);
 		})
+		
 	}
 
 	//Handle Balance
@@ -455,17 +460,29 @@ const Studentpay = () => {
 			});
 			
 	}, [])
-// console.log(gotSchoolDetails[0].term_count);
+
 useEffect (()=>{
-	ShowingTermsValue();
-},[])
- 	const ShowingTermsValue= ( ) => {
-	 
+	ShowingTermsValue(gotSchoolDetails);
+ 
+	
+},[gotSchoolDetails])
+
+ 	const ShowingTermsValue= (termsss:any ) => {
+		  
+ 	 
+
 		 {gotSchoolDetails && gotSchoolDetails.length && gotSchoolDetails.map((terms:any)=>{
-			for (var i = 0; i < terms; i++) {
-				console.log(i);
+			 
+			 let termscount = [] 
+			for (var i = 1; i <= terms.max_count; i++) {
+				
+				console.log( "Terms" + i,"----");
+
+				termscount.push("Term" + i)
+				
 		   }
-		   console.log(i);
+		  console.log(termscount);
+		  setFinalterms(termscount);
 		 })}
 		
 		 
@@ -571,17 +588,19 @@ useEffect (()=>{
 																				<td>{values.admission_no}</td>
 																				<td>{values.academic_year}</td>
 																				<td><div style={{ width: "120px", marginLeft: "10px", float: "right" }}>
-																					
+			
 																					<Form.Select
 																						onChange={(e: any) => {
 																							termsChange(values, e.target.value)
 																							setTermsmaster(e.target.value);
 																						}}
 																					>
-																						<option value="1">Terms 1</option>
-																						<option value="2">Terms 2</option>
-																						<option value="3">Terms 3</option>
-																						<option value="4">Terms 4</option>
+																						{finalterms && finalterms.length && finalterms.map((count:any)=>{
+																							return(
+																								<option value={count}>{count}</option>
+																							)
+																						})}
+																					 
 																					</Form.Select>
 																				</div></td>
 																			</tr>
@@ -642,7 +661,7 @@ useEffect (()=>{
 																	<th>Paid</th>
 																	<th>Refund</th>
 																	<th>Discount</th>
-																	<th>Terms</th>
+																	 
 																	{/* <th style={{ padding: "10px" }}>Balance</th> */}
 																	<th>Date</th>
 																	<th style={{ padding: "10px", width: "70px" }}>Pay</th>
@@ -663,9 +682,7 @@ useEffect (()=>{
 																				<td>{value?.cum_amt}</td>
 																				<td>{value?.refund}</td>
 																				<td>{value?.discount_amount}</td>
-																				<td>{value?.fee_master_id && value?.optional_fees === "1" && <Form.Select name="" id="" style={{ width: "120px", marginLeft: "10px", float: "right" }}>
-																					<option>{value.term_name}</option>
-																				</Form.Select>}</td>
+																				
 																				{/* <td>{Number(value.balance)}</td> */}
 																				<td style={{ width: "10%" }}>
 																					{!refundSwitch ? (
@@ -826,7 +843,7 @@ useEffect (()=>{
 																	})}
 															</tbody>
 															<tfoot>
-																{Payment && Payment.length ? < tr >
+																{Payment && Payment.length && Payment[0] && Payment[0].length ? < tr >
 																	<th>Total</th>
 																	<th id="totalfeeamt">
 																		{Payment && Payment.length && Payment[4].totalFees}

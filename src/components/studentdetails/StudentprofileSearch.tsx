@@ -661,7 +661,8 @@ const StudentprofileSearch = () => {
                       admissions_id={statusStudentDetails.student_admissions_id}
                       section={statusStudentDetails.grade_section_id}
                       fee_master_id={statusStudentDetails.fee_master_id}
-                      grade={statusStudentDetails.grade_id}
+                      grade={statusStudentDetails.grade_id} 
+                      transport={statusStudentDetails.mode_of_transport}
                      ></Hostel>
                     <Academicfees
                       studentDetails={statusStudentDetails}

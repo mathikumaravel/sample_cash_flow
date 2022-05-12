@@ -16,9 +16,10 @@ const Hostel = (props: any) => {
 	const grade_id = props.grade;
 	const section = props.section;
 	const Student_admission_id = props.admissions_id;
- 
+	const Transportation = props.transport;
 
-	console.log(props);
+
+	console.log(Transportation);
 
 	const [YearOfBalanceByYear, setYearOfBalanceByYear] = useState<any>({});
 	const [allGotFinalData, setAllGotFinalData] = useState<any>([]);
@@ -138,7 +139,7 @@ const handleShow = () => {
 
 		// alert()
 		if ("transport" === currentRadioValue) {
-			 
+		 
 			getAccessToken();
 			axios
 				.post(`${baseUrl}modeoftransport`, {
@@ -152,9 +153,21 @@ const handleShow = () => {
 					fee_master_id: Number(feemaster),
 				})
 				.then((res: any) => {
-					console.log(res.data.data, "Hostel");
+				 
+					console.log(res.data.message, "Hostel");
 					if(res.data.data.IsExsist === true){
-						toast.warning("Mode of transport already present", {
+						alert()
+						toast.warning(res.data.message, {
+							position: "top-right",
+							autoClose: 5000,
+							hideProgressBar: false,
+							closeOnClick: true,
+							pauseOnHover: true,
+							draggable: true,
+							progress: undefined,
+						});
+					}else if(res.data.data.IsExsist ===  "year"){
+						toast.warning(res.data.message, {
 							position: "top-right",
 							autoClose: 5000,
 							hideProgressBar: false,
@@ -164,6 +177,7 @@ const handleShow = () => {
 							progress: undefined,
 						});
 					}
+					setShow(false);
 				});
 
 		}
@@ -179,10 +193,11 @@ const handleShow = () => {
 				fee_master_id: checkhostelvalue(),
 				grade_id: grade_id
 			})
+			
 			.then((res: any) => {
 				console.log(res.data.data);
-				if(res.data.data.IsExsist === true){
-					toast.warning("Mode of transport already present", {
+				if(res.data.data.IsExsist === false){
+					toast.warning(res.data.message, {
 						position: "top-right",
 						autoClose: 5000,
 						hideProgressBar: false,
@@ -192,9 +207,9 @@ const handleShow = () => {
 						progress: undefined,
 					});
 				}
-			
+				setShow(false);
 			});
-			handleShow()
+		 
 		}
 		else if("Self" === currentRadioValue){
 			axios
@@ -210,13 +225,28 @@ const handleShow = () => {
 			})
 			.then((res: any) => {
 				console.log(res.data.data, "Hostel");
+				if(res.data.data.IsExsist === false){
+					toast.warning(res.data.message, {
+						position: "top-right",
+						autoClose: 5000,
+						hideProgressBar: false,
+						closeOnClick: true,
+						pauseOnHover: true,
+						draggable: true,
+						progress: undefined,
+					});
+				}
+				setShow(false);
 			});
+			
 		}
-
+		
 	}
 	useEffect(() => {
 
 	}, []);
+	console.log( currentRadioValue,Transportation,Transportation === "Self" ? Transportation : true);
+	
 	useEffect(() => {
 		getAccessToken();
 		axios
@@ -389,7 +419,7 @@ const handleShow = () => {
 												type="radio"
 												value="Self"
 												onChange={(e) => setCurrentValue(e.target.value)}
-												defaultChecked={currentRadioValue === "option1"}
+												checked={Transportation === "Self" ? Transportation : currentRadioValue === "Self"}
 											/>
 											<Form.Label>Self</Form.Label>
 										</div>
@@ -401,7 +431,7 @@ const handleShow = () => {
 												value="transport"
 												type="radio"
 												onChange={(e) => setCurrentValue(e.target.value)}
-												defaultChecked={currentRadioValue === "option2"}
+												checked={Transportation === "transport" ? Transportation : currentRadioValue === "transport"}
 											/>
 											<Form.Label>Bus</Form.Label>
 
@@ -434,10 +464,10 @@ const handleShow = () => {
 												value="Hostal"
 												type="radio"
 												onChange={(e) => setCurrentValue(e.target.value)}
-												defaultChecked={currentRadioValue === "option3"}
+												checked={Transportation === "Hostal" ? Transportation : currentRadioValue === "Hostal"}
 											/>
 											<Form.Label htmlFor="radio-item-2">Hostal</Form.Label>
-											{currentRadioValue === "option3" && (
+											{currentRadioValue === "Hostal" && (
 												<div>
 
 												</div>
@@ -466,6 +496,7 @@ const handleShow = () => {
                                   Close
                                 </Button>
 								<Button variant="danger" 
+								data-bs-dismiss="modal"
 									onClick={(e: any) => {
 										handleTrans(currentRadioValue);
 										handleShow();

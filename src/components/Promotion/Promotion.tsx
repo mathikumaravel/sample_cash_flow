@@ -547,7 +547,7 @@ const Promotion = () => {
                             </Table>
                           </div>
                         </div>
-                        <div style={{ marginLeft: "20%" }}>
+                        {/* <div style={{ marginLeft: "20%" }}>
                           <Pagination>
                             <Pagination.First />
                             <Pagination.Prev />
@@ -563,7 +563,7 @@ const Promotion = () => {
                             <Pagination.Next />
                             <Pagination.Last />
                           </Pagination>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                   </div>

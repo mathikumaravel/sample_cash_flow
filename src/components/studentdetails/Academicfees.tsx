@@ -40,8 +40,57 @@ const Academicfees = (props: any) => {
   const [updateDiscountFeeType, setUpdateDiscountFeeType] = useState<any>([]);
   // console.log(admission_id);
   const [termsmaster, setTermsmaster] = useState<any>("Term1");
-console.log(termsmaster);
+  const [gotSchoolDetails, setGotSchoolDetails] = useState<any>([]);
+  const [finalterms, setFinalterms] = useState<any>([]);
+  
+  const mobileNoPattern = /[`@,~,.<>;':"\/\[\]\|{}()-=_+]/;
 
+ 
+
+const handlespechar = (values:any, char:any) => {
+  let text = "123456789!@#$%fgfgdgdfgdfg";
+let pattern = /[^0-9]/g;
+let result = char.toString().match(pattern);
+console.log(result );
+
+ 
+  if(result && result.length>=1){
+    toast.warning("Enter only Number", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  }
+  else  {
+    getAccessToken();
+    axios
+      .put(`${baseUrl}studentdiscount/${values.student_payment_info_id}`, {
+        discount_amount: updateYearOfFee,
+        dis_feetype_id: updateDiscountFeeType,
+      })
+      .then((res: any) => {
+        toast.success("Discount amount is saved successfully", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        setEditingYearOfFee({});
+        getapi();
+      })
+      .catch((e: any) => {
+        console.log(e);
+      });
+  }
+ 
+};
   useEffect(() => {
     if (student_id && student_id.toString().length) yearacademic();
   }, [student_id]);
@@ -134,28 +183,7 @@ console.log(termsmaster);
   };
 
   const updateDiscount = (values: any) => {
-    getAccessToken();
-    axios
-      .put(`${baseUrl}studentdiscount/${values.student_payment_info_id}`, {
-        discount_amount: updateYearOfFee,
-        dis_feetype_id: updateDiscountFeeType,
-      })
-      .then((res: any) => {
-        toast.success("Discount amt and fee type saved successfully", {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-        setEditingYearOfFee({});
-        getapi();
-      })
-      .catch((e: any) => {
-        console.log(e);
-      });
+    
   };
 
   function setdiscountt(gdata: any) {
@@ -199,7 +227,46 @@ console.log(termsmaster);
   useEffect(() => {
     Total();
   }, [discountallrecord]);
+  useEffect(() => {
+		getAccessToken();
+		axios
+			.get(`${baseUrl}school`)
+			.then((res: any) => {
+				console.log(res.data.data);
+				setGotSchoolDetails(res.data.data);
+				console.log(res.data.data);
+			})
+			.catch((e: any) => {
+				console.log(e);
+			});
+			
+	}, [])
 
+useEffect (()=>{
+	ShowingTermsValue(gotSchoolDetails);
+ 
+	console.log(gotSchoolDetails,"--08098098");
+  
+},[gotSchoolDetails])
+
+ 	const ShowingTermsValue= (termsss:any ) => {
+		  
+ 	 
+
+		 {gotSchoolDetails && gotSchoolDetails.length && gotSchoolDetails.map((terms:any)=>{
+			 
+			 let termscount = [] 
+			for (var i = 1; i <= terms.term_count; i++) {
+				
+				console.log( "Terms" + i,"----");
+
+				termscount.push("Term" + i)
+				
+		   }
+		  console.log(termscount);
+		  setFinalterms(termscount);
+     })}
+    }
   return (
     <div>
       <ToastContainer
@@ -230,10 +297,11 @@ console.log(termsmaster);
 															onChange={(e:any) =>{ 
                                 setTermsmaster(e.target.value);
 															}}>
-																							<option value="Term1">Terms 1</option>
-																							<option value="Term2">Terms 2</option>
-																							<option value="Term3">Terms 3</option>
-																							<option value="Term4">Terms 4</option>
+																		{finalterms && finalterms.length && finalterms.map((count:any)=>{
+																							return(
+																								<option value={count}>{count}</option>
+																							)
+																						})}
 																						</Form.Select>
                 </Col>
             
@@ -318,13 +386,16 @@ console.log(termsmaster);
                               ) : (
                                 <td>
                                   <Form.Control
-                                    type="number"
+                                    type="text"
                                     value={updateYearOfFee}
                                     onChange={(e: any) => {
+                                      
+                                      
                                       Number(values.balance) <
                                       Number(e.target.value)
                                         ? alert("Discount Greater the Balance")
                                         : setUpdateYearOfFee(e.target.value);
+                                     
                                     }}
                                   />
                                 </td>
@@ -367,6 +438,7 @@ console.log(termsmaster);
                                       variant="warning"
                                       onClick={() => {
                                         updateDiscount(values);
+                                        handlespechar(values, updateYearOfFee)
                                       }}
                                     >
                                       Update

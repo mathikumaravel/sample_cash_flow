@@ -49,15 +49,19 @@ const Optional = () => {
   const [searchBy, setSearchBy] = useState("");
   const [optionalFees, setOptionalFees] = useState<any>([]);
   const [grade, setGradeID] = useState<any>("");
-  const [academicYearId, setAcademicYearId] = useState<any>(1);
+  const [academicYearId, setAcademicYearId] = useState<any>(9);
   const [checkboxValue, setCheckboxValue] = useState(false);
   const [optionalValuesData, setOptionalValuesData] = useState<any>([]);
 
   const [foundOptionaldata, setFoundOptionaldata] = useState<any>([]);
   const [optionaldrop, setOptionaldrop] = useState<any>([]);
+  const [gotStudentDetails, setGotStudentDetails] = useState<any>([]);
+  const [gotStudentDetailsChecked, setGotStudentDetailsChecked] = useState<any>([]);
 
+  const [secionId, setSecionId] = useState<any>("");
+  const [loading, setloading] = useState<any>(true);
 
-  console.log(foundOptionaldata);
+  console.log(section);
 
   //manage state  Autosearch
   //manage state  academicYear
@@ -87,21 +91,20 @@ const Optional = () => {
 
 
 
-  console.log(Autosearch);
   const [GotOptionaldata, setGotOptionaldata] = useState<any[]>([]);
-  const OptionalValuesData = (data: any) => {
-    console.log(data);
+  console.log(GotOptionaldata)
+  const OptionalValuesData = (e: any,data:any) => {
+    console.log(e.target.checked,data,"llllllll");
     let dataOnChange = {
       student_admissions_id: data.student_admissions_id,
       student_id: data.student_id,
       fee_master_id: Number(optionaldrop),
       year_id: data.year_id,
-      grade_id: data.grade_id,
-      grade_section_id: data.grade_section_id
+      grade_id: Number(grade),
+      grade_section_id: Number(section)
     }
-    if (data.checked) {
+    if (e.target.checked) {
       setGotOptionaldata([...GotOptionaldata, dataOnChange])
-
     }
     else {
       let newoptionaldata = [...GotOptionaldata]
@@ -120,13 +123,12 @@ const Optional = () => {
     // console.log(GotOptionaldata,"optionaldatattttt");
 
   }
-  console.log(GotOptionaldata, "hhhhh");
-  console.log(foundOptionaldata);
+
   const onSuggesthandler = (value: any) => {
-    console.log(value);
+
 
     setIsComponentVisible(false);
-    console.log(value);
+
     setAutoSearch({
       text: value.student_name,
       studentid: value.admission_no,
@@ -145,35 +147,25 @@ const Optional = () => {
       });
     getAccessToken();
     getAllAcademicYears();
-    axios
-      .post(`${baseUrl}optional/opt`, {
-        year_id: value.year_id,
-        grade_id: value.grade_id
-      })
-      .then((response: AxiosResponse) => {
-        setOptionalFees(response.data.data);
-        console.log(response.data.data, "guyguyguyg");
 
-      });
 
   };
 
 
   const optionaldata = GotOptionaldata;
 
-  console.log(GotOptionaldata);
-  console.log(optionaldata);
+
 
   const submitOptional = () => {
     getAccessToken();
-    console.log(foundOptionaldata);
+
     axios
       .post(`${baseUrl}optional`,
         GotOptionaldata
       )
       .then((response: AxiosResponse) => {
         setOptionalFees(response.data.data);
-        console.log(response.data.data, "guyguyguyg");
+
         if (response.data.data.IsExsist === false) {
           toast.success("Optional fee Added Successfully", {
             position: "top-right",
@@ -246,133 +238,46 @@ const Optional = () => {
     if (section && section === "none") setsection("");
   }, [gradea, section]);
 
+  useEffect(() => {
+    setGotOptionaldata([])
+    setGotStudentDetails([])
+    getAccessToken();
+    axios
+      .post(`${baseUrl}optional/search`, {
+        year_id: Number(academicYearId),
+        grade_id: Number(grade),
+        section_id: Number(section),
+        fee_master_id: Number(optionaldrop)
+        // year_id: 9,
+        // grade_id: 1,
+        // section_id: 112,
+        //         fee_master_id: 12
+      })
+      .then((res: any) => {
 
+        setGotStudentDetails(res.data.data.data);
+        setGotStudentDetailsChecked(res.data.data.data);
+        //      console.log(res.data.data);
+        setloading(true);
+      })
+      .catch((e: any) => {
+        console.log(e);
+      });
+
+  }, [optionaldrop])
   const callStudentData = () => {
     setIsComponentVisible(false);
-    if (academicYear && academicYear.length > 0 && gradea && gradea.length > 0) {
-      console.log(academicYear, "check");
-      getAllAcademicYears();
-      getAccessToken();
-      axios
-        .post(`${baseUrl}optional/opt`, {
-          year_id: Number(academicYearId),
-          grade_id: Number(grade),
-        })
-        .then((response: AxiosResponse) => {
-          setOptionalFees(response.data.data);
-          console.log(response.data.data, "guyguyguyg");
 
-        });
-    }
-    if (academicYear && academicYear.length > 0) {
-      if (searchBy && searchBy.length > 0) {
-        if (
-          searchBy &&
-          searchBy.length > 0 &&
-          academicYear &&
-          academicYear.length > 0 &&
-          gradea &&
-          gradea.length > 0 &&
-          section &&
-          section.length > 0
-        ) {
-          getAccessToken();
-          axios
-            .post(`${baseUrl}autoSearch`, {
-              searchby: searchBy,
-              academic_year: academicYear,
-              grade: gradea,
-              section: section,
-            })
-            .then((response: AxiosResponse) => {
-              setMainSearch(response.data.data);
-            });
-        }
-
-        else if (searchBy && searchBy.length > 0 && academicYear && academicYear.length > 0 && gradea && gradea.length > 0) {
-          getAccessToken();
-          axios
-            .post(`${baseUrl}autoSearch`, {
-              searchby: searchBy,
-              academic_year: academicYear,
-              grade: gradea,
-            })
-            .then((response: AxiosResponse) => {
-              setMainSearch(response.data.data);
-            });
-        } else if (searchBy && searchBy.length > 0 && academicYear && academicYear.length > 0 && section && section.length > 0) {
-          getAccessToken();
-          axios
-            .post(`${baseUrl}autoSearch`, {
-              searchby: searchBy,
-              academic_year: academicYear,
-              section: section,
-            })
-            .then((response: AxiosResponse) => {
-              setMainSearch(response.data.data);
-            });
-        } else if (searchBy && searchBy.length > 0 && academicYear && academicYear.length > 0) {
-          getAccessToken();
-          axios
-            .post(`${baseUrl}autoSearch`, {
-              searchby: searchBy,
-              academic_year: academicYear,
-            })
-            .then((response: AxiosResponse) => {
-              setMainSearch(response.data.data);
-            });
-        }
-      } else {
-        if (academicYear && academicYear.length > 0 && gradea && gradea.length > 0 && section && section.length > 0) {
-          getAccessToken();
-          axios
-            .post(`${baseUrl}autoSearch`, {
-              academic_year: academicYear,
-              grade: gradea,
-              section: section,
-            })
-            .then((response: AxiosResponse) => {
-              setMainSearch(response.data.data);
-            });
-        }
-
-        else if (academicYear && academicYear.length > 0 && gradea && gradea.length > 0) {
-          getAccessToken();
-          axios
-            .post(`${baseUrl}autoSearch`, {
-              academic_year: academicYear,
-              grade: gradea,
-            })
-            .then((response: AxiosResponse) => {
-              setMainSearch(response.data.data);
-            });
-        }
-        else if (academicYear && academicYear.length > 0 && section && section.length > 0) {
-          getAccessToken();
-          axios
-            .post(`${baseUrl}autoSearch`, {
-              academic_year: academicYear,
-              section: section,
-            })
-            .then((response: AxiosResponse) => {
-              setMainSearch(response.data.data);
-            });
-        } else if (academicYear && academicYear.length > 0) {
-          getAccessToken();
-          axios
-            .post(`${baseUrl}autoSearch`, {
-              academic_year: academicYear,
-            })
-            .then((response: AxiosResponse) => {
-              setMainSearch(response.data.data);
-            });
-        }
+    axios
+      .post(`${baseUrl}optional/opt`, {
+        year_id: Number(academicYearId),
+        grade_id: Number(grade)
+      })
+      .then((response: AxiosResponse) => {
+        setOptionalFees(response.data.data);
 
 
-      }
-    } else {
-      alert("Please Choose Academic Year");
-    }
+      });
   };
   const getAllAcademicYears = () => {
     getAccessToken();
@@ -413,6 +318,7 @@ const Optional = () => {
 
   useEffect(() => {
     // console.log(gradeSectionList,filterParticularYear,gradeMaster)
+
     if (
       gradeSectionList &&
       gradeSectionList.length > 0 &&
@@ -426,9 +332,8 @@ const Optional = () => {
       handleGradeFilter(gradeSectionList, firstAcadmicYear[0].year_id);
     }
   }, [gradeSectionList, firstAcadmicYear, gradeMaster]);
-  console.log(academicYear);
   const handleGradeFilter = (gradeSectionList: any, searchInput: any) => {
-    console.log(gradeSectionList, searchInput);
+  
     //Filtering Grade by academic year id
     let resultData: any = [];
     gradeSectionList.forEach((element: any) => {
@@ -452,7 +357,6 @@ const Optional = () => {
     const filtered = grade_id_bind.filter(({ grade_master_id }, index) => !ids.includes(grade_master_id, index + 1));
     const idsofSection = grade_id_bind.map((o) => o.section);
     const filteredForSection = grade_id_bind.filter(({ section }, index) => !idsofSection.includes(section, index + 1));
-    console.log(grade_id_bind, "grademaster and section");
     //  console.log(filtered);
     //   console.log(filteredForSection);
     setFilterGradeByYear(filtered);
@@ -626,7 +530,6 @@ const Optional = () => {
                                 aria-label="Default select example"
                                 onChange={(e) => {
                                   setAcademicYear(e.target.options[e.target.selectedIndex].text);
-                                  console.log(e.target.value);
                                   setAcademicYearId(e.target.value)
                                   handleGradeFilter(gradeSectionList, e.target.value);
                                 }}
@@ -634,6 +537,7 @@ const Optional = () => {
                                 {academicYearFinal &&
                                   academicYearFinal.length &&
                                   academicYearFinal.map((academic: any) => {
+
                                     return <option value={academic.year_id}>{academic.academic_year}</option>;
                                   })}
                               </Form.Select>
@@ -657,12 +561,18 @@ const Optional = () => {
                               </Form.Select>
                             </Col>
                             <Col md={2}>
-                              <Form.Select aria-label="Default select example" onChange={(e) => setsection(e.target.value)}>
+                              <Form.Select aria-label="Default select example"
+                                onChange={(e: any) => {
+                                  setsection(e.target.value)
+                                  setSecionId(e.target[e.target.selectedIndex].text);
+                                  //handlesection(filterParticularYear, e.target.value);
+                                }}
+                              >
                                 <option value="none">Section</option>
                                 {filterSectionByYear &&
                                   filterSectionByYear.length &&
                                   filterSectionByYear.map((value: any, i: any) => {
-                                    return <option value={value.section}>{value.section}</option>;
+                                    return <option value={value.grade_section_id} label={value.section}>{value.section}</option>;
                                   })}
                               </Form.Select>
                             </Col>
@@ -695,33 +605,34 @@ const Optional = () => {
                 </div>
                 <div className="container ">
 
+
+                  <div className="col-md-12" style={{ marginLeft: "170px" }} >
+                    <Row >
+                      <Col md={4}>
+                        <Form.Select aria-label="Default select example" onChange={(e) => setOptionaldrop(e.target.value)} >
+                          <option value="none">Select Optical Fees</option>
+                          {optionalFees &&
+                            optionalFees.length &&
+                            optionalFees.map((value: any, i: any) => {
+                              return <option value={value.fee_master_id}>{value.fee_type_name}</option>;
+                            })}
+                        </Form.Select>{" "}
+                      </Col>
+
+                      <Col>
+                        <Button
+                          type="button"
+                          onClick={(e: any) => {
+                            submitOptional();
+                          }}
+                        >Submit</Button>
+                      </Col>
+
+
+                    </Row>
+                  </div>
                   {optionalFees.length > 0 ? (<div>
-                    <div className="col-md-12" style={{  marginLeft: "170px" }} >
-                      <Row >
-                        <Col md={4}>
-                          <Form.Select aria-label="Default select example" onChange={(e) => setOptionaldrop(e.target.value)} >
-                            <option value="none">Select Optical Fees</option>
-                            {optionalFees &&
-                              optionalFees.length &&
-                              optionalFees.map((value: any, i: any) => {
-                                return <option value={value.fee_master_id}>{value.fee_type_name}</option>;
-                              })}
-                          </Form.Select>{" "}
-                        </Col>
-
-                        <Col>
-                          <Button  
-                            type="button"
-                            onClick={(e: any) => {
-                              submitOptional();
-                            }}
-                          >Submit</Button>
-                        </Col>
-
-
-                      </Row>
-                    </div>
-                    <div className="col-xl-12 text-center" style={{margin:"10px"}}>
+                    <div className="col-xl-12 text-center" style={{ margin: "10px" }}>
                       {statusStudentSearch ? (
                         <div>
 
@@ -734,23 +645,41 @@ const Optional = () => {
                               </tr>
                             </thead>
                             <tbody>
-                              {allGotFinalData && allGotFinalData.length > 0 ? (
-                                allGotFinalData.map((values: any, index: any) => {
+                              {gotStudentDetails && gotStudentDetailsChecked && gotStudentDetailsChecked.length && gotStudentDetails.length > 0 ? (
+                                gotStudentDetails.map((values: any, index: any) => {
+
                                   return (
                                     <>
                                       <tr key={index}>
-                                        <td>{values.admission_no}</td>
+                                        <td>{values.student_admissions_id}</td>
                                         <td>{values.student_name}</td>
                                         <td>
                                           {" "}
-                                          <Form.Check
+                                          {values.status === 0 ?
+                                            <Form.Check
+                                              onChange={(e: any) => {
+                                                // console.log(values);
+                                                
+                                                  OptionalValuesData(e,values)
+                                                //  console.log(values, "checked");
+
+                                              }}
+                                              type="switch"  id="custom-switch" label="switch to add fee" /> :
+                                            <Form.Check
+                                              type="switch" defaultChecked={true} id="custom-switch" label="switch to add fee" disabled={gotStudentDetailsChecked[index].status === 0 ? false : true} />
+                                          }
+
+                                          {/* <Form.Check
                                             onChange={(e: any) => {
                                               // console.log(values);
-                                              values.checked = e.target.checked
-                                              OptionalValuesData(values)
-                                              // setCheckboxValue(e.target.checked)
+                                              values.status = e.target.checked === true ? 1 : 0
+                                              values.checked =
+                                                OptionalValuesData(values)
+                                              console.log(values, "checked");
+
                                             }}
-                                            type="switch" id="custom-switch" label="switch to add fee" />
+                                            type="switch" defaultChecked={values.status === 1 && true} checked={values.status === 0 ? false : true} id="custom-switch" label="switch to add fee" />
+                                        */}
                                         </td>
                                       </tr>
                                     </>
