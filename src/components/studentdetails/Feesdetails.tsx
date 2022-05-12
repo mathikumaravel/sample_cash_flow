@@ -10,8 +10,10 @@ const Feesdetails = (props: any) => {
     let history = useHistory();
     const status = props.student_id;
     const year = props.year;
-    // console.log(props.year);
+    // console.log(props.year);YearOfBalanceByYear
+    const [YearOfBalanceByYearOnly, setYearOfBalanceByYearOnly] = useState<any>({});
     const [YearOfBalanceByYear, setYearOfBalanceByYear] = useState<any>({});
+
     const [allGotFinalData, setAllGotFinalData] = useState<any>([]);
     const [lastFourRecord, setLastFourRecord] = useState<any>([]);
     const [FeeMasterId, setFeeMasterId] = useState<any>([]);
@@ -28,8 +30,8 @@ const Feesdetails = (props: any) => {
 				})
 				.then((res) => {
 					console.log("Getting from ::::", res.data.data);
-					setYearOfBalanceByYear(res.data.data);
-					// console.log(YearOfBalanceByYear, "YearOfBalance");
+					setYearOfBalanceByYearOnly(res.data);
+					 
 				})
 				.catch((err) => console.log(err));
 
@@ -55,6 +57,7 @@ const Feesdetails = (props: any) => {
 			.catch((err) => console.log(err));
 		}
 	}, [status]);
+console.log(YearOfBalanceByYearOnly.data,"datatttttt");
 
     // useEffect(() => {
     //     axios
@@ -267,10 +270,10 @@ const Feesdetails = (props: any) => {
                                     </div>
                                     <div>
                                         <label style={{margin:"3px"}}>
-                                            {allGotFinalData &&
-                                                allGotFinalData.length &&
-                                                allGotFinalData.map((amount: any) => {
-                                                    console.log(amount);
+                                            {YearOfBalanceByYearOnly.data &&
+                                                YearOfBalanceByYearOnly.data.length &&
+                                                YearOfBalanceByYearOnly.data.map((amount: any) => {
+                                                    console.log(amount,"ppppppppppp");
                                                     return <option> {(amount = amount.academic_year)}</option>;
                                                 })}{" "}
                                         </label>
@@ -282,10 +285,10 @@ const Feesdetails = (props: any) => {
                                     </div>
                                     <div>
                                         <label style={{margin:"3px"}}>
-                                            {allGotFinalData &&
-                                                allGotFinalData.length &&
-                                                allGotFinalData.map((amount: any) => {
-                                                    return <option> {(amount = amount.balance)}</option>;
+                                            {YearOfBalanceByYearOnly.data &&
+                                                YearOfBalanceByYearOnly.data.length &&
+                                                YearOfBalanceByYearOnly.data.map((amount: any) => {
+                                                    return <option> {(amount.balance)}</option>;
                                                 })}{" "}
                                         </label>
                                     </div>
@@ -295,10 +298,11 @@ const Feesdetails = (props: any) => {
                                         <h6>Action</h6>
                                     </div>
                                     <div>
-                                        {allGotFinalData &&
-                                            allGotFinalData.length &&
-                                            allGotFinalData.map((amount: any) => {
+                                        {YearOfBalanceByYearOnly.data &&
+                                            YearOfBalanceByYearOnly.data.length &&
+                                            YearOfBalanceByYearOnly.data.map((amount: any) => {
                                                 return (
+                                                    
                                                     <Button style={{margin:"2px"}}
                                                         onClick={(e) => {
                                                             history.push(`/stupay/${status}/${(amount = amount.academic_year)}`);
