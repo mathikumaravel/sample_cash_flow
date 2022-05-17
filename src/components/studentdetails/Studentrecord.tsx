@@ -99,6 +99,8 @@ useEffect(() => {
       dataField: "discount",
       text: "Status",
       formatter: (cell: any, row: any, rowIndex: any, formatExtraData: any) => {
+        
+        
         return (
           <>
             {row.balance && row.balance > 0 ? (
@@ -200,17 +202,17 @@ useEffect(() => {
   }, [gradea, section]);
   const callStudentData = () => {
     setIsComponentVisible(false);
-    //  if (academicYear && academicYear.length > 0 && termsmaster && termsmaster.length > 0) {
-    //   getAccessToken();
-    //   axios
-    //     .post(`${baseUrl}autoSearch`, {
-    //       academic_year: academicYear,
-    //       terms:termsmaster
-    //     })
-    //     .then((response: AxiosResponse) => {
-    //       setMainSearch(response.data.data);
-    //     });
-    // }
+     if (academicYear && academicYear.length > 0 && termsmaster && termsmaster.length > 0) {
+      getAccessToken();
+      axios
+        .post(`${baseUrl}autoSearch`, {
+          academic_year: academicYear,
+          term:termsmaster
+        })
+        .then((response: AxiosResponse) => {
+          setMainSearch(response.data.data);
+        });
+    }
     if (academicYear && academicYear.length > 0) {
       if (searchBy && searchBy.length > 0) {
         if (

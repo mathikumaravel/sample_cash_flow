@@ -21,10 +21,16 @@ const Profile = () => {
     const [gotSchoolDetails, setGotSchoolDetails] = useState<any>([]);
 
     const [schoolOptioanlTerms, setSchoolOptioanlTerms] = useState<any>([]);
+    const [isLoaded, setIsLoaded] = useState<any>(false);
 
+    const windowReload = () => {
+		let interval = setInterval(() => {
+			window.location.reload();
+		}, 2000);
 
-    console.log(schoolName);
-
+		return () => clearInterval(interval);
+	};
+    
     const handleSubmit = async (e: any) => {
         e.preventDefault();
         try {
@@ -41,16 +47,6 @@ const Profile = () => {
                 .then((res: any) => {
                     console.log(res.data);
                     if (res.data.year_id) {
-                        toast.success(" Added Successfully", {
-                            position: "top-right",
-                            autoClose: 5000,
-                            hideProgressBar: false,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                        });
-                    } else {
                         toast.warning(" Already Added", {
                             position: "top-right",
                             autoClose: 5000,
@@ -60,12 +56,28 @@ const Profile = () => {
                             draggable: true,
                             progress: undefined,
                         });
+                    } else {
+                        toast.success("Added Successfully", {
+                            position: "top-right",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        });
+                        
                     }
-
+                    windowReload();
                 });
+               
         } catch (err) {
             alert("Please Fill the Details");
         }
+        axios.get(`${baseUrl}school`)
+        .then((res: any) => {
+          sessionStorage.setItem("School", JSON.stringify(res.data.data[0]));
+        })
     };
 
     useEffect(() => {
@@ -162,7 +174,7 @@ const Profile = () => {
                                                 <Button className='text-center'
                                                     type="submit"
                                                     onClick={(e: any) => {
-                                                        handleSubmit(e);
+                                                        {handleSubmit(e)};
                                                     }}
                                                 >
                                                     Submit

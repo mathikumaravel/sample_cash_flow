@@ -50,7 +50,12 @@ const Hostel = (props: any) => {
 		year_id: 32,
 		grade_id: 11
 	});
-
+    const windowReload = () => {
+        let interval = setInterval(() => {
+            window.location.reload();
+        }, 3000);
+        return () => clearInterval(interval);
+    };
 	// console.log(profileHostel);
 
 	// useEffect(() => {
@@ -138,7 +143,7 @@ const handleShow = () => {
 		console.log(currentRadioValue);
 
 		// alert()
-		if ("transport" === currentRadioValue) {
+		if ("Transport" === currentRadioValue) {
 		 
 			getAccessToken();
 			axios
@@ -153,10 +158,9 @@ const handleShow = () => {
 					fee_master_id: Number(feemaster),
 				})
 				.then((res: any) => {
-				 
 					console.log(res.data.message, "Hostel");
-					if(res.data.data.IsExsist === true){
-						alert()
+					if(res.data.data.IsExsist === false){
+						 
 						toast.success(res.data.message, {
 							position: "top-right",
 							autoClose: 5000,
@@ -166,6 +170,7 @@ const handleShow = () => {
 							draggable: true,
 							progress: undefined,
 						});
+						windowReload()
 					}else if(res.data.data.IsExsist ===  "year"){
 						toast.warning(res.data.message, {
 							position: "top-right",
@@ -206,6 +211,7 @@ const handleShow = () => {
 						draggable: true,
 						progress: undefined,
 					});
+					windowReload()
 				}else if(res.data.data.IsExsist ===  "year"){
 					toast.warning(res.data.message, {
 						position: "top-right",
@@ -245,6 +251,7 @@ const handleShow = () => {
 						draggable: true,
 						progress: undefined,
 					});
+					windowReload()
 				}
 				setShow(false);
 			});
@@ -404,7 +411,7 @@ const handleShow = () => {
 						<div className="card-header py-3">
 							<h4 className="m-0 text-danger text-center">
 								<a>
-									<i className="far fa-clone"></i> Mode Of Transportation
+									<i className="far fa-clone"></i> Student Facilities
 								</a>{" "}
 								<Button
 									variant="success"
@@ -438,14 +445,14 @@ const handleShow = () => {
 										<div>
 											<input
 												name="radio-item-1"
-												value="transport"
+												value="Transport"
 												type="radio"
 												onChange={(e) => setCurrentValue(e.target.value)}
-												checked={Transportation === "transport" ? Transportation : currentRadioValue === "transport"}
+												checked={Transportation === "Transport" ? Transportation : currentRadioValue === "Transport"}
 											/>
 											<Form.Label>Bus</Form.Label>
 
-											{currentRadioValue === "transport" && (
+											{currentRadioValue === "Transport" && (
 
 												<div>
 													<Form.Select style={{ width: "11rem" }}

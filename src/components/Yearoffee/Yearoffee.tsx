@@ -7,7 +7,8 @@ import { getAccessToken } from "../../config/getAccessToken";
 import { baseUrl } from "../../index";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { json } from "stream/consumers";
+import paginationFactory from "react-bootstrap-table2-paginator";
+import BootstrapTable from "react-bootstrap-table-next";
 import _ from "lodash";
 const Yearoffee = () => {
 	const [statusFeeDetailsAdd, setStatusFeeDetailsAdd] = useState(false);
@@ -474,6 +475,64 @@ const Yearoffee = () => {
 		return im
 	}
 
+
+	const paginate = [
+		{
+			text: "5",
+			value: 5,
+		},
+		{
+			text: "10",
+			value: 10,
+		},
+		{
+			text: "15",
+			value: 15,
+		},
+		{
+			text: "20",
+			value: 20,
+		},
+		{
+			text: "25",
+			value: 25,
+		},
+	];
+
+	const col: any = [
+		{
+			dataField: "fee_master_name",
+			text: "Fee Type Name",
+			sort: true,
+		},
+		{ dataField: "terms[0].optional_fee", text: "Optional Split Fees", sort: true },
+		{ dataField: "terms[0].fee_amount", text: "Fee amount", sort: true },
+		{ dataField: "terms.length", text: "Term", sort: true },
+		{
+			dataField: "terms[0].fee_amount", text: "Pay By Terms", formatter: (cell: any, row: any, rowIndex: any, formatExtraData: any) => {
+				return (
+					<>{handleTerm(rowIndex, "show")}</>
+				);
+			}, sort: true
+		},
+		{
+			dataField: "Actions",
+			text: "Actions",
+			formatter: (cell: any, row: any, rowIndex: any, formatExtraData: any) => {
+				return (
+					<i
+						className="fas fa-trash"
+						style={{ color: "red", cursor: "pointer" }} onClick={() => {
+							setShow(true)
+							setdatatoDelete(row.terms[0])
+						}}></i>
+				);
+			},
+			sort: true,
+		},
+	];
+
+
 	const handleSave = (values: any) => {
 		let sumoftermFees = 0
 		values.year_id = frontSearchYear
@@ -659,60 +718,15 @@ const Yearoffee = () => {
 																	</tbody>
 																</table>
 															</div>
-															<Table bordered responsive>
-																<thead>
-																	<tr role="row"  >
-																		<th className="sorting_asc">Fee Type Name</th>
-																		<th className="sorting_asc">Optional</th>
-																		<th className="sorting">Fee amount</th>
-																		<th className="sorting">Term</th>
-																		<th className="text-center">Pay By Terms</th>
-																		<th className="sorting">Action</th>
-																	</tr>
-																</thead>
-																<tbody>
-																	{termFeessaveList && termFeessaveList.length ?
-																		(termFeessaveList?.map((elemant: any, rowindex: any) => {
-																			return (
-																				<>
-																					<tr key={rowindex}>
-																						{termFeesAdd ? (
-																							<>
-																								<td>{elemant.fee_master_name}</td>
-																								<td>{elemant.terms[0].optional_fee}</td>
-																								<td> {elemant.terms[0].fee_amount}</td>
-																								<td>
-																									{elemant?.terms.length}
-																								</td>
-																								<td>
-																									{handleTerm(rowindex, "show")}
-																								</td>
-
-																								<td>
-																									<i
-																										className="fas fa-trash"
-																										style={{ color: "red", cursor: "pointer" }} onClick={() => {
-																											setShow(true)
-																											setdatatoDelete(elemant.terms[0])
-																										}}></i>{" "}
-
-																								</td>
-																							</>
-																						) : (
-																							<>
-																								<td>No Data Found</td>
-																							</>
-																						)}
-																					</tr>
-																				</>
-																			);
-																		})) : <tr>
-																			<td colSpan={6} className="text-center">
-																				No Data Found
-																			</td>
-																		</tr>}
-																</tbody>
-															</Table>
+															<BootstrapTable
+																keyField="academic_year"
+																data={termFeessaveList}
+																columns={col}
+																hover																
+																pagination={paginationFactory({
+																	sizePerPageList: paginate,
+																})}
+															/>
 															<div style={{ marginLeft: "20%" }}>
 																<Modal show={show} onHide={SuddenhandleClose}>
 																	<Modal.Header closeButton>
@@ -784,7 +798,7 @@ const Yearoffee = () => {
 															<thead>
 																<tr role="row"  >
 																	<th className="sorting_asc">Fee Type Name</th>
-																	<th className="sorting_asc">Optional</th>
+																	<th className="sorting_asc">Optional Split terms</th>
 																	<th className="sorting">Fee amount</th>
 																	<th className="sorting">Term</th>
 																	<th className="text-center">Pay By Terms</th>

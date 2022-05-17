@@ -33,9 +33,11 @@ const Studentpay = () => {
 	const [gotSchoolDetails, setGotSchoolDetails] = useState<any>([]);
 	const [finalterms, setFinalterms] = useState<any>([]);
 
+	const [amountTextBox, setAmountTextBox] = useState<any>([]);
 
-console.log(Payment,"rewrewrwerwe");
+console.log(amountTextBox,"rewrewrwerwe");
 
+	console.log(termsmaster,"4444444");
 	
 	const urlParams: any = useParams();
 	const id = urlParams.id;
@@ -275,6 +277,8 @@ console.log(Payment,"rewrewrwerwe");
 	console.log(commentRefundChange);
 	//=====================Handle Balance================================//
 	const [priceArr, setPriceArr] = useState<any>([]);
+	
+	
 	const handlePriceChange = (value: any) => {
 		let tempArrData: any[] = [];
 		priceArr.forEach((element: any) => {
@@ -286,6 +290,15 @@ console.log(Payment,"rewrewrwerwe");
 		var sortedObjs = _.sortBy(SortByOrder, "index");
 		setPriceArr(sortedObjs);
 	};
+useEffect(()=>{
+	setAmountTextBox([]) 
+},[termsmaster])
+
+
+ if(amountTextBox.length > 0){
+	setAmountTextBox(priceArr[0].amoundTyped);
+}
+console.log(priceArr);
 
 	//==============================Handle Redund====================================//
 	const [priceRefundArr, setPriceRefundArr] = useState<any>([]);
@@ -331,6 +344,10 @@ console.log(Payment,"rewrewrwerwe");
 
 	//Handle Balance
 	const handleBalance = () => {
+		let text = "123456789!@#$%fgfgdgdfgdfg";
+		let pattern = /[^0-9]/g;
+		let result = priceArr.toString().match(pattern);
+		console.log(result );
 		setButtonDisable(true);
 		let SendBalace = priceArr;
 		let FeetempArr: any[] = [];
@@ -596,6 +613,10 @@ useEffect (()=>{
 																						onChange={(e: any) => {
 																							termsChange(values, e.target.value)
 																							setTermsmaster(e.target.value);
+																							{priceArr.map((map:any)=>{
+																							
+																								map.amoundTyped = 0
+																							})}
 																						}}
 																					>
 																						{finalterms && finalterms.length && finalterms.map((count:any)=>{
@@ -668,7 +689,7 @@ useEffect (()=>{
 																	{/* <th style={{ padding: "10px" }}>Balance</th> */}
 																	<th>Date</th>
 																	<th style={{ padding: "10px", width: "70px" }}>Pay</th>
-																	<th style={{ width: "40%" }}>Amount</th>
+																	<th style={{ width: "15%" }}>Amount</th>
 																	<th>Mode of Payment</th>
 																	<th>Comments</th>
 																</tr>
@@ -722,7 +743,7 @@ useEffect (()=>{
 																					{!refundSwitch ? (
 																						<input
 																							type="number"
-																							style={{ width: "100%" }}
+																							
 																							className="form-control input-sm txtamt nk border border-warning"
 																							placeholder="Enter Amount"
 																							value={
@@ -733,6 +754,7 @@ useEffect (()=>{
 																									: ""
 																							}
 																							onChange={(e: any) => {
+																								 
 																								Number(e.target.value) > Number(value.balance)
 																									? alert("Amount Greater the Actual Fees")
 																									: handlePriceChange({
@@ -752,7 +774,7 @@ useEffect (()=>{
 																					) : (
 																							<input
 																								type="number"
-																								style={{ width: "100%" }}
+																								 
 																								className="form-control input-sm txtamt nk border border-primary"
 																								placeholder="Enter Amount"
 																								value={
@@ -786,7 +808,7 @@ useEffect (()=>{
 																					{!refundSwitch ? (
 																						<select
 																							className="form-control pointer"
-																							style={{ width: "90%" }}
+																							style={{ width: "100%" }}
 																							value={modeOFPaymnetChange[index].payment_mode}
 																							onChange={(e: any) => {
 																								handleModeOFPaymnetChange({
@@ -794,15 +816,15 @@ useEffect (()=>{
 																									payment_mode: e.target.value,
 																								});
 																							}}>
-																							<option value="Cash">Cash</option>
-																							<option value="Card">Card</option>
-																							<option value="Direct Account">Direct Acc.</option>
-																							<option value="Employee Account">Emp. Account</option>
+																							<option style ={{fontSize:"10px!important"}} value="Cash">Cash</option>
+																							<option style ={{fontSize:"10px!important"}}  value="Card">Card</option>
+																							<option style ={{fontSize:"10px!important"}} value="Direct Account">Direct Acc.</option>
+																							<option style ={{fontSize:"10px!important"}} value="Employee Account">Emp. Account</option>
 																						</select>
 																					) : (
 																							<select
 																								className="form-control pointer"
-																								style={{ width: "90%" }}
+																								style={{ width: "100%" }}
 																								value={modeOfPayRefundChange[index].payment_mode}
 																								onChange={(e: any) => {
 																									handlemodeOfPayRefundChange({
@@ -846,7 +868,7 @@ useEffect (()=>{
 																	})}
 															</tbody>
 															<tfoot>
-																{Payment && Payment.length && Payment[0] && Payment[0].length ? < tr >
+																{Payment && Payment.length && Payment[0] && Payment[0].length ? <tr>
 																	<th>Total</th>
 																	<th id="totalfeeamt">
 																		{Payment && Payment.length && Payment[4].totalFees}
