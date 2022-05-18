@@ -464,7 +464,7 @@ const Yearoffee = () => {
 								value={termFeessaveAdd[rowindex].term_fees[i] ? termFeessaveAdd[rowindex].term_fees[i].term_amount : ""}
 								onChange={(e) => {
 									handleTermAmount({
-										rowindex: rowindex, termindex: i, amount: e.target.value
+										rowindex: rowindex, termindex: i, amount: Number(e.target.value)
 									})
 								}}
 							/>
@@ -519,6 +519,8 @@ const Yearoffee = () => {
 			dataField: "Actions",
 			text: "Actions",
 			formatter: (cell: any, row: any, rowIndex: any, formatExtraData: any) => {
+				console.log(row,"delete");
+				
 				return (
 					<i
 						className="fas fa-trash"
@@ -533,7 +535,7 @@ const Yearoffee = () => {
 	];
 
 	const handleSave = (values: any) => {  
-		let sumoftermFees = 0
+		let sumoftermFees = 0 
 		values.year_id = frontSearchYear
 		values.grade_id = frontSearchGrade
 		FeeDetailsFinal?.map((value: any) => {
@@ -541,12 +543,11 @@ const Yearoffee = () => {
 				values.optional_fee = value.optional_fee==="true"?true:false
 			}
 		})
-		values.term_count = values.optional_fees ? values.term_count : JSON.parse(school).term_count
 		values.term_fees.map((value: any, index: any) => {
 			sumoftermFees = sumoftermFees + Number(value.term_amount)
 		})
 		_.remove(values.term_fees, function (n: any) { return n.term_amount === 0 || n.term_amount === "" });
-
+		values.term_count = values.optional_fees ? values.term_count : values.term_fees.length
 		if (sumoftermFees === values.fee_amount) {
 			delete values.optional_fees
 			axios.post(`${baseUrl}yearOffee/create_new_yearfee`, values).then((res: any) => {
