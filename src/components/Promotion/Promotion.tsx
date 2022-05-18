@@ -495,7 +495,36 @@ const Promotion = () => {
                                       
                                         ) }
                                         
-                                      
+                                        <td>
+                                          <Form.Select
+                                            className="form-control"
+                                            style={{
+                                              width: "150px",
+                                            }}
+                                            onChange={(e: any) => {
+                                              setEventGradeByYearUpdate(e.target.value);
+                                            }}>
+                                            {filterGradeByYearUpdate &&
+                                              filterGradeByYearUpdate.length &&
+                                              filterGradeByYearUpdate.map((grade: any) => {
+                                                return (
+                                                  <>
+                                                    {Number(eventGradeByYear) + 1 === Number(grade.grade_master_id) ? <option
+                                                      value={grade.grade_master_id}
+                                                      selected={true}
+                                                      defaultValue={Number(eventGradeByYear) + 1}
+                                                      label={grade.grade_master}>
+                                                      {grade.grade_master}
+                                                    </option> : Number(eventGradeByYear) === Number(grade.grade_master_id) ? <option
+                                                      value={grade.grade_master_id}
+                                                      label={grade.grade_master}>
+                                                      {grade.grade_master}
+                                                    </option> : ''}
+                                                  </>
+                                                );
+                                              })}
+                                          </Form.Select>
+                                        </td>
                                         
                                         <td>
                                           <Form.Select
