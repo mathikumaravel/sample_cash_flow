@@ -612,7 +612,7 @@ console.log(mobileNoPattern);
                                       <Form.Check
                                         inline
                                         checked={
-                                          statusStudentDetails.status ===
+                                          UpdateProfileActive ===
                                           "Active"
                                             ? true
                                             : false
@@ -629,7 +629,7 @@ console.log(mobileNoPattern);
                                       <Form.Check
                                         inline
                                         checked={
-                                          statusStudentDetails.status ===
+                                          UpdateProfileActive ===
                                           "Inactive"
                                             ? true
                                             : false
@@ -642,6 +642,7 @@ console.log(mobileNoPattern);
                                         onChange={(e: any) => {
                                           setUpdateProfileActive("Inactive");
                                         }}
+
                                       />
                                     </div>
                                   )}
@@ -661,6 +662,7 @@ console.log(mobileNoPattern);
                     <Feesdetails
                       student_id={statusStudentDetails.student_id}
                       year={statusStudentDetails.academic_year_id}
+                      Student_status={statusStudentDetails.status}
                     ></Feesdetails>
                      <Hostel
                       student_id={statusStudentDetails.student_id}
@@ -670,6 +672,7 @@ console.log(mobileNoPattern);
                       fee_master_id={statusStudentDetails.fee_master_id}
                       grade={statusStudentDetails.grade_id} 
                       transport={statusStudentDetails.mode_of_transport}
+                      Student_status={statusStudentDetails.status}
                      ></Hostel>
                     <Academicfees
                       studentDetails={statusStudentDetails}

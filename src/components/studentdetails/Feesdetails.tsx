@@ -10,7 +10,7 @@ const Feesdetails = (props: any) => {
     let history = useHistory();
     const status = props.student_id;
     const year = props.year;
-    // console.log(props.year);YearOfBalanceByYear
+    console.log(props,"props"); 
     const [YearOfBalanceByYearOnly, setYearOfBalanceByYearOnly] = useState<any>({});
     const [YearOfBalanceByYear, setYearOfBalanceByYear] = useState<any>({});
 
@@ -199,10 +199,11 @@ console.log(YearOfBalanceByYearOnly.data,"datatttttt");
                                 <a>
                                     <i className="far fa-clone"></i> Payment
                                 </a>{" "}
+                              
                                 {status === "aa" ? (
-                                    <Link to="/Stu_pay">
+                                    <Link to="/Stu_pay"  >
                                         {" "}
-                                        <a className="btn btn-success btn-sm float-right">Pay or View All</a>
+                                        <a className="btn btn-success btn-sm float-right disabled">Pay or View All</a>
                                     </Link>
                                 ) : null}
                             </h4>
@@ -253,7 +254,8 @@ console.log(YearOfBalanceByYearOnly.data,"datatttttt");
                                         </label>
                                     </div>
                                 </div>  
-                                    </>):(<>No Data</>)}
+                                    </>):(<> <div style={{textAlign:"center"}}>NIL</div>
+                                    </>)}
                                 
                             </div>
                         </div>
@@ -302,21 +304,42 @@ console.log(YearOfBalanceByYearOnly.data,"datatttttt");
                                         <h6>Action</h6>
                                     </div>
                                     <div>
+                                    {props.Student_status === "Active"?(<>
                                         {YearOfBalanceByYearOnly.data &&
                                             YearOfBalanceByYearOnly.data.length &&
                                             YearOfBalanceByYearOnly.data.map((amount: any) => {
                                                 return (
-                                                    
-                                                    <Button style={{margin:"2px"}}
+                                                
+
+                                                    <Button style={{margin:"2px"}} 
                                                         onClick={(e) => {
                                                             history.push(`/stupay/${status}/${(amount = amount.academic_year)}`);
                                                             // history.push("/stupay");/stupay/MVM10004/2021-2022
                                                         }}
-                                                        className="btn-success btn-sm">
+                                                        className="btn-success btn-sm  ">
                                                         Pay / View All 
                                                     </Button> 
                                                 );
                                             })}
+                                                    </>):(<>
+                                                        {YearOfBalanceByYearOnly.data &&
+                                            YearOfBalanceByYearOnly.data.length &&
+                                            YearOfBalanceByYearOnly.data.map((amount: any) => {
+                                                return (
+                                                
+
+                                                    <Button style={{margin:"2px"}} 
+                                                        onClick={(e) => {
+                                                            history.push(`/stupay/${status}/${(amount = amount.academic_year)}`);
+                                                            // history.push("/stupay");/stupay/MVM10004/2021-2022
+                                                        }}
+                                                        className="btn-success btn-sm disabled">
+                                                        Pay / View All 
+                                                    </Button> 
+                                                );
+                                            })}
+                                                    </>) }
+                                        
                                     </div>
                                 </div>
                             </div>

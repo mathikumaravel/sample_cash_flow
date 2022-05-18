@@ -19,7 +19,7 @@ const Hostel = (props: any) => {
 	const Transportation = props.transport;
 
 
-	console.log(Transportation);
+	console.log(props,"Transportation");
 
 	const [YearOfBalanceByYear, setYearOfBalanceByYear] = useState<any>({});
 	const [allGotFinalData, setAllGotFinalData] = useState<any>([]);
@@ -31,7 +31,7 @@ const Hostel = (props: any) => {
 	const [allAcademicBalance, setAllAcademicBalance] = useState<any>([]);
 	const [hostel, setHostel] = useState<any>(false);
 	const [van, setVan] = useState<any>(false);
-	const [currentRadioValue, setCurrentValue] = React.useState("option1");
+	const [currentRadioValue, setCurrentValue] = React.useState("");
 	const [busValue, setBusValue] = useState<any>([]);
 	const [hostalFeeValue, setHostalFeeValue] = useState<any>([]);
 	const [transport, settransport] = useState<any>([]);
@@ -50,12 +50,7 @@ const Hostel = (props: any) => {
 		year_id: 32,
 		grade_id: 11
 	});
-    const windowReload = () => {
-        let interval = setInterval(() => {
-            window.location.reload();
-        }, 3000);
-        return () => clearInterval(interval);
-    };
+  
 	// console.log(profileHostel);
 
 	// useEffect(() => {
@@ -118,6 +113,9 @@ const Hostel = (props: any) => {
 	// 		});
 	// }, []);
 	console.log(hostalFeeValue);
+	useEffect(()=>{
+		setCurrentValue(Transportation)
+	},[Transportation])
 	const checkhostelvalue = () =>{
 		if(hostalFeeValue && hostalFeeValue.length >0){
 			let hostelnameId = hostalFeeValue[0].fee_master_id;
@@ -170,7 +168,7 @@ const handleShow = () => {
 							draggable: true,
 							progress: undefined,
 						});
-						windowReload()
+					 
 					}else if(res.data.data.IsExsist ===  "year"){
 						toast.warning(res.data.message, {
 							position: "top-right",
@@ -211,7 +209,7 @@ const handleShow = () => {
 						draggable: true,
 						progress: undefined,
 					});
-					windowReload()
+				 
 				}else if(res.data.data.IsExsist ===  "year"){
 					toast.warning(res.data.message, {
 						position: "top-right",
@@ -251,7 +249,7 @@ const handleShow = () => {
 						draggable: true,
 						progress: undefined,
 					});
-					windowReload()
+					 
 				}
 				setShow(false);
 			});
@@ -263,6 +261,7 @@ const handleShow = () => {
 
 	}, []);
 	console.log( currentRadioValue,Transportation,Transportation === "Self" ? Transportation : true);
+	console.log(currentRadioValue,"currentRadioValue");
 	
 	useEffect(() => {
 		getAccessToken();
@@ -409,11 +408,13 @@ const handleShow = () => {
 				<div className="col-lg-6">
 					<div className="card shadow mb-4">
 						<div className="card-header py-3">
+					
 							<h4 className="m-0 text-danger text-center">
 								<a>
 									<i className="far fa-clone"></i> Student Facilities
 								</a>{" "}
-								<Button
+								{props.Student_status === "Active"?(<>
+									<Button
 									variant="success"
 									onClick={(e: any) => {
 										handleShow();
@@ -421,12 +422,23 @@ const handleShow = () => {
 									style={{ float: "right", marginRight: "10px" }}>
 									Submit
 								</Button>
-
-
+						</>):(<>
+							<Button
+									variant="success"
+									onClick={(e: any) => {
+										handleShow();
+									}}
+									style={{ float: "right", marginRight: "10px" }} disabled>
+									Submit
+								</Button>
+						</>)}
+							
 							</h4>
 						</div>
+						{props.Student_status === "Active"?(<>
+						
+						</>):(<></>)}
 						<div className="card-body">
-							<></>
 							<div>
 								<Row>
 									<Col>
@@ -436,7 +448,7 @@ const handleShow = () => {
 												type="radio"
 												value="Self"
 												onChange={(e) => setCurrentValue(e.target.value)}
-												checked={Transportation === "Self" ? Transportation : currentRadioValue === "Self"}
+												checked={currentRadioValue === "Self"}
 											/>
 											<Form.Label>Self</Form.Label>
 										</div>
@@ -448,10 +460,9 @@ const handleShow = () => {
 												value="Transport"
 												type="radio"
 												onChange={(e) => setCurrentValue(e.target.value)}
-												checked={Transportation === "Transport" ? Transportation : currentRadioValue === "Transport"}
+												checked={currentRadioValue === "Transport"}
 											/>
 											<Form.Label>Transport</Form.Label>
-
 											{currentRadioValue === "Transport" && (
 
 												<div>
@@ -481,7 +492,7 @@ const handleShow = () => {
 												value="Hostal"
 												type="radio"
 												onChange={(e) => setCurrentValue(e.target.value)}
-												checked={Transportation === "Hostal" ? Transportation : currentRadioValue === "Hostal"}
+												checked={currentRadioValue === "Hostal" }
 											/>
 											<Form.Label htmlFor="radio-item-2">Hostel</Form.Label>
 											{currentRadioValue === "Hostal" && (
