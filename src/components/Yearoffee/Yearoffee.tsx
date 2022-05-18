@@ -505,8 +505,8 @@ const Yearoffee = () => {
 			text: "Fee Type Name",
 			sort: true,
 		},
-		{ dataField: "terms[0].optional_fee", text: "Optional Split Fees", sort: true },
-		{ dataField: "terms[0].fee_amount", text: "Fee amount", sort: true },
+		// { dataField: "terms[0].optional_fee", text: "Optional Split Fees", sort: true },
+		{ dataField: "terms[0].fee_amount", text: "Actual Fee amount", sort: true },
 		{ dataField: "terms.length", text: "Term", sort: true },
 		{
 			dataField: "terms[0].fee_amount", text: "Pay By Terms", formatter: (cell: any, row: any, rowIndex: any, formatExtraData: any) => {
@@ -538,7 +538,7 @@ const Yearoffee = () => {
 		values.grade_id = frontSearchGrade
 		FeeDetailsFinal?.map((value: any) => {
 			if (values.fee_master_id === value.fee_master_id) {
-				values.optional_fee = Boolean(value.optional_fee)
+				values.optional_fee = value.optional_fee==="true"?true:false
 			}
 		})
 		values.term_count = values.optional_fees ? values.term_count : JSON.parse(school).term_count
@@ -803,9 +803,9 @@ const Yearoffee = () => {
 															<thead>
 																<tr role="row"  >
 																	<th className="sorting_asc">Fee Type Name</th>
-																	<th className="sorting_asc">Optional</th>
-																	<th className="sorting">Fee amount</th>
-																	<th className="sorting">Term</th>
+																	<th className="sorting_asc">Split Term Fees</th>
+																	<th className="sorting">Actual Fee amount</th>
+																	<th className="sorting">No of Terms</th>
 																	<th className="text-center">Pay By Terms</th>
 																	<th className="sorting">Action</th>
 																</tr>

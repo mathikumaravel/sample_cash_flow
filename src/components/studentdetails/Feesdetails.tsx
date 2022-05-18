@@ -209,10 +209,12 @@ console.log(YearOfBalanceByYearOnly.data,"datatttttt");
                         </div>
                         <div className="card-body">
                             <div className="row">
+                            {lastFourRecord && lastFourRecord.length>0 ?(<>
                                 <div className="col-xl-4 col-md-3 mb-1">
                                     <div>
                                         <h6>Date</h6>
                                     </div>
+                                   
                                     <div>
                                         <label>
                                             {lastFourRecord &&
@@ -250,7 +252,9 @@ console.log(YearOfBalanceByYearOnly.data,"datatttttt");
                                                 })}
                                         </label>
                                     </div>
-                                </div>
+                                </div>  
+                                    </>):(<>No Data</>)}
+                                
                             </div>
                         </div>
                     </div>
