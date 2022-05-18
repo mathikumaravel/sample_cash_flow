@@ -450,7 +450,7 @@ const handleShow = () => {
 												onChange={(e) => setCurrentValue(e.target.value)}
 												checked={Transportation === "Transport" ? Transportation : currentRadioValue === "Transport"}
 											/>
-											<Form.Label>Bus</Form.Label>
+											<Form.Label>Transport</Form.Label>
 
 											{currentRadioValue === "Transport" && (
 
@@ -483,7 +483,7 @@ const handleShow = () => {
 												onChange={(e) => setCurrentValue(e.target.value)}
 												checked={Transportation === "Hostal" ? Transportation : currentRadioValue === "Hostal"}
 											/>
-											<Form.Label htmlFor="radio-item-2">Hostal</Form.Label>
+											<Form.Label htmlFor="radio-item-2">Hostel</Form.Label>
 											{currentRadioValue === "Hostal" && (
 												<div>
 

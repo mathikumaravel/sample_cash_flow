@@ -341,26 +341,24 @@ useEffect (()=>{
                   >
                     <thead>
                       <tr role="row">
-                        <th style={{ textAlign: "center" }}>Fee Type Name</th>
-                        <th style={{ textAlign: "center" }}>Term Amount</th>
-                        <th style={{ textAlign: "center" }}>Balance</th>
-                        <th style={{ textAlign: "center" }}>Discount</th>
-                        <th style={{ textAlign: "center" }}>
+                        <th  >Fee Type Name</th>
+                        <th style={{ textAlign: "center" }}>Actual Fees</th>
+                        <th  >Term Amount</th>
+                        <th >Balance</th>
+                        <th  >Discount</th>
+                        <th  >
                           Fee Discount Type
                         </th>
                         {/* <th style={{ textAlign: "center" }}>Updated Fees</th> */}
-                        <th style={{ textAlign: "center" }}>Action</th>
+                        <th  >Action</th>
                       </tr>
                     </thead>
                     <tbody>
-                       
- 
+  
 {spinnerLoad ? (
                         <td
                           colSpan={4}
-                          style={{
-                            textAlign: "center",
-                          }}
+                        
                         >
                           <Spinner animation="border" variant="danger"/>
                         </td>
@@ -370,18 +368,21 @@ useEffect (()=>{
                         discountallrecord.map((values: any, index: any) => {
                           return (
                             <tr style={{ textAlign: "center" }}>
-                              <td style={{ width: "20%", textAlign: "center" }}>
+                              <td >
                                 {values.fee_type_name}
                               </td>
-                              <td style={{ width: "20%", textAlign: "center" }}>
+                              <td  >
+                                {values.actual_fees}
+                              </td>
+                              <td  >
                                 {values.term_amount}
                               </td>
-                              <td style={{ textAlign: "center" }}>
+                              <td >
                                 {values.balance}
                               </td>
                               {index !== editingdiscount.id ? (
                                 <td>
-                                  <div style={{ textAlign: "center" }}>
+                                  <div >
                                     {values.discount_amount}
                                   </div>
                                 </td>

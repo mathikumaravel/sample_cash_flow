@@ -471,6 +471,48 @@ const Optional = () => {
 	};
 	console.log(gotStudentDetails, "11111");
 
+	const oprtionalApiCall = () =>{
+		axios
+		.post(`${baseUrl}optional/search`, {
+			year_id: Number(academicYearId),
+			grade_id: Number(grade),
+			section_id: Number(section) === 0 ? filterSectionByYear[0]?.grade_section_id : Number(section),
+			fee_master_id: Number(optionaldrop),
+			// year_id: 9,
+			// grade_id: 1,
+			// section_id: 112,
+			//fee_master_id: 12
+		})
+		.then((res: any) => {
+			let {
+				data: { data },
+			} = res;
+			console.log(data, "data");
+			if (
+				res &&
+				res.hasOwnProperty("data") &&
+				res.data &&
+				res.data.hasOwnProperty("data") &&
+				res.data.data &&
+				res.data.data.data &&
+				res.data.data.data.length > 0
+			) {
+				sessionStorage.setItem("studentDetails", JSON.stringify(res.data.data.data));
+			} else {
+				sessionStorage.setItem("studentDetails", JSON.stringify([]));
+			}
+			setGotStudentDetails(res.data.data.data);
+			setGotStudentDetailsChecked(res.data.data.data);
+
+			//      console.log(res.data.data);
+			setloading(true);
+		})
+		.catch((e: any) => {
+			console.log(e);
+		});
+	}
+
+
 	//Function Call To Select All Student Data
 	const selectAllStudent = (e: any) => {
 		if (e.target.checked) {
@@ -491,7 +533,8 @@ const Optional = () => {
 			sessionStorage.setItem("studentDetailsCheckedAll", JSON.stringify(newTempArr));
 			return newTempArr;
 		} else {
-			return null;
+			setGotStudentDetails([])
+			oprtionalApiCall()			
 		}
 	};
 
@@ -515,7 +558,10 @@ const Optional = () => {
 		}
 	}, [academicYearId, grade, section]);
 
+	
 	// call the api on optional change
+
+
 	useEffect(() => {
 		sessionStorage.setItem("studentDetails", JSON.stringify([]));
 		setGotOptionaldata([]);
@@ -575,44 +621,7 @@ const Optional = () => {
 						console.log(e);
 					});
 			} else {
-				axios
-					.post(`${baseUrl}optional/search`, {
-						year_id: Number(academicYearId),
-						grade_id: Number(grade),
-						section_id: Number(section) === 0 ? filterSectionByYear[0]?.grade_section_id : Number(section),
-						fee_master_id: Number(optionaldrop),
-						// year_id: 9,
-						// grade_id: 1,
-						// section_id: 112,
-						//fee_master_id: 12
-					})
-					.then((res: any) => {
-						let {
-							data: { data },
-						} = res;
-						console.log(data, "data");
-						if (
-							res &&
-							res.hasOwnProperty("data") &&
-							res.data &&
-							res.data.hasOwnProperty("data") &&
-							res.data.data &&
-							res.data.data.data &&
-							res.data.data.data.length > 0
-						) {
-							sessionStorage.setItem("studentDetails", JSON.stringify(res.data.data.data));
-						} else {
-							sessionStorage.setItem("studentDetails", JSON.stringify([]));
-						}
-						setGotStudentDetails(res.data.data.data);
-						setGotStudentDetailsChecked(res.data.data.data);
-
-						//      console.log(res.data.data);
-						setloading(true);
-					})
-					.catch((e: any) => {
-						console.log(e);
-					});
+				oprtionalApiCall()
 			}
 		}
 	}, [optionaldrop]);
@@ -653,6 +662,7 @@ const Optional = () => {
 													onChange={(e: any) => {
 														setAutoSearch(e.target.value.trim());
 														setSearchBy(e.target.value.trim());
+														 
 													}}
 												/>
 
@@ -801,15 +811,16 @@ const Optional = () => {
 												{gotStudentDetails &&
 												gotStudentDetailsChecked &&
 												gotStudentDetailsChecked.length &&
-												gotStudentDetails.length > 0 ? (
+												gotStudentDetails.length > 1 ? (
 													<Form.Check 
 														type="switch"
 														id="custom-switch"
-														label="switch to add fee"
+														label="Select All Students"
 														onChange={(e: any) => {
 															setAllCheck(e.target.checked);
 															const allStudentDetails: any = sessionStorage.getItem("studentDetails");
 															setGetAllCheckedValues(JSON.parse(allStudentDetails));
+															selectAllStudent(e)
 														}}
 													/>
 												) : (

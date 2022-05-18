@@ -209,8 +209,7 @@ const Grade = () => {
         axios
           .post(`${baseUrl}gradeSection`, sendData)
           .then((res: any) => {
-            console.log(res.data.data);
-            if (res.data.data.IsExsist === false) {
+             if (res.data.data.IsExsist === false) {
               finalAcademicYr.forEach((element: any) => {
                 if (
                   element.academic_year_id ==
@@ -218,7 +217,7 @@ const Grade = () => {
                   element.section == res.data.data.data.section &&
                   element.year_id == res.data.data.data.academic_year_id
                 ) {
-                  console.log(element);
+                  console.log(element); 
                   toast.success(
                     `${element.academic_year},${element.grade_master},${element.section} Added`,
                     {
@@ -232,6 +231,18 @@ const Grade = () => {
                     }
                   );
                 }
+                else if (element.academic_year_id != res.data.data.data.academic_year_id && element.section != res.data.data.data.section &&
+                  element.year_id != res.data.data.data.academic_year_id){
+                    toast.success("Grade & Section Added Successfully", {
+                      position: "top-right",
+                      autoClose: 2000,
+                      hideProgressBar: false,
+                      closeOnClick: true,
+                      pauseOnHover: true,
+                      draggable: true,
+                      progress: undefined,
+                    });
+                  }
               });
             } else if (res.data.data.IsExsist === true) {
               toast.warning(`Data Already Added`, {
@@ -244,9 +255,10 @@ const Grade = () => {
                 progress: undefined,
               });
             }
-            setStatusList([]);
+             
             getAllGradeSectionData();
             setDuplication(false);
+            setStatusList([])
           })
           .catch((err: any) => {
             setDuplication(false);
@@ -256,6 +268,7 @@ const Grade = () => {
       setClickedGrade([]);
       setAcademic_year_data(allAcademicYear[0].year_id);
       setAcademic_section("");
+     
     }
   };
   const deleteSection = (gradeid: any, index: any) => {
@@ -361,9 +374,9 @@ const Grade = () => {
       ...matchedyearid[0],
       ...matchedgradeid[0],
     };
-    console.log(combindobject);
+    // console.log(combindobject);
     finalAcademicYr.push(combindobject);
-    console.log(finalAcademicYr);
+    // console.log(finalAcademicYr);
     setFinalAcademicYr(finalAcademicYr);
   }
 
@@ -609,8 +622,7 @@ const Grade = () => {
                                           key={index}
                                           value={romanvalues.grade_master_id}
                                           onChange={(e: any) => {
-                                            console.log(e.target.value);
-                                            callTheAddGrade(e.target.value);
+                                             callTheAddGrade(e.target.value);
                                           }}
                                           id={`inline-checkbox-${index}`}
                                           style={{
