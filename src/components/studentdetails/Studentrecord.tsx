@@ -94,7 +94,7 @@ const Studentrecord = () => {
                             <Button disabled>{"Paid"}</Button>
                         )}
                     </>):(<>
-                        <Button disabled>{"Inactive"}</Button>
+                        <Button disabled className="btn btn-danger">{"Inactive"}</Button>
                     </>)}
                        
                     </>
