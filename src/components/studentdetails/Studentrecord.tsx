@@ -85,12 +85,18 @@ const Studentrecord = () => {
             formatter: (cell: any, row: any, rowIndex: any, formatExtraData: any) => {
                 console.log(row, "row");
                 return (
+                    
                     <>
+                    {row.status === "Active" ?(<>
                         {row.Allbalance && row.Allbalance > 0 ? (
                             <Button onClick={(e: any) => history.push(`/stupay/${row.student_id}/${row.academic_year}`)}>{"Unpaid"}</Button>
                         ) : (
                             <Button disabled>{"Paid"}</Button>
                         )}
+                    </>):(<>
+                        <Button disabled>{"Inactive"}</Button>
+                    </>)}
+                       
                     </>
                 );
             },

@@ -11,7 +11,8 @@ const Academicfees = (props: any) => {
   //table status edit
   const urlParams: any = useParams();
   const id = urlParams.id;
-  // console.log(id, "++iss");
+
+  console.log(props.studentDetails.status, "++iss");
 
   const [updateTableStatus, setUpdateTableStatus] = useState(false);
   const [academicYear, setAcademicYear] = useState<any>([]);
@@ -460,6 +461,7 @@ useEffect (()=>{
                                 </>
                               ) : (
                                 <>
+                                {props.studentDetails.status === "Active"?(<>
                                   <td>
                                     <Button
                                       variant="primary"
@@ -475,11 +477,29 @@ useEffect (()=>{
                                       Edit
                                     </Button>
                                   </td>
+                                </>):(<>
+                                  <td>
+                                    <Button
+                                      variant="primary"
+                                      onClick={() => {
+                                        setUpdateYearOfFee(
+                                          Number(values.discount_amount)
+                                        );
+                                        setEditingYearOfFee({
+                                          id: index,
+                                        });
+                                      }}
+                                      disabled >
+                                      Edit
+                                    </Button>
+                                  </td>
+                                </>)}
+                                  
                                 </>
                               )}
                             </tr>
                           );
-                        }):(<><tr><td colSpan={6} style={{textAlign:"center"}}>No Term Fees</td></tr></>)
+                        }):(<><tr><td colSpan={7} style={{textAlign:"center"}}>No Term Fees</td></tr></>)
                       )}
  
                       
