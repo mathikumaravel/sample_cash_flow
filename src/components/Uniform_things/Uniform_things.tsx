@@ -15,6 +15,10 @@ const Uniform_things = () => {
 	const [acdYear, setAcdYear] = useState<any>({ fromYear: "", toYear: 0 });
 	const [allAcademicYear, setAllAcademicYear] = useState<any[]>([]);
 	const [datatoDelete, setdatatoDelete] = useState<any>({});
+
+	//Uniform Things
+	const[uniformThings,setUniformThings] = useState<any> ([])
+	const [getUniformThings,setGetUniformThings] = useState <any> ([])
 	//Modal Popup
 	const [show, setShow] = useState(false);
 	const handleClose = () => {
@@ -40,10 +44,10 @@ const Uniform_things = () => {
 	const getAllAcademicYear = () => {
 		getAccessToken();
 		axios
-			.get(`${baseUrl}academic_year/show`)
+			.get(`${baseUrl}uniform_items`)
 			.then((res: any) => {
-				console.log(res.data.academic_years);
-				setAllAcademicYear(res.data.academic_years);
+				console.log(res.data.data);
+				setGetUniformThings(res.data.data);
 			})
 			.catch((e: any) => {
 				console.log(e);
@@ -52,12 +56,12 @@ const Uniform_things = () => {
 	const setNewAcademicYear = (newArrVal: any) => {
 		setAllAcademicYear([...newArrVal]);
 	};
-	const deleteAnAcademicYear = (year: any, index: any) => {
+	const deleteAnAcademicYear = (item: any, index: any) => {
 		let newArrVal = allAcademicYear;
 		newArrVal.splice(index, 1);
 		getAccessToken();
 		axios
-			.delete(`${baseUrl}academic_year/delete?`, { data: { year_id: year } })
+			.delete(`${baseUrl}uniform_items`, { data: { items_id: item } })
 			.then((res: any) => {
 				toast.success("Year Deleted Successfully", {
 					position: "top-right",
@@ -70,6 +74,8 @@ const Uniform_things = () => {
 				});
 				setNewAcademicYear(newArrVal);
 				setdatatoDelete({});
+				getAllAcademicYear();
+
 			})
 			.catch((e: any) => {
 				console.log(e);
@@ -87,13 +93,13 @@ const Uniform_things = () => {
 		try {
 			getAccessToken();
 			const res: any = await axios
-				.post(`${baseUrl}academic_year/new_academic_year`, {
-					academic_year: `${acdYear.fromYear}-${acdYear.toYear}`,
+				.post(`${baseUrl}uniform_items`, {
+					 items:uniformThings,
 				})
 				.then((res: any) => {
 					console.log(res.data);
-					if (res.data.year_id) {
-						toast.success("Year Added Successfully", {
+					if (res.data.data.IsExsist === false) {
+						toast.success("Uniform Things Added Successfully", {
 							position: "top-right",
 							autoClose: 5000,
 							hideProgressBar: false,
@@ -102,8 +108,8 @@ const Uniform_things = () => {
 							draggable: true,
 							progress: undefined,
 						});
-					} else {
-						toast.warning("Year Already Added", {
+					} else if(res.data.data.IsExsist === true){
+						toast.warning("Uniform Things Already Added", {
 							position: "top-right",
 							autoClose: 5000,
 							hideProgressBar: false,
@@ -117,7 +123,7 @@ const Uniform_things = () => {
 					setStatusAcademicYearAdd(false);
 				});
 		} catch (err) {
-			alert("Incorrect Username and Password");
+			alert("Please Enter The Value");
 		}
 	};
 	return (
@@ -205,41 +211,33 @@ const Uniform_things = () => {
 																	</tr>
 																</thead>
 																<tbody>
-																	{allAcademicYear && allAcademicYear.length ? (
-																		allAcademicYear.map(
+																	{getUniformThings && getUniformThings.length ? (
+																		getUniformThings.map(
 																			(values: any, index: any) => {
 																				return (
-																					// <tr key={index}>
-																					//     <td>{index + 1}</td>
-																					//     <td> </td>
-																					//     <td>
-																					//         <Button
-																					//             variant="danger"
-																					//             onClick={() => {
-																					//                 // deleteAnAcademicYear(
-																					//                 //     values.year_id,
-																					//                 //     index
-																					//                 // );
-																					//                 setdatatoDelete({
-																					//                     index: index,
-																					//                     year: values.academic_year,
-																					//                     id: values.year_id,
-																					//                 });
-																					//                 handleShow();
-																					//             }}>
-																					//             Delete
-																					//         </Button>
-																					//     </td>
-																					// </tr>
-																					<tr>
-																		 				<td>1</td>
-																						<td>Shirt</td>
-																						<td>
-																							<Button variant="danger">
-																								Delete
-																							</Button>{" "}
-																						</td>
+																					<tr key={index}>
+																					    <td>{index + 1}</td>
+																					    <td>{values.items}</td>
+																					    <td>
+																					        <Button
+																					            variant="danger"
+																					            onClick={() => {
+																					                // deleteAnAcademicYear(
+																					                //     values.year_id,
+																					                //     index
+																					                // );
+																					                setdatatoDelete({
+																					                    index: index,
+																					                    year: values.academic_year,
+																					                    id: values.items_id,
+																					                });
+																					                handleShow();
+																					            }}>
+																					            Delete
+																					        </Button>
+																					    </td>
 																					</tr>
+																					 
 																				);
 																			}
 																		)
@@ -259,34 +257,7 @@ const Uniform_things = () => {
 																			</tr>
 																		</>
 																	)}
-																	<tr>
-																		<td>2</td>
-																		<td>Pant</td>
-																		<td>
-																			<Button variant="danger">Delete</Button>{" "}
-																		</td>
-																	</tr>
-																	<tr>
-																		<td>3</td>
-																		<td>Shoe</td>
-																		<td>
-																			<Button variant="danger">Delete</Button>{" "}
-																		</td>
-																	</tr>
-																	<tr>
-																		<td>4</td>
-																		<td>Belt</td>
-																		<td>
-																			<Button variant="danger">Delete</Button>{" "}
-																		</td>
-																	</tr>
-																	<tr>
-																		<td>5</td>
-																		<td>Tie</td>
-																		<td>
-																			<Button variant="danger">Delete</Button>{" "}
-																		</td>
-																	</tr>
+																	 
 																</tbody>
 															</Table>
 														</div>
@@ -359,7 +330,12 @@ const Uniform_things = () => {
 																</Form.Label>
 															</Col>
 															<Col sm="6">
-																<Form.Control type="text" />
+																<Form.Control type="text"
+																onChange={(e:any)=>{
+																	setUniformThings(e.target.value)
+																}}
+																required
+																/>
 															</Col>
 															{/* <Col md="6">
                                                                 <Form.Group className="mb-3" controlId="formBasicEmail">

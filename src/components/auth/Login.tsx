@@ -16,6 +16,21 @@ const Login = (props: any) => {
 
 	const notify = () => toast("Wow so easy!");
 
+	useEffect(() => {
+		if(sessionStorage.getItem("AccessToken")){
+			history.push("/studentrecord");
+		}
+
+		const unloadCallback = (event: any) => {
+			event.preventDefault();
+			event.returnValue = "";
+			return "";
+		};
+		window.addEventListener("beforeunload", unloadCallback);
+		return () => window.removeEventListener("beforeunload", unloadCallback);
+	
+	}, []);
+
 	const handleSubmit = async (e: any) => {
 		e.preventDefault();
 		if (username.length <= 0 || password <= 0) {
@@ -42,20 +57,36 @@ const Login = (props: any) => {
 			}
 		} else {
 			try {
-				const res: any = await axios.post(`${baseUrl}sessions/login`, { email: username, password: password }).then((res: any) => {
+				const res: any = await axios.post(`${baseUrl}login`, { email: username, password: password }).then((res: any) => {
 					console.log(res);
-                    toast.success('Welcome', {
-                        position: "top-right",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        });
-					localStorage.setItem("AccessToken", res.data.auth_token);
-					callToPush();
-				});
+					if(res.data.success == 1) {
+						toast.success('Welcome', {
+							position: "top-right",
+							autoClose: 5000,
+							hideProgressBar: false,
+							closeOnClick: true,
+							pauseOnHover: true,
+							draggable: true,
+							progress: undefined,
+							});
+						sessionStorage.setItem("AccessToken", res.data.token);
+	
+						history.push("/studentrecord");
+	
+					callToPush(); 
+					}else {
+						toast.error('Incorrect Username and Password', {
+							position: "top-right",
+							autoClose: 5000,
+							hideProgressBar: false,
+							closeOnClick: true,
+							pauseOnHover: true,
+							draggable: true,
+							progress: undefined,
+							});
+					}
+                    
+        });
 			} catch (err: any) {
 				console.log(err.response.data.error_message);
                 toast.error('Incorrect Username and Password', {
@@ -71,23 +102,22 @@ const Login = (props: any) => {
 		}
 	};
 
+
 	const callToPush = () =>{
 		setTimeout(() => {
-			browser()
-			//history.push("/studentrecord");
+			history.push("/studentrecord");
 		  }, 1000);
 	}
 
-	const browser = () =>{
-		window.location.href = "/studentrecord"
-	}
+
 
 	useEffect(()=>{
-		const token = localStorage.getItem("AccessToken");
+		const token = sessionStorage.getItem("AccessToken");
 		if(token?.length){
 			history.push("/studentrecord");
 		}
 	},[])
+
 
 	return (
 		<div className="container">
@@ -99,7 +129,7 @@ const Login = (props: any) => {
 								<div>
 									<div className="p-5">
 										<div className="text-center">
-											<h1 className="h4 text-gray-900 mb-4 cashflow-heading">₹ Cash Flow</h1>
+											<h1 className="h4 text-danger-900 mb-4 cashflow-heading">₹ Cash Flow</h1>
 										</div>
 										<form className="user">
 											<div className="form-group">
