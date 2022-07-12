@@ -1,0 +1,5 @@
+export const ActionTypes = {
+    FETCH_YEARS: "FETCH_YEARS",
+
+    REMOVE_SELECTED_PRODUCT: "REMOVE_SELECTED_PRODUCT",
+};
