@@ -11,7 +11,7 @@ import { useHistory, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import BootstrapTable from "react-bootstrap-table-next";
-import { fecthYears } from "../../redux/actions/yearsActions";
+import { deleteYear, fecthYears } from "../../redux/actions/yearsActions";
 
 const Year = () => {
     //Academic Year
@@ -113,7 +113,7 @@ const Year = () => {
     const [show, setShow] = useState(false);
     const handleClose = () => {
         setShow(false);
-        deleteAnAcademicYear(datatoDelete.id, datatoDelete.index);
+        dispatch(deleteYear(datatoDelete.id, datatoDelete.index));
     };
     const SuddenhandleClose = () => {
         setShow(false);
@@ -152,43 +152,43 @@ const Year = () => {
         });
     };
 
-    const deleteAnAcademicYear = (year: any, index: any) => {
-        setSpinnerLoad(true);
+    // const deleteAnAcademicYear = (year: any, index: any) => {
+    //     setSpinnerLoad(true);
 
-        getAccessToken();
-        axios
-            .delete(`${baseUrl}year`, { data: { year_id: year } })
-            .then((res: any) => {
-                if (res.data.data.isDeletable) {
-                    toast.success("Year Deleted Successfully", {
-                        position: "top-right",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                    });
-                    setdatatoDelete({});
-                    // fecthYears();
-                } else if (res.data.data.isDeletable === false) {
-                    toast.warning("Year Existing in Grade&Section", {
-                        position: "top-right",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                    });
-                    setSpinnerLoad(false);
-                    setdatatoDelete({});
-                }
-            })
-            .catch((e: any) => {
-                console.log(e);
-            });
-    };
+    //     getAccessToken();
+    //     axios
+    //         .delete(`${baseUrl}year`, { data: { year_id: year } })
+    //         .then((res: any) => {
+    //             if (res.data.data.isDeletable) {
+    //                 toast.success("Year Deleted Successfully", {
+    //                     position: "top-right",
+    //                     autoClose: 5000,
+    //                     hideProgressBar: false,
+    //                     closeOnClick: true,
+    //                     pauseOnHover: true,
+    //                     draggable: true,
+    //                     progress: undefined,
+    //                 });
+    //                 setdatatoDelete({});
+    //                 // fecthYears();
+    //             } else if (res.data.data.isDeletable === false) {
+    //                 toast.warning("Year Existing in Grade&Section", {
+    //                     position: "top-right",
+    //                     autoClose: 5000,
+    //                     hideProgressBar: false,
+    //                     closeOnClick: true,
+    //                     pauseOnHover: true,
+    //                     draggable: true,
+    //                     progress: undefined,
+    //                 });
+    //                 setSpinnerLoad(false);
+    //                 setdatatoDelete({});
+    //             }
+    //         })
+    //         .catch((e: any) => {
+    //             console.log(e);
+    //         });
+    // };
 
     useEffect(() => {
         dispatch(fecthYears());
