@@ -11,7 +11,7 @@ import { useHistory, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import BootstrapTable from "react-bootstrap-table-next";
-import { deleteYear, fecthYears } from "../../redux/actions/yearsActions";
+import { addYear, deleteYear, fecthYears } from "../../redux/actions/yearsActions";
 
 const Year = () => {
     //Academic Year
@@ -202,38 +202,39 @@ const Year = () => {
     const handleSubmit = async (e: any) => {
         if (acdYear.fromYear && acdYear.fromYear.toString().length > 3) {
             try {
-                getAccessToken();
-                const res: any = await axios
-                    .post(`${baseUrl}year`, {
-                        academic_year: `${acdYear.fromYear}-${acdYear.toYear}`,
-                    })
-                    .then((res: any) => {
-                        console.log(res.data);
-                        if (res.data.data.insertId) {
-                            toast.success("Year Added Successfully", {
-                                position: "top-right",
-                                autoClose: 5000,
-                                hideProgressBar: false,
-                                closeOnClick: true,
-                                pauseOnHover: true,
-                                draggable: true,
-                                progress: undefined,
-                            });
-                        } else {
-                            toast.warning("Year Already Added", {
-                                position: "top-right",
-                                autoClose: 5000,
-                                hideProgressBar: false,
-                                closeOnClick: true,
-                                pauseOnHover: true,
-                                draggable: true,
-                                progress: undefined,
-                            });
-                        }
-                        // fecthYears();
-                        setStatusAcademicYearAdd(false);
-                        setDuplication(false);
-                    });
+                dispatch(addYear());
+                // getAccessToken();
+                // const res: any = await axios
+                //     .post(`${baseUrl}year`, {
+                //         academic_year: `${acdYear.fromYear}-${acdYear.toYear}`,
+                //     })
+                //     .then((res: any) => {
+                //         console.log(res.data);
+                //         if (res.data.data.insertId) {
+                //             toast.success("Year Added Successfully", {
+                //                 position: "top-right",
+                //                 autoClose: 5000,
+                //                 hideProgressBar: false,
+                //                 closeOnClick: true,
+                //                 pauseOnHover: true,
+                //                 draggable: true,
+                //                 progress: undefined,
+                //             });
+                //         } else {
+                //             toast.warning("Year Already Added", {
+                //                 position: "top-right",
+                //                 autoClose: 5000,
+                //                 hideProgressBar: false,
+                //                 closeOnClick: true,
+                //                 pauseOnHover: true,
+                //                 draggable: true,
+                //                 progress: undefined,
+                //             });
+                //         }
+                //         // fecthYears();
+                //         setStatusAcademicYearAdd(false);
+                //         setDuplication(false);
+                // //     });
             } catch (err) {
                 setDuplication(false);
                 alert("Error");
@@ -414,6 +415,7 @@ const Year = () => {
                                                                 }
                                                                 onClick={(e: any) => {
                                                                     setDuplication(true);
+                                                                    dispatch(addYear());
                                                                     handleSubmit(e);
                                                                 }}
                                                             >

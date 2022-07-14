@@ -22,9 +22,9 @@ export const addYear = (acdYear) => {
             .post(`${baseUrl}year`, {
                 academic_year: `${acdYear.fromYear}-${acdYear.toYear}`,
             })
-            .then((response) => {
-                console.log(response.data);
-                if (response.data.data.insertId) {
+            .then((res) => {
+                console.log(res.data);
+                if (res.data.data.insertId) {
                     toast.success("Year Added Successfully", {
                         position: "top-right",
                         autoClose: 5000,
@@ -34,7 +34,7 @@ export const addYear = (acdYear) => {
                         draggable: true,
                         progress: undefined,
                     });
-                    dispatch({ type: ActionTypes.ADD_YEAR, payload: response });
+                    dispatch({ type: ActionTypes.ADD_YEAR, payload: res });
                 } else {
                     toast.warning("Year Already Added", {
                         position: "top-right",
